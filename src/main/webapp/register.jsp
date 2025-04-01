@@ -8,6 +8,13 @@
 <%-- Note syntax for form action and method --%>
 <%
     Basket basket = new Basket();
+    Item one = new Item("001","CPU");
+    Item two = new Item("002","GPU");
+    Item three = new Item("003","HDD");
+    basket.addItem(one,3);
+    basket.addItem(two,3);
+    basket.addItem(three,3);
+    session.setAttribute("basket",basket);
 %>
 
 <form action="welcome.jsp" method="post">

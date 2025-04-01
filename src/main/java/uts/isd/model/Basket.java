@@ -53,4 +53,35 @@ public class Basket {
         }
         return 0;
     }
+
+    public void increaseByOne(String itemId){
+        if(containsItem(itemId)){
+            for (Map.Entry<Item, Integer> entry : items.entrySet()) {
+                if (entry.getKey().getItemId().equals(itemId)){
+                    entry.setValue(entry.getValue() + 1);
+                    System.out.println("Item quantity increase in the basket");
+                    break;
+                }
+            }
+        } else {
+            System.out.println("Item does not exist in the basket");
+        }
+    }
+
+    public void decreaseByOne(String itemId){
+        if(containsItem(itemId)){
+            for (Map.Entry<Item, Integer> entry : items.entrySet()) {
+                if (entry.getKey().getItemId().equals(itemId)){
+                    entry.setValue(entry.getValue() - 1);
+                    System.out.println("Item quantity decrease in the basket");
+                    if (entry.getValue() == 0){
+                        items.remove(entry.getKey());
+                    }
+                    break;
+                }
+            }
+        } else {
+            System.out.println("Item does not exist in the basket");
+        }
+    }
 }

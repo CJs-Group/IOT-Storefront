@@ -1,4 +1,7 @@
 <html>
+<head>
+    <title>Checkout</title>
+</head>
 <h1>Checkout</h1>
 
 <body>
@@ -24,17 +27,18 @@
         if (deliveryMethod.equals("Delivery")){
 %>
     <h2>Shipping Address</h2>
-    <form action="welcome.jsp" method="post">
+    <form action="receipt.jsp" method="post">
+        <input type="hidden" name="deliveryType" value="delivery">
         <label>Country/Region: </label><br>
-        <input type="text" id="Country" name="Country"><br>
+        <input type="text" id="country" name="country" required><br>
         <label>First Name: </label><br>
-        <input type="text" id ="firstName" name="firstName"><br>
+        <input type="text" id ="firstName" name="firstName" required><br>
         <label>Last Name: </label><br>
-        <input type="text" id="lastName" name="lastName"><br>
+        <input type="text" id="lastName" name="lastName" required><br>
         <label>Address: </label><br>
-        <input type="text" id="address" name="address"><br>
+        <input type="text" id="address" name="address" required ><br>
         <label>City: </label><br>
-        <input type="text" id="city" name="city"><br>
+        <input type="text" id="city" name="city" required><br>
         <label>State/Territory: </label><br>
         <select id="state" name="state" required>
             <option value="">Select</option>
@@ -52,18 +56,20 @@
         } else if (deliveryMethod.equals("Click&Collect")){
 %>
 <h2>Click & Collect</h2>
-<form action="welcome.jsp" method="post">
-    <label><input type="radio" name="deliveryMethod" value="Delivery" onchange="showOptions()"> Central Storefront </label><br>
-    <label><input type="radio" name="deliveryMethod" value="Click&Collect" onchange="showOptions()"> Lidcombe Storefront </label><br>
-    <label><input type="radio" name="deliveryMethod" value="Ship" onchange="showOptions()"> Bankstown Storefront </label><br>
+<form action="receipt.jsp" method="post">
+    <input type="hidden" name="deliveryType" value="click">
+    <label><input type="radio" name="selectedStore" value="Central Storefront" required > Central Storefront </label><br>
+    <label><input type="radio" name="selectedStore" value="Lidcombe Storefront" > Lidcombe Storefront </label><br>
+    <label><input type="radio" name="selectedStore" value="Bankstown Storefront" > Bankstown Storefront </label><br>
     <input type="submit" value="Submit">
 </form>
 <%
         } else if (deliveryMethod.equals("Ship")){
 %>
 <h2>Select a collection point</h2>
-<form action="welcome.jsp" method="post">
-    <select id="Service" name="state" required>
+<form action="receipt.jsp" method="post">
+    <input type="hidden" name="deliveryType" value="collection">
+    <select id="collectionPoint" name="collectionPoint" required>
         <option value="">Select</option>
         <option value="AustraliaPost">Australia Post Parcel Lockers and Parcel Collect</option>
         <option value="ParcelPoint">ParcelPoint</option>
