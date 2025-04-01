@@ -4,19 +4,23 @@
 <%@page import="java.util.Map"%>
 
 <html>
+<head>
+  <title>Basket</title>
+</head>
 <h1> Basket </h1>
 <%
   String itemId = request.getParameter("itemId");
-  String updateBasket = request.getParameter("updateBasket");
+  String updateBasket = request.getParameter("action");
 %>
 <body>
 <%
-  if (updateBasket != null && updateBasket.equals("remove")) {
-    Basket basket = (Basket) session.getAttribute("basket");
-    if (basket != null) {
-      basket.removeItem(itemId);
-    }
+  Basket basket = (Basket) session.getAttribute("basket");
+  if (basket != null && updateBasket != null) {
+    if (updateBasket.equals("remove")) basket.removeItem(itemId);
+    if (updateBasket.equals("+1")) basket.increaseByOne(itemId);
+    if (updateBasket.equals("-1")) basket.decreaseByOne(itemId);
   }
+
   CreditCard creditCard = (CreditCard) session.getAttribute("creditCard");
   if (creditCard == null){
 %>
@@ -30,7 +34,6 @@
 <a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
 <%
   }
-  Basket basket = (Basket) session.getAttribute("basket");
   if (basket == null || basket.getBasketSize() == 0){
 %>
 <label> Basket is empty </label><br>
@@ -43,16 +46,19 @@
 %>
 <label> Item: <%= entry.getKey().getItemName() %>, Quantity: <%= entry.getValue() %> </label>
 <form method="post" action="basket.jsp">
-  <input type="hidden" name="updateBasket" value="remove">
   <input type="hidden" name="itemId" value="<%= entry.getKey().getItemId() %>">
   <button type="submit" name="action" value="remove">Remove</button>
+  <button type="submit" name="action" value="+1">+1</button>
+  <button type="submit" name="action" value="-1">-1</button>
 </form>
 
 <%
     }
+%>
+  Click <a href="checkout.jsp">here </a>to proceed for checkout. <br/>
+<%
   }
 %>
-Click <a href="checkout.jsp">here </a>to proceed for checkout. <br/>
 Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
 </body>
 </html>
