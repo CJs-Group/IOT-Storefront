@@ -49,5 +49,40 @@ public class DB {
         users.add(new Staff(4, "Carol", "passwordCarol", "carol@gmail.com", "2233445566", false));
         users.add(new Staff(5, "Dave", "passwordDave", "dave@gmail.com", "3344556677", false));
         users.add(new Staff(6, "Admin", "adminPassword", "admin@example.com", "4455667788", true));
+        for (User user : users) {
+            if (user instanceof Customer) {
+                Customer customer = (Customer) user;
+                for (ItemType item : items) {
+                    customer.getBasket().addItem(item, 1);
+                }
+            }
+        }
+    }
+
+    public static ItemType getItemById(int id) {
+        for (ItemType item : items) {
+            if (item.getItemID() == id) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static Unit getUnitById(int id) {
+        for (Unit unit : units) {
+            if (unit.getUnitID() == id) {
+                return unit;
+            }
+        }
+        return null;
+    }
+
+    public static User getUserById(int id) {
+        for (User user : users) {
+            if (user.getUserID() == id) {
+                return user;
+            }
+        }
+        return null;
     }
 }

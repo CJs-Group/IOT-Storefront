@@ -1,16 +1,18 @@
-package uts.isd.model;
+package Model.Users;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Basket {
-    private Map<Item, Integer> items = new HashMap<>();
+import Model.Items.ItemType;
 
-    public Map<Item, Integer> getItems() {
+public class Basket {
+    private Map<ItemType, Integer> items = new HashMap<>();
+
+    public Map<ItemType, Integer> getItems() {
         return items;
     }
 
-    public void addItem(Item item, Integer quantity) {
+    public void addItem(ItemType item, Integer quantity) {
         if (items.containsKey(item)) {
             items.put(item, items.get(item) + quantity);
             System.out.println("Item already in the basket, updated the quantity");
@@ -20,19 +22,19 @@ public class Basket {
         }
     }
 
-    public boolean containsItem(String itemId){
-        for (Map.Entry<Item, Integer> entry : items.entrySet()) {
-            if(entry.getKey().getItemId().equals(itemId)){
+    public boolean containsItem(int itemId){
+        for (Map.Entry<ItemType, Integer> entry : items.entrySet()) {
+            if(entry.getKey().getItemID() == (itemId)){
                 return true;
             }
         }
         return false;
     }
 
-    public void removeItem(String itemId) {
+    public void removeItem(int itemId) {
         if(containsItem(itemId)) {
-            for (Map.Entry<Item, Integer> entry : items.entrySet()) {
-                if (entry.getKey().getItemId().equals(itemId)){
+            for (Map.Entry<ItemType, Integer> entry : items.entrySet()) {
+                if (entry.getKey().getItemID() == (itemId)){
                     items.remove(entry.getKey());
                     System.out.println("Item removed from the basket");
                     break;
@@ -47,17 +49,17 @@ public class Basket {
         return items.size();
     }
 
-    public int getItemQuantity(Item item) {
+    public int getItemQuantity(ItemType item) {
         if (items.containsKey(item)) {
             return items.get(item);
         }
         return 0;
     }
 
-    public void increaseByOne(String itemId){
+    public void increaseByOne(int itemId){
         if(containsItem(itemId)){
-            for (Map.Entry<Item, Integer> entry : items.entrySet()) {
-                if (entry.getKey().getItemId().equals(itemId)){
+            for (Map.Entry<ItemType, Integer> entry : items.entrySet()) {
+                if (entry.getKey().getItemID() == (itemId)){
                     entry.setValue(entry.getValue() + 1);
                     System.out.println("Item quantity increase in the basket");
                     break;
@@ -68,10 +70,10 @@ public class Basket {
         }
     }
 
-    public void decreaseByOne(String itemId){
+    public void decreaseByOne(int itemId){
         if(containsItem(itemId)){
-            for (Map.Entry<Item, Integer> entry : items.entrySet()) {
-                if (entry.getKey().getItemId().equals(itemId)){
+            for (Map.Entry<ItemType, Integer> entry : items.entrySet()) {
+                if (entry.getKey().getItemID() == (itemId)){
                     entry.setValue(entry.getValue() - 1);
                     System.out.println("Item quantity decrease in the basket");
                     if (entry.getValue() == 0){

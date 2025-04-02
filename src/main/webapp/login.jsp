@@ -17,11 +17,16 @@
             String existErr = (String) session.getAttribute("existErr");
             String emailErr = (String) session.getAttribute("emailErr");
             String passErr = (String) session.getAttribute("passErr");
-//            String nameErr = (String) session.getAttribute("nameErr");
         %>
         
-        <h1>Sign In <span class="message"><%=(existErr != null? existErr : "")%></span></h1>
-        <form action="LoginController" method="post">
+        <h1>Sign In</h1>
+        
+        <% if(existErr != null || emailErr != null || passErr != null) { %>
+            <div style="color: red; margin-bottom: 15px;">
+                Error: <%= existErr != null ? existErr : emailErr != null ? emailErr : passErr %>
+            </div>
+        <% } %>
+        <form action="login" method="post">
             <table id="form_table">
                 <tr>
                     <td>Email:</td>

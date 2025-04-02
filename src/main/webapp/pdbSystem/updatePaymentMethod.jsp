@@ -1,47 +1,45 @@
-<%@page import="uts.isd.model.CreditCard"%>
-
+<%@page import="Model.DB"%>
+<%@page import="Model.Users.Customer"%>
+<%@page import="Model.Order.PaymentInfo"%>
 <html>
-<%
-  String creditCardNumber = request.getParameter("creditCardNumber");
-  String fullName = request.getParameter("fullName");
-  String expiryDate = request.getParameter("expiryDate");
-  String cvv = request.getParameter("cvv");
-  String updatePaymentMethod = request.getParameter("updatePaymentMethod");
-%>
-
+<head>
+    <title>Update Payment Method</title>
+</head>
 <body>
 <%
-  if (creditCardNumber != null && updatePaymentMethod.equals("updatePaymentMethod")) {
-    CreditCard creditCard = new CreditCard(creditCardNumber, fullName, expiryDate, cvv);
-    if (creditCard.validate()) {
-      session.setAttribute("creditCard", creditCard);
+    int userId = (Integer) session.getAttribute("userId");
+    Customer customer = (Customer) DB.getUserById(userId);
+    PaymentInfo paymentInfo = customer.getPaymentInfo();
+    String paymentErr = (String) session.getAttribute("paymentErr");
+    String paymentSuccess = (String) session.getAttribute("paymentSuccess");
+    
+    if(paymentErr != null) {
 %>
-    Successfully updated the account
+    <p style="color:red;"><%= paymentErr %></p>
 <%
-    } else {
-      session.removeAttribute("creditCard");
-%>
-    Invalid payment details. Please re-enter details.
-<%
+        session.removeAttribute("paymentErr");
     }
-  }
+    if(paymentSuccess != null) {
 %>
-
-<h1>Update Credit Card</h1>
-<form action="updatePaymentMethod.jsp" method="post">
-  <label>Credit Card Number: </label><br>
-  <input type="text" name="creditCardNumber"><br>
-  <label>Full Name: </label><br>
-  <input type="text" name="fullName"><br>
-  <label>Expiry Date (dd/mm/yy): </label><br>
-  <input type="text" name="expiryDate"><br>
-  <label>CVV/CVC: </label><br>
-  <input type="password" name="cvv"><br>
-  <input type="hidden" name="updatePaymentMethod" value="updatePaymentMethod"><br>
-  <input type="submit" value="Submit">
+    <p style="color:green;"><%= paymentSuccess %></p>
+<%
+        session.removeAttribute("paymentSuccess");
+    }
+%>
+<h1>Update Payment Method</h1>
+<form action="../updatePaymentMethod" method="post">
+    <label>Credit Card Number:</label><br>
+    <input type="text" name="creditCardNumber" value="<%= paymentInfo.getCardNo() != null ? paymentInfo.getCardNo() : "" %>"><br>
+    <label>Full Name:</label><br>
+    <input type="text" name="fullName" value="<%= paymentInfo.getCardHolderName() != null ? paymentInfo.getCardHolderName() : "" %>"><br>
+    <label>Expiry Date (MM/yy):</label><br>
+    <input type="text" name="expiryDate" value="<%= paymentInfo.getExpiryDate() != null ? paymentInfo.getExpiryDate() : "" %>"><br>
+    <label>CVV:</label><br>
+    <input type="password" name="cvv" value=""><br><br>
+    <input type="submit" value="Submit">
 </form>
-
-Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
-Click <a href="basket.jsp">here </a>to proceed to the basket. <br/>
+<br/>
+Click <a href="../userHome.jsp">here</a> to proceed to the main page.<br/>
+Click <a href="basket.jsp">here</a> to proceed to the basket.<br/>
 </body>
 </html>

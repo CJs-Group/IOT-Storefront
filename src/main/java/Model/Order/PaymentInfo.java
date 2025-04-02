@@ -3,6 +3,10 @@
 
 package Model.Order;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 // import java.util.Date; //We're just storing 4 numbers for expiry date
 import Model.Users.Customer;
 
@@ -11,15 +15,43 @@ public class PaymentInfo {
     // Customer customer;
     String cardNo;
     int CCV;
-    int expiryDate;
+    String expiryDate;
     String cardHolderName;
 
-    public PaymentInfo(int paymentId, String cardNo, int CCV, int expiryDate, String cardHolderName) {
+    public PaymentInfo(int paymentId, String cardNo, int CCV, String expiryDate, String cardHolderName) {
         this.paymentId = paymentId;
         this.cardNo = cardNo;
         this.CCV = CCV;
         this.expiryDate = expiryDate;
         this.cardHolderName = cardHolderName;
+    }
+
+    public PaymentInfo() {
+        this.paymentId = -1;
+        this.cardNo = null;
+        this.CCV = 0;
+        this.expiryDate = null;
+        this.cardHolderName = null;
+    }
+
+    public boolean validate() throws DateTimeParseException {
+        if(cardNo.length() != 16) {
+            System.out.println(cardNo + " is not a valid card number");
+            System.out.println("Card number length must be 16");
+            return false;
+        }
+        try {
+            if(LocalDate.parse(expiryDate, DateTimeFormatter.ofPattern("MM/yy")).isBefore(LocalDate.now())) {
+                System.out.println("Expiration Date is before current date");
+                return false;
+            }
+        }
+        catch (DateTimeParseException e) {
+            System.out.println("DateTimeParseException occurred");
+            return false;
+        }
+
+        return String.valueOf(CCV).length() == 3;
     }
 
     public int getPaymentId() {
@@ -46,11 +78,11 @@ public class PaymentInfo {
         this.CCV = CCV;
     }
 
-    public int getExpiryDate() {
+    public String getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(int expiryDate) {
+    public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
 

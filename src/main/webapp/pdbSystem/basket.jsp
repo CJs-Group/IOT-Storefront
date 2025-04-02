@@ -1,36 +1,33 @@
-<%@page import="uts.isd.model.Basket"%>
-<%@page import="uts.isd.model.CreditCard"%>
-<%@page import="uts.isd.model.Item"%>
+<%@page import="Model.Users.Basket"%>
+<%@page import="Model.Items.ItemType"%>
+<%@page import="Model.Order.PaymentInfo"%>
+<%@page import="Model.Users.User"%>
+<%@page import="Model.Users.Customer"%>
+<%@page import="Model.DB"%>
 <%@page import="java.util.Map"%>
 
 <html>
 <head>
   <title>Basket</title>
 </head>
-<h1> Basket </h1>
-<%
-  String itemId = request.getParameter("itemId");
-  String updateBasket = request.getParameter("action");
-%>
 <body>
-<%
-  Basket basket = (Basket) session.getAttribute("basket");
-  if (basket != null && updateBasket != null) {
-    if (updateBasket.equals("remove")) basket.removeItem(itemId);
-    if (updateBasket.equals("+1")) basket.increaseByOne(itemId);
-    if (updateBasket.equals("-1")) basket.decreaseByOne(itemId);
-  }
+<h1>Basket</h1>
 
-  CreditCard creditCard = (CreditCard) session.getAttribute("creditCard");
-  if (creditCard == null){
+<%
+  int userId = (int)session.getAttribute("userId");
+  Customer customer = (Customer)DB.getUserById(userId);
+  Basket basket = customer.getBasket();
+  PaymentInfo paymentInfo = customer.getPaymentInfo();
+  
+  if (paymentInfo.getPaymentId() == -1) {
 %>
-<a style="float:left"> You haven't provided your Payment Method</a><br>
-<a style="float:left"> Please provide your Credit Card details</a><br>
+<a style="float:left">You haven't provided your Payment Method</a><br>
+<a style="float:left">Please provide your Payment details</a><br>
 <a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br>
 <%
 } else {
 %>
-<label> Credit Card Details have been provided </label><br>
+<label>Payment Details have been provided</label><br>
 <a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
 <%
   }
@@ -42,11 +39,11 @@
 %>
 <label> Your Basket contains: </label><br>
 <%
-  for (Map.Entry<Item, Integer> entry : basket.getItems().entrySet()) {
+    for (Map.Entry<ItemType, Integer> entry : basket.getItems().entrySet()) {
 %>
-<label> Item: <%= entry.getKey().getItemName() %>, Quantity: <%= entry.getValue() %> </label>
-<form method="post" action="basket.jsp">
-  <input type="hidden" name="itemId" value="<%= entry.getKey().getItemId() %>">
+<label>Item: <%= entry.getKey().getName() %>, Quantity: <%= entry.getValue() %></label>
+<form method="post" action="../updateBasket">
+  <input type="hidden" name="itemId" value="<%= entry.getKey().getItemID() %>">
   <button type="submit" name="action" value="remove">Remove</button>
   <button type="submit" name="action" value="+1">+1</button>
   <button type="submit" name="action" value="-1">-1</button>

@@ -11,11 +11,9 @@
         <div>
             <a class="button" href="register.jsp">Register</a>
         </div>
-        <%
-        // Retrieve Alice assuming she's at index 1 of DB.users
-        String aliceName = DB.users.get(2).getUsername();
-        %>
-        <p>Alices name: <%= aliceName %></p>
+        <div>
+            <a class="button" href="login.jsp">Login</a>
+        </div>
         <jsp:include page="/ConnServlet" flush="true" />
     </body>
 </html>

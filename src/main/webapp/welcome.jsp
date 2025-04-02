@@ -1,28 +1,31 @@
-<%@page import="uts.isd.model.User"%>
+<%@page import="Model.DB"%>
+<%@page import="Model.Users.User"%>
 
 <html>
-
-<%
-    String name = request.getParameter("name");
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-    String gender = request.getParameter("gender");
-    String favcol = request.getParameter("favcol");
-%>
-
+<head>
+    <title>Welcome to IOT Storefront</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
 <body>
-
     <%
-    User user = new User(email, name, password, gender, favcol);
-    session.setAttribute("user", user);
+        int userId = (int)session.getAttribute("userId");
+        User user = DB.getUserById(userId);
+        session.setAttribute("user", user);
     %>
-    <h1>
-    Welcome, <%= name %>, good day! </br>
-    Your Email is <%= email %>, have fun! </br>
-    Your password is <%= password %>. </br>
-    Your gender is <%= gender %>. </br>
-    Your favourite colour is <%= favcol %>. </br>
-    Click <a href="userHome.jsp">here </a>to proceed to the main page. <br/>
-    </h1>
+    
+    <div class="welcome-container">
+        <h1>Welcome to IOT Storefront</h1>
+        
+        <div class="user-info">
+            <h2>Welcome, <%= user.getUsername() %>!</h2>
+            <p>Your account details:</p>
+            <ul>
+                <li>Email: <%= user.getEmail() %></li>
+                <li>Phone: <%= user.getPhoneNumber() %></li>
+            </ul>
+            
+            <p>Click <a href="userHome.jsp">here</a> to proceed to the main page.</p>
+        </div>
+    </div>
 </body>
 </html>
