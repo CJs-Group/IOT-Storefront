@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.DB"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,6 +11,11 @@
         <div>
             <a class="button" href="register.jsp">Register</a>
         </div>
+        <%
+        // Retrieve Alice assuming she's at index 1 of DB.users
+        String aliceName = DB.users.get(2).getUsername();
+        %>
+        <p>Alices name: <%= aliceName %></p>
         <jsp:include page="/ConnServlet" flush="true" />
     </body>
 </html>
