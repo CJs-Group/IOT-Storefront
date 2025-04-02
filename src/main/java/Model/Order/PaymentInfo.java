@@ -41,7 +41,7 @@ public class PaymentInfo {
             return false;
         }
         try {
-            if(LocalDate.parse(expiryDate, DateTimeFormatter.ofPattern("MM/yy")).isBefore(LocalDate.now())) {
+            if(java.time.YearMonth.parse(expiryDate, DateTimeFormatter.ofPattern("MM/yy")).isBefore(java.time.YearMonth.now())) {
                 System.out.println("Expiration Date is before current date");
                 return false;
             }

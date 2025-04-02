@@ -1,5 +1,6 @@
 <%@page import="Model.DB"%>
 <%@page import="Model.Users.User"%>
+<%@page import="Model.Users.Customer"%>
 
 <html>
 
