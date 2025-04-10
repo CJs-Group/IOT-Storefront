@@ -1,12 +1,16 @@
 package Controller;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.google.common.hash.Hashing;
+
 import javax.servlet.annotation.WebServlet;
 
 import Model.DB;
@@ -35,9 +39,14 @@ public class LoginController extends HttpServlet {
             return;
         }
         
+        String hashedPassword = Hashing.sha256()
+            .hashString(password, StandardCharsets.UTF_8)
+            .toString();
+
         boolean userFound = false;
         for (User user : DB.users) {
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+            //Temporarily check both hashed and unhashed password so test database still works, remove before release
+            if (user.getEmail().equals(email) && (user.getPassword().equals(hashedPassword) || user.getPassword().equals(password))) {
                 userFound = true;
                 session.setAttribute("userId", user.getUserID());
                 response.sendRedirect("welcome.jsp");

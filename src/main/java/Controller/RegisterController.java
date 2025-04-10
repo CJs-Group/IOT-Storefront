@@ -1,12 +1,16 @@
 package Controller;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.google.common.hash.Hashing;
+
 import javax.servlet.annotation.WebServlet;
 
 import Model.DB;
@@ -29,6 +33,11 @@ public class RegisterController extends HttpServlet {
         }
 
         int newId = DB.users.size() + 1;
+        
+        password = Hashing.sha256()
+            .hashString(password, StandardCharsets.UTF_8)
+            .toString();
+
         Customer newCustomer = new Customer(newId, username, password, email, "");
         DB.users.add(newCustomer);
 
