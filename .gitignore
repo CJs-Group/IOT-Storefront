@@ -43,3 +43,5 @@ replay_pid*
 
 server/
 database/
+
+store.db
