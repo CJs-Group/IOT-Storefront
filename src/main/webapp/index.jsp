@@ -14,6 +14,5 @@
         <div>
             <a class="button" href="login.jsp">Login</a>
         </div>
-        <jsp:include page="/ConnServlet" flush="true" />
     </body>
 </html>
