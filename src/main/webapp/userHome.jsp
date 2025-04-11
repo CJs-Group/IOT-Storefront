@@ -1,16 +1,20 @@
 <%@page import="Model.DB"%>
 <%@page import="Model.Users.User"%>
 <%@page import="Model.Users.Customer"%>
+<%@page import="Model.DAO.DBConnector"%>
+<%@page import="Model.DAO.DBManager"%>
 
 <html>
 
     <body>
         <h3> Welcome </h3>
         <%
+        DBConnector dbc = new DBConnector();
+        DBManager dbm = new DBManager(dbc.openConnection());
         int userId = (int)session.getAttribute("userId");
-        User user = DB.getUserById(userId);
+        User user = dbm.getUserById(userId);
         session.setAttribute("user", user);
-        if (user != null){
+        if (user != null) {
         %>
             <p align="right"> You are logged in as <%= user.getUsername() %> <%= user.getEmail() %> <br/>
                 <%

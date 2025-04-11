@@ -1,5 +1,7 @@
 <%@page import="Model.DB"%>
 <%@page import="Model.Users.User"%>
+<%@page import="Model.DAO.DBConnector"%>
+<%@page import="Model.DAO.DBManager"%>
 
 <html>
 <head>
@@ -8,8 +10,10 @@
 </head>
 <body>
     <%
+        DBConnector dbc = new DBConnector();
+        DBManager dbm = new DBManager(dbc.openConnection());
         int userId = (int)session.getAttribute("userId");
-        User user = DB.getUserById(userId);
+        User user = dbm.getUserById(userId);
         session.setAttribute("user", user);
     %>
     

@@ -18,34 +18,30 @@ import Model.Users.Staff;
 public class SetupDB {
 
     public static void main(String[] args) throws Exception {
-        Path[] paths = Files.walk(Paths.get("migrations/")).toArray(Path[]::new);
+        try (DBConnector connector = new DBConnector()) {
+            Path[] paths = Files.walk(Paths.get("migrations/")).toArray(Path[]::new);
+            Connection conn = connector.openConnection();
 
-        DBConnector connector = new DBConnector();
-
-        Connection conn = connector.openConnection();
-
-        for (Path path : paths) {
-            File file = new File(path.toString());
-            if (!file.isFile()) {
-                continue;
+            for (Path path : paths) {
+                File file = new File(path.toString());
+                if (!file.isFile()) {
+                    continue;
+                }
+                FileInputStream inputStream = new FileInputStream(path.toAbsolutePath().toString());
+                Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8.name());
+                String content = scanner.useDelimiter("\\A").next();
+                Statement st = conn.createStatement();
+                System.out.println(content);
+                int i = st.executeUpdate(content);
+                if (i == 0) {
+                    System.out.println("Migration Successful: " + file.getName());
+                }
+                else {
+                    System.out.println("Migration Unsuccessful: " + file.getName());
+                }
+                scanner.close();
             }
-            FileInputStream inputStream = new FileInputStream(path.toAbsolutePath().toString());
-            Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8.name());
-            String content = scanner.useDelimiter("\\A").next();
-            Statement st = conn.createStatement();
-            System.out.println(content);
-            int i = st.executeUpdate(content);
-            if (i == 0) {
-                System.out.println("Migration Successful: " + file.getName());
-            }
-            else {
-                System.out.println("Migration Unsuccessful: " + file.getName());
-            }
-            scanner.close();
         }
-
-        connector.closeConnection();
-
     }
 
 }
