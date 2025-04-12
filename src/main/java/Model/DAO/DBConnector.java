@@ -6,8 +6,8 @@ import java.sql.DriverManager;
 
 import java.sql.SQLException;
 
-public class DBConnector extends DB {
-    public DBConnector() throws ClassNotFoundException, SQLException {
+public class DBConnector extends DB implements AutoCloseable {
+    public DBConnector() throws SQLException {
         conn = DriverManager.getConnection(URL + db, dbuser, dbpass);
     }
 
@@ -15,7 +15,8 @@ public class DBConnector extends DB {
         return this.conn;
     }
 
-    public void closeConnection() throws SQLException {
+    @Override
+    public void close() throws SQLException {
         this.conn.close();
     }
 }
