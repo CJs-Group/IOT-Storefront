@@ -2,7 +2,6 @@ package Controller;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -15,7 +14,6 @@ import com.google.common.hash.Hashing;
 
 import javax.servlet.annotation.WebServlet;
 
-import Model.DB;
 import Model.DAO.DBConnector;
 import Model.DAO.DBManager;
 import Model.Users.User;

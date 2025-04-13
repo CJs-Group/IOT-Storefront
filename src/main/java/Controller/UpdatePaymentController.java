@@ -5,7 +5,6 @@ import java.time.format.DateTimeParseException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-
 import Model.DB;
 import Model.Order.PaymentInfo;
 import Model.Users.Customer;
@@ -51,7 +50,7 @@ public class UpdatePaymentController extends HttpServlet {
             }
         }
         catch(DateTimeParseException e) {
-            session.setAttribute("paymentErr", "Expiry date format is invalid. Use dd/MM/yy.");
+            session.setAttribute("paymentErr", "Expiry date format is invalid. Use MM/yy.");
             response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
             return;
         }

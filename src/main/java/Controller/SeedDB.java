@@ -1,9 +1,6 @@
 package Controller;
 
 import java.sql.*;
-
-import java.util.logging.*;
-
 import Model.DAO.*;
 import Model.Users.Customer;
 import Model.Users.Staff;
