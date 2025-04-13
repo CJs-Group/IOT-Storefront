@@ -3,7 +3,6 @@
 package Model.DAO;
 
 import Model.Items.ItemType;
-import Model.Items.Unit;
 import Model.Users.Customer;
 import Model.Users.Staff;
 import Model.Users.User;

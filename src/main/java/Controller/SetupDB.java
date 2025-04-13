@@ -8,12 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Scanner;
-import java.util.logging.*;
-import java.util.stream.Stream;
-
 import Model.DAO.*;
-import Model.Users.Customer;
-import Model.Users.Staff;
 
 public class SetupDB {
 

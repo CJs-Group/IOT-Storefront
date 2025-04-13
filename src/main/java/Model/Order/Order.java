@@ -1,7 +1,6 @@
 // Order is a list of items allocated to a person when they purchase something.
 
 package Model.Order;
-import Model.Order.OrderItem;
 import java.util.List;
 
 public class Order {

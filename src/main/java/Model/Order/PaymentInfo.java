@@ -3,12 +3,8 @@
 
 package Model.Order;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
-// import java.util.Date; //We're just storing 4 numbers for expiry date
-import Model.Users.Customer;
 
 public class PaymentInfo {
     int paymentId;

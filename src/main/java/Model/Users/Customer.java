@@ -1,7 +1,5 @@
 package Model.Users;
-import Model.Items.ItemType;
 import Model.Order.PaymentInfo;
-import Model.Users.Basket;
 
 public class Customer extends User {
     private Basket basket = new Basket();

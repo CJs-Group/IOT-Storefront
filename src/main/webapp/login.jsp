@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><a href="cancel.jsp" class="button"> Cancel</a>
+                    <td><a href="index.jsp" class="button"> Cancel</a>
                         <input class="button" type="submit" value="Sign In">
                     </td>
                 </tr>
