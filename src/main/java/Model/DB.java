@@ -4,13 +4,9 @@ package Model;
 import Model.Items.ItemType;
 import Model.Items.Types;
 import Model.Items.Unit;
-import Model.Order.PaymentInfo;
 import Model.Users.Customer;
 import Model.Users.User;
 import Model.Users.Staff;
-import Model.Items.Types;
-import Model.Items.Status;
-
 import java.util.ArrayList;
 import java.util.List;
 

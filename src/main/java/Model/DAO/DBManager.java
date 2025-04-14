@@ -3,7 +3,6 @@
 package Model.DAO;
 
 import Model.Items.ItemType;
-import Model.Items.Unit;
 import Model.Users.Customer;
 import Model.Users.Staff;
 import Model.Users.User;
@@ -18,7 +17,7 @@ public class DBManager {
 
     private Connection conn;
     
-    public DBManager(Connection conn) throws SQLException {       
+    public DBManager(Connection conn) {       
         this.conn = conn;   
     }
 
@@ -91,7 +90,7 @@ public class DBManager {
         user.setUserID(rs.getInt("UserID"));
     }
 
-    public User findUserById(int userId) throws SQLException {
+    public User getUserById(int userId) throws SQLException {
         PreparedStatement ps = conn.prepareStatement("""
             SELECT
                 *
@@ -103,7 +102,7 @@ public class DBManager {
         return resultToUser(rs);
     }
 
-    public User findUserByEmail(String email) throws SQLException {
+    public User getUserByEmail(String email) throws SQLException {
         PreparedStatement ps = conn.prepareStatement("""
             SELECT
                 *

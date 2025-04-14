@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -14,9 +15,9 @@
     <body>
         <div><span class="time" id="time"></span></div>
         <%
-            String existErr = (String) session.getAttribute("existErr");
-            String emailErr = (String) session.getAttribute("emailErr");
-            String passErr = (String) session.getAttribute("passErr");
+            String existErr = request.getParameter("existError");
+            String emailErr = request.getParameter("emailError");
+            String passErr = request.getParameter("passError");
         %>
         
         <h1>Sign In</h1>
@@ -38,7 +39,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><a href="cancel.jsp" class="button"> Cancel</a>
+                    <td><a href="index.jsp" class="button"> Cancel</a>
                         <input class="button" type="submit" value="Sign In">
                     </td>
                 </tr>
