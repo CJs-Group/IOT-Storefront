@@ -15,6 +15,9 @@ if (item == null) {
     <h1>STOREFRONT</h1>
     <h2>Item <%= item.getItemID() %></h2>
     <h3>Item <%= item.getName() %></h3>
+    <img src="<%= item.getImagePath() %>">
+    <p>$<%= item.getPrice() %></p>
+    <p><%= item.getDescription() %></p>
     <div>
     </div>
 </body>

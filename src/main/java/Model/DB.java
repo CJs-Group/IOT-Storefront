@@ -21,17 +21,17 @@ public class DB {
     }
 
     public static void addItems() { //Temporary to add fake items to the database.
-        items.add(new ItemType(1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.png"));
-        items.add(new ItemType(2, "Switch", "A device that connects devices on a computer network by using packet switching to forward data to its destination", Types.Networking, "images/switch.png"));
-        items.add(new ItemType(3, "Doorbell", "A device that signals the presence of a visitor at a door", Types.Security, "images/doorbell.png"));
-        items.add(new ItemType(4, "Security Camera", "A device that records video footage of a specific area", Types.Security, "images/security_camera.png"));
-        items.add(new ItemType(5, "Smart Light", "A light bulb that can be controlled remotely", Types.Smart_Home, "images/smart_light.png"));
-        items.add(new ItemType(6, "Smart Thermostat", "A device that controls the temperature of a building", Types.Smart_Home, "images/smart_thermostat.png"));
-        items.add(new ItemType(7, "Smart Lock", "A lock that can be controlled remotely", Types.Security, "images/smart_lock.png"));
-        items.add(new ItemType(8, "Smart TV", "A television set that is connected to the internet", Types.Smart_Home, "images/smart_tv.png"));
-        items.add(new ItemType(9, "Baby Monitor", "A device that allows parents to monitor their baby remotely", Types.Smart_Home, "images/baby_monitor.png"));
-        items.add(new ItemType(10, "Amazon Echo", "A smart speaker that can control other smart devices", Types.Assistants, "images/amazon_echo.png"));
-        items.add(new ItemType(11, "Google Nest", "A smart speaker that can control other smart devices", Types.Assistants, "images/google_nest.png"));
+        items.add(new ItemType(1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.jpg", 5.5));
+        items.add(new ItemType(2, "Switch", "A device that connects devices on a computer network by using packet switching to forward data to its destination", Types.Networking, "images/switch.png", 5.5));
+        items.add(new ItemType(3, "Doorbell", "A device that signals the presence of a visitor at a door", Types.Security, "images/doorbell.png", 5.5));
+        items.add(new ItemType(4, "Security Camera", "A device that records video footage of a specific area", Types.Security, "images/security_camera.png", 5.5));
+        items.add(new ItemType(5, "Smart Light", "A light bulb that can be controlled remotely", Types.Smart_Home, "images/smart_light.png", 5.5));
+        items.add(new ItemType(6, "Smart Thermostat", "A device that controls the temperature of a building", Types.Smart_Home, "images/smart_thermostat.png", 5.5));
+        items.add(new ItemType(7, "Smart Lock", "A lock that can be controlled remotely", Types.Security, "images/smart_lock.png", 5.5));
+        items.add(new ItemType(8, "Smart TV", "A television set that is connected to the internet", Types.Smart_Home, "images/smart_tv.png", 5.5));
+        items.add(new ItemType(9, "Baby Monitor", "A device that allows parents to monitor their baby remotely", Types.Smart_Home, "images/baby_monitor.png", 5.5));
+        items.add(new ItemType(10, "Amazon Echo", "A smart speaker that can control other smart devices", Types.Assistants, "images/amazon_echo.png", 5.5));
+        items.add(new ItemType(11, "Google Nest", "A smart speaker that can control other smart devices", Types.Assistants, "images/google_nest.png", 5.5));
         int i = 0;
         for (ItemType item : items) {
             for (int j = 0; j < 10; j++) {

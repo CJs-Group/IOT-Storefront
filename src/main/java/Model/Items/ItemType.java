@@ -6,27 +6,29 @@ import java.util.List;
 public class ItemType {
     int ItemID;
     List<Unit> units;
-    int price; // divided by 100 to get the actual price
+    double price; 
     String name;
     String description;
     Enum<Types> type;
     String imagePath;
 
-    public ItemType(int ItemID, List<Unit> units, String name, String description, Enum<Types> type, String imagePath) {
+    public ItemType(int ItemID, List<Unit> units, String name, String description, Enum<Types> type, String imagePath, double price) {
         this.ItemID = ItemID;
         this.units = units;
         this.name = name;
         this.description = description;
         this.type = type;
         this.imagePath = imagePath;
+        this.price = price;
     }
 
-    public ItemType (int ItemID, String name, String description, Enum<Types> type, String imagePath) {
+    public ItemType (int ItemID, String name, String description, Enum<Types> type, String imagePath, double price) {
         this.ItemID = ItemID;
         this.name = name;
         this.description = description;
         this.type = type;
         this.imagePath = imagePath;
+        this.price = price;
     }
 
     public String getName() {
@@ -53,11 +55,11 @@ public class ItemType {
         return units;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
