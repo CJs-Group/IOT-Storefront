@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import Model.DAO.DBConnector;
 import Model.DAO.DBManager;
 import Model.Users.Customer;
+import Model.Validator;
 
 @WebServlet("/register")
 public class RegisterController extends HttpServlet {
@@ -38,7 +39,18 @@ public class RegisterController extends HttpServlet {
                 return;
             }
             catch (Exception _e) {}
-            
+            if (!Validator.validateEmail(email)) {
+                response.sendRedirect("register.jsp?error=Invalid Email.");
+                return;
+            }
+            // if (!Validator.validateName(username)) {
+            //     response.sendRedirect("register.jsp?error=Invalid Name.");
+            //     return;
+            // }
+            if (!Validator.validatePassword(password)) {
+                response.sendRedirect("register.jsp?error=Invalid Password.");
+                return;
+            }
             password = Hashing.sha256()
                 .hashString(password, StandardCharsets.UTF_8)
                 .toString();
