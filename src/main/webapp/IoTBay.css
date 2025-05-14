@@ -2,6 +2,7 @@ body {
     background-color: #FFAF85;
     height: 100%;
     overflow-y: hidden;
+    color: #3C3A41;
 }
 
 .topBar {
@@ -11,7 +12,23 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1000;
+    z-index: -1;
+
+    box-sizing: border-box;
+    border-top: 5px solid #3C3A41;
+    border-left: 5px solid #3C3A41;
+    border-right: 5px solid #3C3A41;
+}
+
+.topBar::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 100px;
+    right: 100px;
+    height: 5px;
+    background-color: #3C3A41;
+    
 }
 
 .mainText {
@@ -22,6 +39,36 @@ body {
 .logo {
     height: 100px;
     padding-left: 7%;
+}
+
+.buttonContainer {
+    position: fixed;
+    top: 3%;
+    right: 1%;
+    text-align: center;
+    gap: 40px;
+    padding-right: 7%;
+    display: flex;
+    justify-content: center;
+}
+
+.registerContainer, .cartContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none; /* removes underline from link */
+    cursor: pointer; /* makes the cursor a pointer */
+}
+
+.registerIcon, .cartIcon {
+    height: 60px;
+}
+
+.registerText, .cartText {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 1000;
+    color: #3C3A41;
 }
 
 .searchBarPos {
@@ -41,7 +88,8 @@ body {
     height: 100vh;
     position: fixed;
     top: 0;
-    z-index: -1;
+    border: 5px solid #3C3A41;
+    z-index: -2;
 }
 
 .leftBar {
@@ -54,10 +102,24 @@ body {
 
 .botBar {
     bottom: 0;
-    background-color: #FF8D70;
-    width: 100vw;
-    height: 60px;
+    left: 0;
+    right: 0;
+    background-color: #3C3A41;
+    height: 100px;
+    margin: 0 auto;
     position: fixed;
+    border: 5px solid #3C3A41;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 150px;
+    color: white;
+}
+
+.bottomLeftText, .bottomRightText {
+    font-size: 15px;
+    margin: 0;
 }
 
 .prodImageContainer {
@@ -68,9 +130,43 @@ body {
     height: 50vh;
     position: absolute;
     z-index: -1;
-    border: 1px solid black;
+    border: 1px solid #3C3A41;
 }
 
 .descText {
     padding-left: 70vh;
+}
+
+.priceText {
+    font-weight: 500;
+    font-size: 3vh;
+}
+
+.priceTextContainer {
+    background-color: #DA6C70;
+    height: 5vh;
+    width: 10vw;
+    border: 1px solid #A36672;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addCartContainer {
+    background-color: #2ba135;
+    height: 10vh;
+    width: 25vh;
+    border: 3px solid #3C3A41;
+
+    position: fixed;
+    top: 63%;
+    right: 28%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addCartText {
+    font-weight: 1000;
+    font-size: 3vh;
 }

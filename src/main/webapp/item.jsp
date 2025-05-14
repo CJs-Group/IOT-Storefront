@@ -21,6 +21,18 @@ if (item == null) {
     <img src="images/CJ_MAXX.png" class="logo">
     <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
 
+    <div class="buttonContainer">
+        <a href="register.jsp" class="registerContainer">
+            <img src="images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+
+        <a href="placeholder" class="cartContainer">
+            <img src="images/cart.png" class="cartIcon">
+            <p class="cartText">Cart</p>
+        </a>
+    </div>
+
     <div class="leftBar"></div>
     <div class="rightBar"></div>
 
@@ -28,12 +40,17 @@ if (item == null) {
         <div class="prodImageContainer"><img src="<%= item.getImagePath() %>" class="prodImage"></div>
         <div class="descText">
             <h1><%= item.getName() %></h1>
-            <h2>ID: <%= item.getItemID() %></h2>
-            <p>Price: $<%= item.getPrice() %></p>
+            <div class="priceTextContainer"><p class="priceText">Price: $<%= item.getPrice() %></p></div>
+            <p>ID: <%= item.getItemID() %></p>
             <p><%= item.getDescription() %></p>
         </div>
+
+        <div class="addCartContainer"><p class="addCartText">Add to Cart</p></div>
     </div>
 
-    <div class="botBar"></div>
+    <div class="botBar">
+        <p class="bottomLeftText">81-113, Broadway, Ultimo NSW 2007</p>
+        <p class="bottomRightText">support@cjmaxx.com</p>
+        </div>
 </body>
 </html>
