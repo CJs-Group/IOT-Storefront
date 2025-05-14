@@ -41,6 +41,17 @@ body {
     padding-left: 7%;
 }
 
+.logoLarge {
+    height: 60vh;
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -100;
+}
+
 .buttonContainer {
     position: fixed;
     top: 3%;
@@ -169,4 +180,41 @@ body {
 .addCartText {
     font-weight: 1000;
     font-size: 3vh;
+}
+
+.featItemText {
+    font-weight: 1000;
+    font-size: 3vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.scrollContainer {
+    display: flex;
+    margin: 40vh 10vw;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+}
+
+.itemCard {
+    flex: 0 0 auto;
+    width: 180px;
+    border: 1px solid #3C3A41;
+    padding: 10px;
+    text-align: center;
+    background-color: #DA6C70;
+    color: #3C3A41;
+    text-decoration: none;
+}
+
+.itemImage {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 10px;
 }

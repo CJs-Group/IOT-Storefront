@@ -14,6 +14,7 @@ if (item == null) {
 <head>
     <title><%=item.getName()%></title>
     <link rel="stylesheet" type = "text/css" href="IoTBay.css">
+    <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
 </head>
 
 <body>
