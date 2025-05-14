@@ -1,0 +1,76 @@
+body {
+    background-color: #FFAF85;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.topBar {
+    background-color: #FF8D70;
+    height: 125px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1000;
+}
+
+.mainText {
+    padding-top: 5%;
+    padding-left: 10%;
+}
+
+.logo {
+    height: 100px;
+    padding-left: 7%;
+}
+
+.searchBarPos {
+    position: absolute;
+    top: 5%;
+    left: 19%;
+}
+
+.searchBar {
+    height: 35px;
+    width: 300px;
+}
+
+.leftBar, .rightBar {
+    background-color: #FF8D70;
+    width: 100px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: -1;
+}
+
+.leftBar {
+    left: 0;
+}
+
+.rightBar {
+    right: 0;
+}
+
+.botBar {
+    bottom: 0;
+    background-color: #FF8D70;
+    width: 100vw;
+    height: 60px;
+    position: fixed;
+}
+
+.prodImageContainer {
+    padding-left: 5%;
+}
+
+.prodImage {
+    height: 50vh;
+    position: absolute;
+    z-index: -1;
+    border: 1px solid black;
+}
+
+.descText {
+    padding-left: 70vh;
+}

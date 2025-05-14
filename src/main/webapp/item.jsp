@@ -11,14 +11,29 @@ if (item == null) {
 }
 %>
 
+<head>
+    <title><%=item.getName()%></title>
+    <link rel="stylesheet" type = "text/css" href="IoTBay.css">
+</head>
+
 <body>
-    <h1>STOREFRONT</h1>
-    <h2>Item <%= item.getItemID() %></h2>
-    <h3>Item <%= item.getName() %></h3>
-    <img src="<%= item.getImagePath() %>">
-    <p>$<%= item.getPrice() %></p>
-    <p><%= item.getDescription() %></p>
-    <div>
+    <div class="topBar"></div>
+    <img src="images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+    <div class="mainText">
+        <div class="prodImageContainer"><img src="<%= item.getImagePath() %>" class="prodImage"></div>
+        <div class="descText">
+            <h1><%= item.getName() %></h1>
+            <h2>ID: <%= item.getItemID() %></h2>
+            <p>Price: $<%= item.getPrice() %></p>
+            <p><%= item.getDescription() %></p>
+        </div>
     </div>
+
+    <div class="botBar"></div>
 </body>
 </html>
