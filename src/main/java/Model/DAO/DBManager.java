@@ -1,12 +1,14 @@
  
 
 package Model.DAO;
-
 import Model.Items.ItemType;
 import Model.Users.Customer;
 import Model.Users.Staff;
 import Model.Users.User;
+import Model.Order.PaymentInfo;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /* 
 * DBManager is the primary DAO class to interact with the database. 
@@ -112,5 +114,80 @@ public class DBManager {
         ps.setString(1, email);
         ResultSet rs = ps.executeQuery();
         return resultToUser(rs);
+    }
+
+    // Was tempting to add restrictions to modifying the user objects, but this should be handled in the Model and just gets in the way here
+    public void updateUser(User user) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement("""
+            UPDATE Users
+            SET
+                Name = ?,
+                Email = ?,
+                PasswordHash = ?,
+                PhoneNumber = ?,
+                ShippingAddress = ?
+            WHERE UserID = ?
+        """);
+        ps.setString(1, user.getUsername());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getPassword());
+        ps.setString(4, user.getPhoneNumber());
+        if (user instanceof Customer) {
+            ps.setString(5, ((Customer)user).getAddress());
+        }
+        ps.setInt(6, user.getUserID());
+        ps.executeUpdate();
+    }
+
+    public List<User> getAllUsers() throws SQLException {
+        List<User> users = new ArrayList<>();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            users.add(resultToUser(rs));
+        }
+        return users;
+    }
+
+    public List<Customer> getCustomers() throws SQLException {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT * FROM Users WHERE Type = 'Customer'";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Customer c = new Customer(
+                    rs.getInt("UserID"),
+                    rs.getString("Name"),
+                    rs.getString("PasswordHash"),
+                    rs.getString("Email"),
+                    rs.getString("PhoneNumber"),
+                    rs.getString("ShippingAddress"),
+                    new PaymentInfo()
+                );
+                customers.add(c);
+            }
+        }
+        return customers;
+    }
+
+    public List<Staff> getStaff() throws SQLException {
+        List<Staff> staffList = new ArrayList<>();
+        String sql = "SELECT * FROM Users WHERE Type IN ('Staff','Admin')";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                boolean isAdmin = "Admin".equals(rs.getString("Type"));
+                Staff s = new Staff(
+                    rs.getInt("UserID"),
+                    rs.getString("Name"),
+                    rs.getString("PasswordHash"),
+                    rs.getString("Email"),
+                    rs.getString("PhoneNumber"),
+                    isAdmin
+                );
+                staffList.add(s);
+            }
+        }
+        return staffList;
     }
 }
