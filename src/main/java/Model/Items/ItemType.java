@@ -11,6 +11,7 @@ public class ItemType {
     String description;
     Enum<Types> type;
     String imagePath;
+    java.util.Formatter formatter = new java.util.Formatter();
 
     public ItemType(int ItemID, List<Unit> units, String name, String description, Enum<Types> type, String imagePath, double price) {
         this.ItemID = ItemID;
@@ -57,6 +58,10 @@ public class ItemType {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getPriceString() {
+        return String.format("%.2f", price);
     }
 
     public void setPrice(double price) {

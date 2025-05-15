@@ -49,7 +49,7 @@
             <a href="/item.jsp?id=<%= it.getItemID() %>" class="itemCard">
                 <img src="<%= it.getImagePath() %>" alt="<%= it.getName() %>" class="itemImage">
                 <p><%= it.getName() %></p>
-                <p>$<%= it.getPrice() %></p>
+                <p>$<%= it.getPriceString() %></p>
             </a>
         <% } %>    
     </div>
