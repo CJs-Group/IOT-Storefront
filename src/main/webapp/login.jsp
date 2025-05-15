@@ -11,8 +11,26 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login Page</title>
+        <link rel="stylesheet" type = "text/css" href="IoTBay.css">
+        <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
     </head>
-    <body>
+
+<body>
+
+        <div class="topBar"></div>
+            <img src="images/CJ_MAXX.png" class="logo">
+        </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+    <img src="images/CJ_MAXX.png" class="logoLarge">
+
+    <div class="botBar">
+        <p class="bottomLeftText">81-113, Broadway, Ultimo NSW 2007</p>
+        <p class="bottomRightText">support@cjmaxx.com</p>
+    </div>
+
         <div><span class="time" id="time"></span></div>
         <%
             String existErr = request.getParameter("existError");

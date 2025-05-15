@@ -52,6 +52,6 @@ if (item == null) {
     <div class="botBar">
         <p class="bottomLeftText">81-113, Broadway, Ultimo NSW 2007</p>
         <p class="bottomRightText">support@cjmaxx.com</p>
-        </div>
+    </div>
 </body>
 </html>
