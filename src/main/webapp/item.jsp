@@ -41,7 +41,7 @@ if (item == null) {
         <div class="prodImageContainer"><img src="<%= item.getImagePath() %>" class="prodImage"></div>
         <div class="descText">
             <h1><%= item.getName() %></h1>
-            <div class="priceTextContainer"><p class="priceText">Price: $<%= item.getPrice() %></p></div>
+            <div class="priceTextContainer"><p class="priceText">Price: $<%= item.getPriceString() %></p></div>
             <p>ID: <%= item.getItemID() %></p>
             <p><%= item.getDescription() %></p>
         </div>
