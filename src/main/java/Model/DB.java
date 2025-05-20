@@ -20,6 +20,15 @@ public class DB {
         System.out.println("");
     }
 
+    public static ItemType getItemById(String id) {
+        for (ItemType item : items) {
+            if (item.getItemID() == Integer.parseInt(id)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public static void addItems() { //Temporary to add fake items to the database.
         items.add(new ItemType(1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.png"));
         items.add(new ItemType(2, "Switch", "A device that connects devices on a computer network by using packet switching to forward data to its destination", Types.Networking, "images/switch.png"));

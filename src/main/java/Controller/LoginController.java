@@ -45,7 +45,7 @@ public class LoginController extends HttpServlet {
 
             
             User user = dbm.getUserByEmail(email);
-            session.setAttribute("userId", user.getUserID());
+            session.setAttribute("user", user);
             response.sendRedirect("welcome.jsp");
 
             if (user.getPassword() == hashedPassword) {

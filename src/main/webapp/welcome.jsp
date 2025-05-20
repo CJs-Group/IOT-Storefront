@@ -10,11 +10,7 @@
 </head>
 <body>
     <%
-    try (DBConnector dbc = new DBConnector()) {
-        DBManager dbm = new DBManager(dbc.openConnection());
-        int userId = (int)session.getAttribute("userId");
-        User user = dbm.getUserById(userId);
-        session.setAttribute("user", user);
+    User user = (User) session.getAttribute("user");
     %>
     
     <div class="welcome-container">
@@ -32,9 +28,6 @@
         </div>
     </div>
 <%
-    } catch (Exception e) {
-        // Handle exception or log
-    }
 %>
 </body>
 </html>

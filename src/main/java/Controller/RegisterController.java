@@ -58,9 +58,9 @@ public class RegisterController extends HttpServlet {
             Customer newCustomer = new Customer(0, username, password, email, "");
                 dbm.createUser(newCustomer);
             
-            // Add the new user id to session
+            // Add the new user to session
             HttpSession session = request.getSession();
-            session.setAttribute("userId", newCustomer.getUserID());
+            session.setAttribute("user", newCustomer);
             response.sendRedirect("welcome.jsp");
         }
         catch (SQLException e) {
