@@ -15,7 +15,6 @@ import javax.servlet.http.*;
 
 import com.google.common.hash.Hashing;
 
-import Model.DB;
 import Model.Validator;
 import Model.DAO.DBConnector;
 import Model.DAO.DBManager;

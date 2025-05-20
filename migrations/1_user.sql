@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS "Users";
+
 CREATE TABLE "Users" (
 	"UserID"	INTEGER,
 	"Name"	TEXT NOT NULL,

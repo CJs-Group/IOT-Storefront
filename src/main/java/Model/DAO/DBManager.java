@@ -1,14 +1,21 @@
- 
+//I have been moving the DAO code for the different classes into their own files
 
 package Model.DAO;
+import Model.Basket.Basket;
+import Model.Basket.BasketItem;
 import Model.Items.ItemType;
+import Model.Items.Unit;
 import Model.Users.Customer;
 import Model.Users.Staff;
 import Model.Users.User;
+import Model.Order.Order;
+import Model.Order.OrderItem;
+import Model.Order.OrderStatus;
 import Model.Order.PaymentInfo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import Model.Items.Status;
 
 /* 
 * DBManager is the primary DAO class to interact with the database. 
@@ -18,176 +25,230 @@ import java.util.List;
 public class DBManager {
 
     private Connection conn;
+    private UserDAO userDAO;
+    private ItemTypeDAO itemTypeDAO;
+    private UnitDAO unitDAO;
+    private OrderDAO orderDAO;
+    private OrderItemDAO orderItemDAO;
+    private BasketDAO basketDAO;
+    private BasketItemDAO basketItemDAO;
+    private CardDetailDAO cardDetailDAO;
     
-    public DBManager(Connection conn) {       
-        this.conn = conn;   
+    public DBManager(Connection conn) {
+        this.conn = conn;
+        this.userDAO = new UserDAO(conn);
+        this.itemTypeDAO = new ItemTypeDAO(conn);
+        this.unitDAO = new UnitDAO(conn, itemTypeDAO);
+        this.orderItemDAO = new OrderItemDAO(conn, this.unitDAO);
+        this.orderDAO = new OrderDAO(conn, this.orderItemDAO);
+        this.basketItemDAO = new BasketItemDAO(conn, this.itemTypeDAO);
+        this.basketDAO = new BasketDAO(conn, this.basketItemDAO);
+        this.cardDetailDAO = new CardDetailDAO(conn);
     }
 
-    public ItemType getItemById(int id) {
-        return null;
-    }
-
-    private User resultToUser(ResultSet rs) throws SQLException {
-        String type  = rs.getString("Type");
-        if (type.equals("Customer")) {
-            Customer c = new Customer(
-                rs.getInt("UserID"),
-                rs.getString("Name"),
-                rs.getString("PasswordHash"),
-                rs.getString("Email"),
-                rs.getString("PhoneNumber")
-            );
-            c.setAddress(rs.getString("ShippingAddress"));
-            return c;
-        }
-        else {
-            Staff s = new Staff(
-                rs.getInt("UserID"),
-                rs.getString("Name"),
-                rs.getString("PasswordHash"),
-                rs.getString("Email"),
-                rs.getString("PhoneNumber"),
-                type.equals("Admin")
-            );
-            return s;
+    public void close() throws SQLException {
+        if (conn != null) {
+            conn.close();
         }
     }
 
-    /**
-     * Creates a user in the DB and mutates the ID of the input user to match that of the one in the DB.
-     * @param user
-     * @throws SQLException
-     */
+    public ItemType getItemById(int id) throws SQLException {
+        return itemTypeDAO.getItemTypeById(id);
+    }
+
     public void createUser(User user) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("""
-            INSERT INTO Users
-            (
-                Name,
-                Email,
-                PasswordHash,
-                PhoneNumber,
-                Type,
-                ShippingAddress
-            )
-            VALUES
-            (
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?
-            )
-            RETURNING UserID;
-        """);
-        ps.setString(1, user.getUsername());
-        ps.setString(2, user.getEmail());
-        ps.setString(3, user.getPassword());
-        ps.setString(4, user.getPhoneNumber());
-        ps.setString(5, user instanceof Staff ? ((Staff)user).isAdmin() ? "Admin" : "Staff" : "Customer" );
-        if (user instanceof Customer) {
-            ps.setString(6, ((Customer)user).getAddress());
-        }
-        ResultSet rs = ps.executeQuery();
-        user.setUserID(rs.getInt("UserID"));
+        userDAO.createUser(user);
     }
 
     public User getUserById(int userId) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("""
-            SELECT
-                *
-            FROM Users
-            WHERE UserID = ?
-        """);
-        ps.setInt(1, userId);
-        ResultSet rs = ps.executeQuery();
-        return resultToUser(rs);
+        return userDAO.getUserById(userId);
     }
 
     public User getUserByEmail(String email) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("""
-            SELECT
-                *
-            FROM Users
-            WHERE Email = ?
-        """);
-        ps.setString(1, email);
-        ResultSet rs = ps.executeQuery();
-        return resultToUser(rs);
+        return userDAO.getUserByEmail(email);
     }
 
-    // Was tempting to add restrictions to modifying the user objects, but this should be handled in the Model and just gets in the way here
     public void updateUser(User user) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("""
-            UPDATE Users
-            SET
-                Name = ?,
-                Email = ?,
-                PasswordHash = ?,
-                PhoneNumber = ?,
-                ShippingAddress = ?
-            WHERE UserID = ?
-        """);
-        ps.setString(1, user.getUsername());
-        ps.setString(2, user.getEmail());
-        ps.setString(3, user.getPassword());
-        ps.setString(4, user.getPhoneNumber());
-        if (user instanceof Customer) {
-            ps.setString(5, ((Customer)user).getAddress());
-        }
-        ps.setInt(6, user.getUserID());
-        ps.executeUpdate();
+        userDAO.updateUser(user);
     }
 
     public List<User> getAllUsers() throws SQLException {
-        List<User> users = new ArrayList<>();
-        PreparedStatement ps = conn.prepareStatement("SELECT * FROM Users");
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            users.add(resultToUser(rs));
-        }
-        return users;
+        return userDAO.getAllUsers();
     }
 
     public List<Customer> getCustomers() throws SQLException {
-        List<Customer> customers = new ArrayList<>();
-        String sql = "SELECT * FROM Users WHERE Type = 'Customer'";
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Customer c = new Customer(
-                    rs.getInt("UserID"),
-                    rs.getString("Name"),
-                    rs.getString("PasswordHash"),
-                    rs.getString("Email"),
-                    rs.getString("PhoneNumber"),
-                    rs.getString("ShippingAddress"),
-                    new PaymentInfo()
-                );
-                customers.add(c);
-            }
-        }
-        return customers;
+        return userDAO.getCustomers();
     }
 
     public List<Staff> getStaff() throws SQLException {
-        List<Staff> staffList = new ArrayList<>();
-        String sql = "SELECT * FROM Users WHERE Type IN ('Staff','Admin')";
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                boolean isAdmin = "Admin".equals(rs.getString("Type"));
-                Staff s = new Staff(
-                    rs.getInt("UserID"),
-                    rs.getString("Name"),
-                    rs.getString("PasswordHash"),
-                    rs.getString("Email"),
-                    rs.getString("PhoneNumber"),
-                    isAdmin
-                );
-                staffList.add(s);
-            }
-        }
-        return staffList;
+        return userDAO.getStaff();
+    }
+
+    public boolean doesEmailExist(String email) throws SQLException {
+        return userDAO.doesEmailExist(email);
+    }
+
+    public boolean doesUsernameExist(String username) throws SQLException {
+        return userDAO.doesUsernameExist(username);
+    }
+
+    public void createItemType(ItemType itemType) throws SQLException {
+        itemTypeDAO.createItemType(itemType);
+    }
+
+    public List<ItemType> getAllItemTypes() throws SQLException {
+        return itemTypeDAO.getAllItemTypes();
+    }
+
+    public void updateItemType(ItemType itemType) throws SQLException {
+        itemTypeDAO.updateItemType(itemType);
+    }
+
+    public void deleteItemType(int itemTypeId) throws SQLException {
+        itemTypeDAO.deleteItemType(itemTypeId);
+    }
+
+        public void createUnit(Unit unit, Integer userID) throws SQLException {
+        unitDAO.createUnit(unit, userID);
+    }
+
+    public Unit getUnitById(int unitId) throws SQLException {
+        return unitDAO.getUnitById(unitId);
+    }
+
+    public List<Unit> getAllUnits() throws SQLException {
+        return unitDAO.getAllUnits();
+    }
+
+    public List<Unit> getUnitsByItemTypeId(int itemTypeId) throws SQLException {
+        return unitDAO.getUnitsByItemTypeId(itemTypeId);
+    }
+
+    public List<Unit> getUnitsByStatus(Status status) throws SQLException {
+        return unitDAO.getUnitsByStatus(status);
+    }
+
+    public List<Unit> getUnitsByUserId(int userId) throws SQLException {
+        return unitDAO.getUnitsByUserId(userId);
+    }
+
+    public void updateUnit(Unit unit, Integer userID) throws SQLException {
+        unitDAO.updateUnit(unit, userID);
+    }
+
+    public void deleteUnit(int unitId) throws SQLException {
+        unitDAO.deleteUnit(unitId);
+    }
+
+    public void createOrder(Order order) throws SQLException {
+        orderDAO.createOrder(order);
+    }
+
+    public Order getOrderById(int orderId, boolean fetchItems) throws SQLException {
+        return orderDAO.getOrderById(orderId, fetchItems);
+    }
+
+    public List<Order> getOrdersByUserId(int userId, boolean fetchItems) throws SQLException {
+        return orderDAO.getOrdersByUserId(userId, fetchItems);
+    }
+
+    public List<Order> getAllOrders(boolean fetchItems) throws SQLException {
+        return orderDAO.getAllOrders(fetchItems);
+    }
+
+    public void updateOrder(Order order) throws SQLException {
+        orderDAO.updateOrder(order);
+    }
+
+    public void updateOrderStatus(int orderId, OrderStatus newStatus) throws SQLException {
+        orderDAO.updateOrderStatus(orderId, newStatus);
+    }
+
+    public void deleteOrder(int orderId) throws SQLException {
+        orderDAO.deleteOrder(orderId);
+    }
+
+    public void createOrderItem(OrderItem orderItem, int orderId) throws SQLException {
+        orderItemDAO.createOrderItem(orderItem, orderId);
+    }
+
+    public List<OrderItem> getOrderItemsByOrderId(int orderId) throws SQLException {
+        return orderItemDAO.getOrderItemsByOrderId(orderId);
+    }
+
+    public void updateOrderItem(OrderItem orderItem) throws SQLException {
+        orderItemDAO.updateOrderItem(orderItem);
+    }
+
+    public void deleteOrderItem(int orderItemId) throws SQLException {
+        orderItemDAO.deleteOrderItem(orderItemId);
+    }
+
+    public Basket getBasketForUser(int userId) throws SQLException {
+        return basketDAO.getBasketForUser(userId);
+    }
+
+    public Basket getBasketById(int basketId, boolean fetchItems) throws SQLException {
+        return basketDAO.getBasketById(basketId, fetchItems);
+    }
+
+    public Basket getBasketByUserId(int userId, boolean fetchItems) throws SQLException {
+        return basketDAO.getBasketByUserId(userId, fetchItems);
+    }
+
+    public void addItemToBasket(int basketId, ItemType item, int quantity) throws SQLException {
+        basketDAO.addItemToBasket(basketId, item, quantity);
+    }
+
+    public void removeItemFromBasket(int basketItemId) throws SQLException {
+        basketDAO.removeItemFromBasket(basketItemId);
+    }
+
+    public void removeItemTypeFromBasket(int basketId, int itemTypeId) throws SQLException {
+        basketDAO.removeItemTypeFromBasket(basketId, itemTypeId);
+    }
+
+    public void updateBasketItemQuantity(int basketItemId, int newQuantity) throws SQLException {
+        basketDAO.updateBasketItemQuantity(basketItemId, newQuantity);
+    }
+    
+    public void clearBasket(int basketId) throws SQLException {
+        basketDAO.clearBasket(basketId);
+    }
+
+    public void createBasketItem(BasketItem basketItem) throws SQLException {
+        basketItemDAO.createBasketItem(basketItem);
+    }
+
+    public List<BasketItem> getBasketItemsByBasketId(int basketId) throws SQLException {
+        return basketItemDAO.getBasketItemsByBasketId(basketId);
+    }
+    
+    public BasketItem getBasketItemById(int basketItemId) throws SQLException {
+        return basketItemDAO.getBasketItemById(basketItemId);
+    }
+
+    public void updateBasketItem(BasketItem basketItem) throws SQLException {
+        basketItemDAO.updateBasketItem(basketItem);
+    }
+
+    public void createCardDetail(PaymentInfo cardDetail, int userId) throws SQLException {
+        cardDetailDAO.createCardDetail(cardDetail, userId);
+    }
+
+    public PaymentInfo getCardDetailById(int cardId) throws SQLException {
+        return cardDetailDAO.getCardDetailById(cardId);
+    }
+
+    public List<PaymentInfo> getCardDetailsByUserId(int userId) throws SQLException {
+        return cardDetailDAO.getCardDetailsByUserId(userId);
+    }
+
+    public void updateCardDetail(PaymentInfo cardDetail) throws SQLException {
+        cardDetailDAO.updateCardDetail(cardDetail);
+    }
+
+    public void deleteCardDetail(int cardId) throws SQLException {
+        cardDetailDAO.deleteCardDetail(cardId);
     }
 }

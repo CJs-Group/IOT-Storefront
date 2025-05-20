@@ -67,14 +67,15 @@
         <div class="content-wrapper">
             <h1>User Management</h1>
             <div class="buttons">
-                <button class="customerButton" onmouseup="expandCustomer()">Customer</button>
-                <button class="staffButton" onmouseup="expandStaff()">Staff</button>
+                <button class="customerButton bigbutton" onmouseup="expandCustomer()">Customer</button>
+                <button class="staffButton bigbutton" onmouseup="expandStaff()">Staff</button>
             </div>
                 <div class="container">
                     <form id="selectForm" action="userManagement" method="post">
                         <input type="hidden" name="selectedUserID" id="selectedUserID"/> <!-- Don't think about this -->
                     </form>
                     <div id="customerContent" style="display:none; width:100%;">
+                        <h2>Customers</h2>
                         <table>
                             <thead>
                                 <tr>
@@ -102,6 +103,7 @@
                     </div>
 
                     <div id="staffContent" style="display:none; width:100%;">
+                        <h2>Staff</h2>
                         <table>
                             <thead>
                                 <tr>
@@ -126,6 +128,11 @@
                             %>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="buttons">
+                        <button class="addButton smallbutton" type="submit" form="selectForm" name="addUser">Add</button>
+                        <button class="editButton smallbutton" type="submit" form="selectForm" name="editUser">Edit</button>
+                        <button class="deleteButton smallbutton" type="submit" form="selectForm" name="deleteUser">Delete</button>
                     </div>
                 </div>
             </div>

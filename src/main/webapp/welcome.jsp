@@ -1,4 +1,3 @@
-<%@page import="Model.DB"%>
 <%@page import="Model.Users.User"%>
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>

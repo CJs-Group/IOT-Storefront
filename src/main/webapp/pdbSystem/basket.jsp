@@ -1,10 +1,14 @@
-<%@page import="Model.Users.Basket"%>
+<%@page import="Model.Basket.Basket"%>
+<%@page import="Model.Basket.BasketItem"%>
 <%@page import="Model.Items.ItemType"%>
 <%@page import="Model.Order.PaymentInfo"%>
 <%@page import="Model.Users.User"%>
 <%@page import="Model.Users.Customer"%>
-<%@page import="Model.DB"%>
-<%@page import="java.util.Map"%>
+<%@page import="Model.DAO.DBManager"%>
+<%@page import="Model.DAO.DBConnector"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.util.List"%>
 
 <html>
 <head>
@@ -14,14 +18,21 @@
 <h1>Basket</h1>
 
 <%
-  int userId = (int)session.getAttribute("userId");
-  Customer customer = (Customer)DB.getUserById(userId);
-  Basket basket = customer.getBasket();
-  PaymentInfo paymentInfo = customer.getPaymentInfo();
+  Connection conn = null;
+  DBManager dbm = null;
+  try {
+    DBConnector dbConnector = new DBConnector();
+    conn = dbConnector.openConnection();
+    dbm = new DBManager(conn);
+
+    int userId = (int)session.getAttribute("userId");
+    Customer customer = (Customer)dbm.getUserById(userId); // Use DBManager
+    Basket basket = dbm.getBasketByUserId(userId, true); // Fetch basket with items using DBManager
+    PaymentInfo paymentInfo = customer.getPaymentInfo(); // Assuming this is correctly populated or handled by Customer class
   
-  if (paymentInfo.getPaymentId() == -1) {
+    if (paymentInfo == null || paymentInfo.getPaymentId() == -1) { // Added null check for paymentInfo
 %>
-<a style="float:left">You haven't provided your Payment Method</a><br>
+<a style="float:left">You havent provided your Payment Method</a><br>
 <a style="float:left">Please provide your Payment details</a><br>
 <a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br>
 <%
@@ -31,7 +42,8 @@
 <a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
 <%
   }
-  if (basket == null || basket.getBasketSize() == 0){
+  // Updated condition to check basket items
+  if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
 %>
 <label> Basket is empty </label><br>
 <%
@@ -39,11 +51,14 @@
 %>
 <label> Your Basket contains: </label><br>
 <%
-    for (Map.Entry<ItemType, Integer> entry : basket.getItems().entrySet()) {
+    // Updated loop to iterate over List<BasketItem>
+    for (BasketItem basketItem : basket.getItems()) {
+      ItemType itemType = basketItem.getItemType();
+      int quantity = basketItem.getQuantity();
 %>
-<label>Item: <%= entry.getKey().getName() %>, Quantity: <%= entry.getValue() %></label>
+<label>Item: <%= itemType.getName() %>, Quantity: <%= quantity %></label>
 <form method="post" action="../updateBasket">
-  <input type="hidden" name="itemId" value="<%= entry.getKey().getItemID() %>">
+  <input type="hidden" name="itemId" value="<%= itemType.getItemID() %>">
   <button type="submit" name="action" value="remove">Remove</button>
   <button type="submit" name="action" value="+1">+1</button>
   <button type="submit" name="action" value="-1">-1</button>
@@ -57,5 +72,19 @@
   }
 %>
 Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
+<%
+  } catch (Exception e) {
+    out.println("<!-- An error occurred: " + e.getMessage() + " -->");
+    e.printStackTrace(new java.io.PrintWriter(out)); // Print stack trace to HTML comment for debugging
+  } finally {
+    if (conn != null) {
+      try {
+        conn.close();
+      } catch (SQLException ex) {
+        out.println("<!-- Error closing connection: " + ex.getMessage() + " -->");
+      }
+    }
+  }
+%>
 </body>
 </html>
