@@ -10,7 +10,7 @@
 </head>
 <body>
     <%
-        DBConnector dbc = new DBConnector();
+    try (DBConnector dbc = new DBConnector()) {
         DBManager dbm = new DBManager(dbc.openConnection());
         int userId = (int)session.getAttribute("userId");
         User user = dbm.getUserById(userId);
@@ -31,5 +31,10 @@
             <p>Click <a href="userHome.jsp">here</a> to proceed to the main page.</p>
         </div>
     </div>
+<%
+    } catch (Exception e) {
+        // Handle exception or log
+    }
+%>
 </body>
 </html>
