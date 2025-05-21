@@ -2,7 +2,6 @@
 
 package Model.Items;
 
-import java.util.List;
 public class ItemType {
     int ItemID;
     // List<Unit> units;
