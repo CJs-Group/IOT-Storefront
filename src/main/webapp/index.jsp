@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Model.DB"%>
 <%@page import="Model.Items.ItemType"%>
 <!DOCTYPE html>
 <html>
@@ -15,14 +14,7 @@
         </div>
         <div>
             <a class="button" href="login.jsp">Login</a>
+            <a class="button" href="userManagement">Not Login</a>
         </div>
-        <h2>Items</h2>
-        <% for (ItemType it : DB.items) { %>
-            <a href="/item.jsp?id=<%= it.getItemID() %>">
-                <%= it.getItemID() %>
-                <%= it.getName() %>
-            </a>
-            <br />
-        <% } %>
     </body>
 </html>

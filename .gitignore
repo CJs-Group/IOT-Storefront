@@ -45,3 +45,4 @@ server/
 database/
 
 store.db
+.vscode/*

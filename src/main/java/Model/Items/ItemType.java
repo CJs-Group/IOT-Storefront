@@ -5,24 +5,25 @@ package Model.Items;
 import java.util.List;
 public class ItemType {
     int ItemID;
-    List<Unit> units;
+    // List<Unit> units;
     int price; // divided by 100 to get the actual price
     String name;
     String description;
     Enum<Types> type;
     String imagePath;
 
-    public ItemType(int ItemID, List<Unit> units, String name, String description, Enum<Types> type, String imagePath) {
+    public ItemType(int ItemID, int price, String name, String description, Enum<Types> type, String imagePath) {
         this.ItemID = ItemID;
-        this.units = units;
+        this.price = price;
         this.name = name;
         this.description = description;
         this.type = type;
         this.imagePath = imagePath;
     }
 
-    public ItemType (int ItemID, String name, String description, Enum<Types> type, String imagePath) {
+    public ItemType(int ItemID, String name, String description, Enum<Types> type, String imagePath) {
         this.ItemID = ItemID;
+        price = 0;
         this.name = name;
         this.description = description;
         this.type = type;
@@ -49,9 +50,9 @@ public class ItemType {
         return ItemID;
     }
 
-    public List<Unit> getUnits() {
-        return units;
-    }
+    // public List<Unit> getUnits() {
+    //     return units;
+    // }
 
     public int getPrice() {
         return price;
@@ -65,9 +66,9 @@ public class ItemType {
         ItemID = itemID;
     }
 
-    public void setUnits(List<Unit> units) {
-        this.units = units;
-    }
+    // public void setUnits(List<Unit> units) {
+    //     this.units = units;
+    // }
 
     public void setName(String name) {
         this.name = name;

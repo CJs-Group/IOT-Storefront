@@ -36,6 +36,7 @@ public class SetupDB {
                 }
                 scanner.close();
             }
+            conn.close();
         }
     }
 

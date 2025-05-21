@@ -1,9 +1,8 @@
 package Model.Users;
+import Model.Basket.Basket;
 import Model.Order.PaymentInfo;
 
 public class Customer extends User {
-    private Basket basket = new Basket();
-    private Basket wishlist = new Basket();
     PaymentInfo paymentInfo;
     String address;
 
@@ -11,31 +10,11 @@ public class Customer extends User {
         super(userID, username, password, email, phoneNumber);
         this.address = address;
         this.paymentInfo = paymentInfo;
-        basket = new Basket();
-        wishlist = new Basket();
     }
 
     public Customer(int userID, String username, String password, String email, String phoneNumber) {
         super(userID, username, password, email, phoneNumber);
-        basket = new Basket();
-        wishlist = new Basket();
         paymentInfo = new PaymentInfo();
-    }
-
-    public Basket getBasket() {
-        return basket;
-    }
-
-    public void setBasket(Basket cart) {
-        this.basket = cart;
-    }
-
-    public Basket getWishlist() {
-        return wishlist;
-    }
-
-    public void setWishlist(Basket wishlist) {
-        this.wishlist = wishlist;
     }
 
     public String getAddress() {

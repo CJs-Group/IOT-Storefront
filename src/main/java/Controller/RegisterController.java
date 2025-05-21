@@ -33,12 +33,10 @@ public class RegisterController extends HttpServlet {
                 response.sendRedirect("register.jsp?error=All fields are required.");
                 return;
             }
-            try {
-                dbm.getUserByEmail(email);
+            if (dbm.doesEmailExist(email)) {
                 response.sendRedirect("register.jsp?error=Email already exists.");
                 return;
             }
-            catch (Exception _e) {}
             if (!Validator.validateEmail(email)) {
                 response.sendRedirect("register.jsp?error=Invalid Email.");
                 return;
