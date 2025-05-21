@@ -56,6 +56,10 @@ public class DBManager {
         return itemTypeDAO.getItemTypeById(id);
     }
 
+    public ItemType[] getItemsByQuery(String query) throws SQLException {
+        return itemTypeDAO.getItemTypesByQuery(query);
+    }
+
     public void createUser(User user) throws SQLException {
         userDAO.createUser(user);
     }

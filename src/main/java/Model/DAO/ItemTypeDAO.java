@@ -41,6 +41,21 @@ public class ItemTypeDAO {
         return null;
     }
 
+    public ItemType[] getItemTypesByQuery(String query) throws SQLException {
+        ArrayList<ItemType> result = new ArrayList<ItemType>();
+        String sql = "SELECT * FROM ItemTypes WHERE Name LIKE ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + query + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while(rs.next()) {
+                    result.add(resultToItemType(rs));
+                }
+            }
+        }
+        ItemType[] resultArr = new ItemType[result.size()];
+        return result.toArray(resultArr);
+    }
+
     public List<ItemType> getAllItemTypes() throws SQLException {
         List<ItemType> itemTypes = new ArrayList<>();
         String sql = "SELECT * FROM ItemTypes";
