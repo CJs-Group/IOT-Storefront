@@ -5,7 +5,7 @@ CREATE TABLE "Users" (
 	"Name"	TEXT NOT NULL,
 	"Email"	TEXT UNIQUE NOT NULL,
 	"PasswordHash"	TEXT NOT NULL,
-	"PhoneNumber"	TEXT NOT NULL,
+	"PhoneNumber"	TEXT,
 	"Type" TEXT CHECK("Type" IN ('Customer', 'Staff', 'Admin')) NOT NULL,
 	"ShippingAddress" TEXT CHECK (
         ("Type" != 'Customer' AND  "ShippingAddress" IS NULL) OR 

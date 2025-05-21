@@ -92,6 +92,10 @@ public class DBManager {
         return userDAO.doesUsernameExist(username);
     }
 
+    public void deleteUser(int userId) throws SQLException {
+        userDAO.deleteUser(userId);
+    }
+
     public void createItemType(ItemType itemType) throws SQLException {
         itemTypeDAO.createItemType(itemType);
     }

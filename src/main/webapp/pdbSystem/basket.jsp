@@ -26,28 +26,29 @@
     dbm = new DBManager(conn);
 
     int userId = (int)session.getAttribute("userId");
-    Customer customer = (Customer)dbm.getUserById(userId); // Use DBManager
-    Basket basket = dbm.getBasketByUserId(userId, true); // Fetch basket with items using DBManager
-    PaymentInfo paymentInfo = customer.getPaymentInfo(); // Assuming this is correctly populated or handled by Customer class
+    Customer customer = (Customer)dbm.getUserById(userId);
+    Basket basket = dbm.getBasketByUserId(userId, true);
+    PaymentInfo paymentInfo = customer.getPaymentInfo();
   
-    if (paymentInfo == null || paymentInfo.getPaymentId() == -1) { // Added null check for paymentInfo
+    if (paymentInfo == null || paymentInfo.getPaymentId() == -1) {
 %>
 <a style="float:left">You havent provided your Payment Method</a><br>
 <a style="float:left">Please provide your Payment details</a><br>
 <a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br>
 <%
-} else {
+}
+else {
 %>
 <label>Payment Details have been provided</label><br>
 <a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
 <%
   }
-  // Updated condition to check basket items
   if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
 %>
 <label> Basket is empty </label><br>
 <%
-} else {
+}
+else {
 %>
 <label> Your Basket contains: </label><br>
 <%
@@ -73,17 +74,10 @@
 %>
 Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
 <%
-  } catch (Exception e) {
+  }
+  catch (Exception e) {
     out.println("<!-- An error occurred: " + e.getMessage() + " -->");
-    e.printStackTrace(new java.io.PrintWriter(out)); // Print stack trace to HTML comment for debugging
-  } finally {
-    if (conn != null) {
-      try {
-        conn.close();
-      } catch (SQLException ex) {
-        out.println("<!-- Error closing connection: " + ex.getMessage() + " -->");
-      }
-    }
+    e.printStackTrace(new java.io.PrintWriter(out));
   }
 %>
 </body>

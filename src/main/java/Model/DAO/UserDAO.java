@@ -259,4 +259,12 @@ public class UserDAO {
         }
         return false;
     }
+
+    public void deleteUser(int userId) throws SQLException {
+        String sql = "DELETE FROM Users WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        }
+    }
 }

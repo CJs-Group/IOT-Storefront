@@ -86,11 +86,11 @@ h1 {
 }
 
 .customerButton {
-    background-color: #DA6C70;
+    background-color: #354F52;
 }
 
 .staffButton {
-    background-color: #2F6690;
+    background-color: #79394C;
 }
 
 .moveupButton {
@@ -152,4 +152,16 @@ th, td {
 .selected-row {
   background-color: #a0c4ff;
   font-weight: bold;
+}
+
+.smallbutton {
+    background-color: #3C3A41;
+    color: white;
+    border: none;
+    border-radius: 32px;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 5px;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }

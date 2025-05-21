@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Model.DB"%>
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
 <%@page import="Model.Users.User"%>
@@ -22,9 +21,11 @@
 
             function expandCustomer() {
                 selectedTab = 'Customer';
+                document.getElementById('activeTab').value = 'Customer';
                 const customerButton = document.querySelector('.customerButton');
                 const staffButton = document.querySelector('.staffButton');
                 const container = document.querySelector('.container');
+                const smallbuttons = document.querySelectorAll('.smallbutton');
                 const buttonColor = getComputedStyle(customerButton).backgroundColor;
                 container.classList.add('shown');
                 staffButton.classList.remove('movedownButton');
@@ -32,15 +33,20 @@
                 staffButton.classList.add('moveupButton');
                 customerButton.classList.remove('moveupButton');
                 document.body.style.backgroundColor = buttonColor;
+                smallbuttons.forEach(button => {
+                    button.style.backgroundColor = buttonColor;
+                });
                 document.getElementById('customerContent').style.display = 'block';
                 document.getElementById('staffContent').style.display = 'none';
             }
 
             function expandStaff() {
                 selectedTab = 'Staff';
+                document.getElementById('activeTab').value = 'Staff';
                 const staffButton = document.querySelector('.staffButton');
                 const customerButton = document.querySelector('.customerButton');
                 const container = document.querySelector('.container');
+                const smallbuttons = document.querySelectorAll('.smallbutton');
                 const buttonColor = getComputedStyle(staffButton).backgroundColor;
                 container.classList.add('shown');
                 customerButton.classList.remove('movedownButton');
@@ -48,6 +54,9 @@
                 customerButton.classList.add('moveupButton');
                 staffButton.classList.remove('moveupButton');
                 document.body.style.backgroundColor = buttonColor;
+                smallbuttons.forEach(button => {
+                    button.style.backgroundColor = buttonColor;
+                });
                 document.getElementById('staffContent').style.display = 'block';
                 document.getElementById('customerContent').style.display = 'none';
             }
@@ -72,7 +81,8 @@
             </div>
                 <div class="container">
                     <form id="selectForm" action="userManagement" method="post">
-                        <input type="hidden" name="selectedUserID" id="selectedUserID"/> <!-- Don't think about this -->
+                        <input type="hidden" name="selectedUserID" id="selectedUserID"/>
+                        <input type="hidden" name="activeTab" id="activeTab" value=""/>
                     </form>
                     <div id="customerContent" style="display:none; width:100%;">
                         <h2>Customers</h2>

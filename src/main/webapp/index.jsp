@@ -14,7 +14,7 @@
         </div>
         <div>
             <a class="button" href="login.jsp">Login</a>
-            <a class="button" href="userManagement.jsp">Not Login</a>
+            <a class="button" href="userManagement">Not Login</a>
         </div>
     </body>
 </html>
