@@ -20,5 +20,11 @@ ItemType item = dbm.getItemById(Integer.parseInt(request.getParameter("id")));
     <p>$<%= item.getPrice() %></p>
     <h3>Description</h3>
     <p><%= item.getDescription() %></p>
+    <h3>Actions</h3>
+    <form action="/updateBasket" method="post">
+        <input type="hidden" name="itemId" value="<%= request.getParameter("id") %>" />
+        <input type="hidden" name="action" value="+1" />
+        <button type="submit">Add to Cart</button>
+    </form>
 </body>
 </html>

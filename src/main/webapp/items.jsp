@@ -8,7 +8,8 @@
 <%
     DBConnector dbc = new DBConnector();
     DBManager dbm = new DBManager(dbc.openConnection());
-    ItemType[] items = dbm.getItemsByQuery(request.getParameter("q"));
+    String query = request.getParameter("q");
+    ItemType[] items = dbm.getItemsByQuery(query == null ? "" : query);
 %>
 
 <body>
