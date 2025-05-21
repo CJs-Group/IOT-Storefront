@@ -1,90 +1,61 @@
-<%@page import="Model.Basket.Basket"%>
-<%@page import="Model.Basket.BasketItem"%>
-<%@page import="Model.Items.ItemType"%>
-<%@page import="Model.Order.PaymentInfo"%>
 <%@page import="Model.Users.User"%>
-<%@page import="Model.Users.Customer"%>
-<%@page import="Model.DAO.DBManager"%>
 <%@page import="Model.DAO.DBConnector"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.util.List"%>
+<%@page import="Model.DAO.DBManager"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 
 <html>
 <head>
-  <title>Basket</title>
+    <title>BASKET</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<h1>Basket</h1>
-
 <%
-  Connection conn = null;
-  DBManager dbm = null;
-  try {
-    DBConnector dbConnector = new DBConnector();
-    conn = dbConnector.openConnection();
-    dbm = new DBManager(conn);
-
-    int userId = (int)session.getAttribute("userId");
-    Customer customer = (Customer)dbm.getUserById(userId); // Use DBManager
-    Basket basket = dbm.getBasketByUserId(userId, true); // Fetch basket with items using DBManager
-    PaymentInfo paymentInfo = customer.getPaymentInfo(); // Assuming this is correctly populated or handled by Customer class
-  
-    if (paymentInfo == null || paymentInfo.getPaymentId() == -1) { // Added null check for paymentInfo
-%>
-<a style="float:left">You havent provided your Payment Method</a><br>
-<a style="float:left">Please provide your Payment details</a><br>
-<a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br>
-<%
-} else {
-%>
-<label>Payment Details have been provided</label><br>
-<a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
-<%
-  }
-  // Updated condition to check basket items
-  if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
-%>
-<label> Basket is empty </label><br>
-<%
-} else {
-%>
-<label> Your Basket contains: </label><br>
-<%
-    // Updated loop to iterate over List<BasketItem>
-    for (BasketItem basketItem : basket.getItems()) {
-      ItemType itemType = basketItem.getItemType();
-      int quantity = basketItem.getQuantity();
-%>
-<label>Item: <%= itemType.getName() %>, Quantity: <%= quantity %></label>
-<form method="post" action="../updateBasket">
-  <input type="hidden" name="itemId" value="<%= itemType.getItemID() %>">
-  <button type="submit" name="action" value="remove">Remove</button>
-  <button type="submit" name="action" value="+1">+1</button>
-  <button type="submit" name="action" value="-1">-1</button>
-</form>
-
-<%
+Map<Integer, Integer> items = new HashMap<>();
+try (DBConnector dbc = new DBConnector()) {
+    DBManager dbm = new DBManager(dbc.openConnection());
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+      items = new HashMap<Integer, Integer>();    
+    } else {
+      items = dbm.getBasketItemIds(user.getUserID());
     }
+      
+%>
+    <h1>BASKET</h1>
+<%
+      if (items.isEmpty()) {
+%>
+    <p>Your basket is empty.</p>
+<%    
+      } else {
+%>
+    <label>Your Basket contains:</label><br>
+<%
+      
+      for (Map.Entry<Integer, Integer> entry : items.entrySet()) {
+        String itemName = dbm.getItemById(entry.getKey()).getName();
+%>
+    <label>Item: <%= itemName %>, Quantity: <%= entry.getValue() %></label>
+    <form method="post" action="../updateBasket">
+        <input type="hidden" name="itemId" value="<%= entry.getKey() %>">
+        <button type="submit" name="action" value="remove">Remove</button>
+        <button type="submit" name="action" value="+1">+1</button>
+        <button type="submit" name="action" value="-1">-1</button>
+    </form>
+<%
+        }
+  }
+} catch (Exception e) {
+    out.println("Error: " + e.getMessage());
+    // Optionally log the stack trace
+}
+  if (!items.isEmpty()) {
 %>
   Click <a href="checkout.jsp">here </a>to proceed for checkout. <br/>
 <%
   }
 %>
-Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
-<%
-  } catch (Exception e) {
-    out.println("<!-- An error occurred: " + e.getMessage() + " -->");
-    e.printStackTrace(new java.io.PrintWriter(out)); // Print stack trace to HTML comment for debugging
-  } finally {
-    if (conn != null) {
-      try {
-        conn.close();
-      } catch (SQLException ex) {
-        out.println("<!-- Error closing connection: " + ex.getMessage() + " -->");
-      }
-    }
-  }
-%>
+  Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
 </body>
 </html>

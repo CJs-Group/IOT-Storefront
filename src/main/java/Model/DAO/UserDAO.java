@@ -108,15 +108,15 @@ public class UserDAO {
             }
         }
 
-        if (newUserId != -1 && user instanceof Customer) {
-            ItemTypeDAO itemTypeDAO = new ItemTypeDAO(this.conn); 
-            BasketItemDAO basketItemDAO = new BasketItemDAO(this.conn, itemTypeDAO);
-            BasketDAO basketDAO = new BasketDAO(this.conn, basketItemDAO);
-            Basket newBasket = new Basket(newUserId);
-            basketDAO.createBasket(newBasket);
-        } else if (newUserId == -1 && user instanceof Customer) {
-            throw new SQLException("Cannot create basket because user creation failed.");
-        }
+        // if (newUserId != -1 && user instanceof Customer) {
+        //     ItemTypeDAO itemTypeDAO = new ItemTypeDAO(this.conn); 
+        //     BasketItemDAO basketItemDAO = new BasketItemDAO(this.conn, itemTypeDAO);
+        //     BasketDAO basketDAO = new BasketDAO(this.conn, basketItemDAO);
+        //     Basket newBasket = new Basket(newUserId);
+        //     basketDAO.createBasket(newBasket);
+        // } else if (newUserId == -1 && user instanceof Customer) {
+        //     throw new SQLException("Cannot create basket because user creation failed.");
+        // }
     }
 
     public User getUserById(int userId) throws SQLException {

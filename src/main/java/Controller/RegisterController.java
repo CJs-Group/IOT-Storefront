@@ -58,7 +58,7 @@ public class RegisterController extends HttpServlet {
             
             // Add the new user id to session
             HttpSession session = request.getSession();
-            session.setAttribute("userId", newCustomer.getUserID());
+            session.setAttribute("user", newCustomer);
             response.sendRedirect("welcome.jsp");
         }
         catch (SQLException e) {

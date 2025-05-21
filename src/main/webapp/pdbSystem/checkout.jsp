@@ -27,7 +27,7 @@
         if (deliveryMethod.equals("Delivery")){
 %>
     <h2>Shipping Address</h2>
-    <form action="receipt.jsp" method="post">
+    <form method="post" action="/order">
         <input type="hidden" name="deliveryType" value="delivery">
         <label>Country/Region: </label><br>
         <input type="text" id="country" name="country" required><br>
@@ -56,7 +56,7 @@
         } else if (deliveryMethod.equals("Click&Collect")){
 %>
 <h2>Click & Collect</h2>
-<form action="receipt.jsp" method="post">
+<form method="post" action="/order">
     <input type="hidden" name="deliveryType" value="click">
     <label><input type="radio" name="selectedStore" value="Central Storefront" required > Central Storefront </label><br>
     <label><input type="radio" name="selectedStore" value="Lidcombe Storefront" > Lidcombe Storefront </label><br>
@@ -67,7 +67,7 @@
         } else if (deliveryMethod.equals("Ship")){
 %>
 <h2>Select a collection point</h2>
-<form action="receipt.jsp" method="post">
+<form method="post" action="/order">
     <input type="hidden" name="deliveryType" value="collection">
     <select id="collectionPoint" name="collectionPoint" required>
         <option value="">Select</option>

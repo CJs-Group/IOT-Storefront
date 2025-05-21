@@ -1,10 +1,6 @@
 package Controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,52 +8,50 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.WebServlet;
 
-import Model.DAO.DBManager;
 import Model.DAO.DBConnector;
-import Model.Basket.Basket;
-import Model.Basket.BasketItem;
-import Model.Items.ItemType;
+import Model.DAO.DBManager;
 import Model.Users.Customer;
+import Model.Items.ItemType;
 
 @WebServlet("/updateBasket")
 public class BasketController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try (DBConnector dbc = new DBConnector()) {
-            HttpSession session = request.getSession();
+        
+        try (DBConnector dbc = new DBConnector()){
             DBManager dbm = new DBManager(dbc.openConnection());
-            String itemIdStr = request.getParameter("itemId");
+
+            HttpSession session = request.getSession();
             String action = request.getParameter("action");
-            if (itemIdStr != null && action != null) {
-            try {
-                int basketID = dbm.getBasketByUserId((int)session.getAttribute("userId"), false).getBasketID();
-                int itemId = Integer.parseInt(itemIdStr);
-                ItemType item = dbm.getItemById(itemId);
-                int userId = (int)session.getAttribute("userId");
-                switch (action) {
-                    case "remove":
-                        dbm.removeItemTypeFromBasket(basketID, itemId);
-                        break;
-                    case "+1":
-                        dbm.addItemToBasket(basketID, item, 1);
-                        break;
-                    case "-1":
-                        dbm.addItemToBasket(basketID, item, -1);
-                        break;
+            Customer customer = new Customer(0, "", "", "", "");
+
+            if (session.getAttribute("user") != null) {
+                customer = (Customer)session.getAttribute("user");
+            }
+            if (request.getParameter("itemId") != null && action != null) {
+                int itemId = Integer.parseInt(request.getParameter("itemId"));
+                ItemType itemType = dbm.getItemById(itemId);
+                try {
+                    switch (action) {
+                        case "remove":
+                            dbm.removeItemFromBasket(itemType, customer);
+                            break;
+                        case "+1":
+                            dbm.incrementItemQuantity(itemType, customer);
+                            break;
+                        case "-1":
+                            dbm.decrementItemQuantity(itemType, customer);
+                            break;
+                        case "add":
+                            dbm.addItemToBasket(itemType, customer);
+                            break;
                     }
-                    // session.setAttribute("basket", basket);
-                }
-                catch (NumberFormatException e) {
-                    System.out.println("Invalid item ID: " + itemIdStr);
-                }
-                catch (SQLException e) {
-                    System.out.println("Error updating basket: " + e.getMessage());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid item ID: " + itemId);
                 }
             }
-            
             response.sendRedirect("pdbSystem/basket.jsp");
-        }
-        catch (SQLException e) {
-            response.sendRedirect("pdbSystem/basket.jsp?error=" + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
