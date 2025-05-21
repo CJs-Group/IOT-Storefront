@@ -1,6 +1,7 @@
 //I have been moving the DAO code for the different classes into their own files
 
 package Model.DAO;
+
 import Model.Basket.Basket;
 import Model.Basket.BasketItem;
 import Model.Items.ItemType;
@@ -15,6 +16,8 @@ import Model.Order.PaymentInfo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import Model.Items.Status;
 
 /* 
@@ -33,16 +36,16 @@ public class DBManager {
     private BasketDAO basketDAO;
     private BasketItemDAO basketItemDAO;
     private CardDetailDAO cardDetailDAO;
-    
+
     public DBManager(Connection conn) {
         this.conn = conn;
         this.userDAO = new UserDAO(conn);
         this.itemTypeDAO = new ItemTypeDAO(conn);
         this.unitDAO = new UnitDAO(conn, itemTypeDAO);
         this.orderItemDAO = new OrderItemDAO(conn, this.unitDAO);
-        this.orderDAO = new OrderDAO(conn, this.orderItemDAO);
+        this.orderDAO = new OrderDAO(conn);
         this.basketItemDAO = new BasketItemDAO(conn, this.itemTypeDAO);
-        this.basketDAO = new BasketDAO(conn, this.basketItemDAO);
+        this.basketDAO = new BasketDAO(conn);
         this.cardDetailDAO = new CardDetailDAO(conn);
     }
 
@@ -108,7 +111,7 @@ public class DBManager {
         itemTypeDAO.deleteItemType(itemTypeId);
     }
 
-        public void createUnit(Unit unit, Integer userID) throws SQLException {
+    public void createUnit(Unit unit, Integer userID) throws SQLException {
         unitDAO.createUnit(unit, userID);
     }
 
@@ -140,32 +143,24 @@ public class DBManager {
         unitDAO.deleteUnit(unitId);
     }
 
-    public void createOrder(Order order) throws SQLException {
-        orderDAO.createOrder(order);
+    public void createOrder(int orderId, int userId, int itemId, int quantity, double price) throws SQLException {
+        orderDAO.createOrder(orderId, userId, itemId, quantity, price);
     }
 
-    public Order getOrderById(int orderId, boolean fetchItems) throws SQLException {
-        return orderDAO.getOrderById(orderId, fetchItems);
+    public List<Integer> getOrderItemIds(int orderId) throws SQLException {
+        return orderDAO.getOrderItemIds(orderId);
     }
 
-    public List<Order> getOrdersByUserId(int userId, boolean fetchItems) throws SQLException {
-        return orderDAO.getOrdersByUserId(userId, fetchItems);
+    public int getLatestOrderId() throws SQLException {
+        return orderDAO.getLatestOrderId();
     }
 
-    public List<Order> getAllOrders(boolean fetchItems) throws SQLException {
-        return orderDAO.getAllOrders(fetchItems);
+    public List<Integer> getOrderIdsForUser(int userId) throws SQLException {
+        return orderDAO.getOrderIdsForUser(userId);
     }
 
-    public void updateOrder(Order order) throws SQLException {
-        orderDAO.updateOrder(order);
-    }
-
-    public void updateOrderStatus(int orderId, OrderStatus newStatus) throws SQLException {
-        orderDAO.updateOrderStatus(orderId, newStatus);
-    }
-
-    public void deleteOrder(int orderId) throws SQLException {
-        orderDAO.deleteOrder(orderId);
+    public int getOrderItemQuantity(int orderId, int itemId) throws SQLException {
+        return orderDAO.getOrderItemQuantity(orderId, itemId);
     }
 
     public void createOrderItem(OrderItem orderItem, int orderId) throws SQLException {
@@ -184,36 +179,32 @@ public class DBManager {
         orderItemDAO.deleteOrderItem(orderItemId);
     }
 
-    public Basket getBasketForUser(int userId) throws SQLException {
-        return basketDAO.getBasketForUser(userId);
+    public Map<Integer, Integer> getBasketItemIds(int userId) throws SQLException {
+        return basketDAO.getBasketItemIds(userId);
     }
 
-    public Basket getBasketById(int basketId, boolean fetchItems) throws SQLException {
-        return basketDAO.getBasketById(basketId, fetchItems);
+    public void addItemToBasket(ItemType item, Customer customer) throws SQLException {
+        basketDAO.addItemToBasket(item, customer);
     }
 
-    public Basket getBasketByUserId(int userId, boolean fetchItems) throws SQLException {
-        return basketDAO.getBasketByUserId(userId, fetchItems);
+    public void removeItemFromBasket(ItemType item, Customer customer) throws SQLException {
+        basketDAO.addItemToBasket(item, customer);
     }
 
-    public void addItemToBasket(int basketId, ItemType item, int quantity) throws SQLException {
-        basketDAO.addItemToBasket(basketId, item, quantity);
+    public void incrementItemQuantity(ItemType item, Customer customer) throws SQLException {
+        basketDAO.incrementItemQuantity(item, customer);
     }
 
-    public void removeItemFromBasket(int basketItemId) throws SQLException {
-        basketDAO.removeItemFromBasket(basketItemId);
+    public void decrementItemQuantity(ItemType item, Customer customer) throws SQLException {
+        basketDAO.decrementItemQuantity(item, customer);
     }
 
-    public void removeItemTypeFromBasket(int basketId, int itemTypeId) throws SQLException {
-        basketDAO.removeItemTypeFromBasket(basketId, itemTypeId);
+    public void getBasketItemQuantity(ItemType item, Customer customer) throws SQLException {
+        basketDAO.getBasketItemQuantity(item, customer);
     }
 
-    public void updateBasketItemQuantity(int basketItemId, int newQuantity) throws SQLException {
-        basketDAO.updateBasketItemQuantity(basketItemId, newQuantity);
-    }
-    
-    public void clearBasket(int basketId) throws SQLException {
-        basketDAO.clearBasket(basketId);
+    public void resetBasket(Customer customer) throws SQLException {
+        basketDAO.resetBasket(customer);
     }
 
     public void createBasketItem(BasketItem basketItem) throws SQLException {
@@ -223,7 +214,7 @@ public class DBManager {
     public List<BasketItem> getBasketItemsByBasketId(int basketId) throws SQLException {
         return basketItemDAO.getBasketItemsByBasketId(basketId);
     }
-    
+
     public BasketItem getBasketItemById(int basketItemId) throws SQLException {
         return basketItemDAO.getBasketItemById(basketItemId);
     }

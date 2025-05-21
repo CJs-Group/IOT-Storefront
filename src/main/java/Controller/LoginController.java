@@ -52,14 +52,14 @@ public class LoginController extends HttpServlet {
             if (user != null && user.getPassword().equals(hashedPassword)) {
                 session.setAttribute("userId", user.getUserID());
                 
-                String userType = "User";
-                if (user instanceof Model.Users.Customer) {
-                    userType = "Customer";
-                } else if (user instanceof Model.Users.Staff) {
-                    Model.Users.Staff staffUser = (Model.Users.Staff) user;
-                    userType = staffUser.isAdmin() ? "Admin" : "Staff";
-                }
-                session.setAttribute("userType", userType);
+                // String userType = "User";
+                // if (user instanceof Model.Users.Customer) {
+                //     userType = "Customer";
+                // } else if (user instanceof Model.Users.Staff) {
+                //     Model.Users.Staff staffUser = (Model.Users.Staff) user;
+                //     userType = staffUser.isAdmin() ? "Admin" : "Staff";
+                // }
+                session.setAttribute("user", user);
                 
                 response.sendRedirect("welcome.jsp");
             }

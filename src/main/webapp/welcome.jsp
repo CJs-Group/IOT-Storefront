@@ -9,11 +9,7 @@
 </head>
 <body>
     <%
-        DBConnector dbc = new DBConnector();
-        DBManager dbm = new DBManager(dbc.openConnection());
-        int userId = (int)session.getAttribute("userId");
-        User user = dbm.getUserById(userId);
-        session.setAttribute("user", user);
+    User user = (User) session.getAttribute("user");
     %>
     
     <div class="welcome-container">
@@ -30,5 +26,7 @@
             <p>Click <a href="userHome.jsp">here</a> to proceed to the main page.</p>
         </div>
     </div>
+<%
+%>
 </body>
 </html>

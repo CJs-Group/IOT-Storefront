@@ -3,6 +3,7 @@ package Scripts;
 import java.sql.*;
 import Model.DAO.*;
 import Model.Users.Customer;
+import Model.Users.User;
 import Model.Users.Staff;
 import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
@@ -62,13 +63,12 @@ public class SeedDB {
             List<ItemType> allItemTypes = db.getAllItemTypes();
 
             for (Customer customer : customers) {
-                Model.Basket.Basket basket = db.getBasketForUser(customer.getUserID());
-                if (basket != null) {
                     for (ItemType itemType : allItemTypes) {
-                        db.addItemToBasket(basket.getBasketID(), itemType, 1);
+                        db.addItemToBasket(itemType, customer);
                     }
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        }
     }
 }

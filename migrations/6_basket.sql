@@ -1,7 +1,6 @@
-DROP TABLE IF EXISTS "Baskets";
-
-CREATE TABLE "Baskets" (
-    "BasketID" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "UserID" INTEGER NOT NULL,
-    FOREIGN KEY ("UserID") REFERENCES "Users"("UserID")
+CREATE TABLE Baskets (
+    userID INT NOT NULL,
+    itemID INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
+    PRIMARY KEY (userID,itemID)
 );
