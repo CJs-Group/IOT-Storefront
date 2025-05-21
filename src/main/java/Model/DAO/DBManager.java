@@ -144,6 +144,10 @@ public class DBManager {
         unitDAO.updateUnit(unit, userID);
     }
 
+    public List<Unit> getUnitsByStatusAndItemID(Status status, int itemTypeId) throws SQLException {
+        return unitDAO.getUnitsByStatusAndItemID(status, itemTypeId);
+    }
+
     public void deleteUnit(int unitId) throws SQLException {
         unitDAO.deleteUnit(unitId);
     }

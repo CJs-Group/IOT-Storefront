@@ -12,10 +12,11 @@
         DBManager dbm = new DBManager(dbc.openConnection());
         int userId = (int)session.getAttribute("userId");
         User user = dbm.getUserById(userId);
-        session.setAttribute("user", user);
+        // session.setAttribute("user", user);
         if (user != null) {
         %>
             <p align="right"> You are logged in as <%= user.getUsername() %> <%= user.getEmail() %> <br/>
+            <a style="float:right" href="index.jsp">Storefront</a><br/>
                 <%
                     if(user instanceof Customer) {
                 %>

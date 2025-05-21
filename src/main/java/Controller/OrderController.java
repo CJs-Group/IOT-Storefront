@@ -1,0 +1,128 @@
+package Controller;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.net.URLEncoder;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
+
+import Model.DAO.DBConnector;
+import Model.DAO.DBManager;
+import Model.Users.User;
+import Model.Basket.Basket;
+import Model.Basket.BasketItem;
+import Model.Items.ItemType;
+import Model.Items.Unit;
+import Model.Items.Status;
+import Model.Order.Order;
+import Model.Order.OrderItem;
+import Model.Order.OrderStatus;
+
+@WebServlet("/order")
+public class OrderController extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Connection conn = null; 
+
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp?error=" + URLEncoder.encode("Session expired. Please login again.", "UTF-8"));
+            return;
+        }
+        int userId = userIdObj;
+
+        try (DBConnector dbc = new DBConnector()) {
+            conn = dbc.openConnection(); 
+            DBManager dbm = new DBManager(conn);
+
+            User user = dbm.getUserById(userId);
+            if (user == null) {
+                response.sendRedirect(request.getContextPath() + "/login.jsp?error=" + URLEncoder.encode("User not found.", "UTF-8"));
+                return;
+            }
+
+            Basket basket = dbm.getBasketByUserId(userId, true); 
+            if (basket == null || basket.getItems().isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Your basket is empty.", "UTF-8"));
+                return;
+            }
+
+            Map<ItemType, List<Unit>> unitsToReserveForOrder = new HashMap<>();
+            for (BasketItem basketItem : basket.getItems()) {
+                ItemType itemType = basketItem.getItemType();
+                int requiredQuantity = basketItem.getQuantity();
+                List<Unit> availableUnits = dbm.getUnitsByStatusAndItemID(Status.In_Stock, itemType.getItemID()); 
+
+                if (availableUnits.size() < requiredQuantity) {
+                    String errorMessage = "Not enough stock for " + itemType.getName() +
+                                          ". Required: " + requiredQuantity +
+                                          ", Available: " + availableUnits.size() + ".";
+                    response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode(errorMessage, "UTF-8"));
+                    return;
+                }
+                unitsToReserveForOrder.put(itemType, new ArrayList<>(availableUnits.subList(0, requiredQuantity)));
+            }
+
+            List<OrderItem> orderItemsForNewOrder = new ArrayList<>();
+            for (BasketItem basketItem : basket.getItems()) {
+                ItemType itemType = basketItem.getItemType();
+                int requiredUnitsForItemType = basketItem.getQuantity();
+                List<Unit> unitsForThisItemType = unitsToReserveForOrder.get(itemType);
+                
+                for (int i = 0; i < requiredUnitsForItemType; i++) {
+                    Unit unitToReserve = unitsForThisItemType.get(i); 
+                    
+                    unitToReserve.setStatus(Status.Reserved);
+                    unitToReserve.setDatePurchased(new Date()); 
+                    dbm.updateUnit(unitToReserve, user.getUserID()); 
+
+                    OrderItem orderItem = new OrderItem(0, unitToReserve, 1, itemType.getPrice());
+                    orderItemsForNewOrder.add(orderItem);
+                }
+            }
+
+            String deliveryType = request.getParameter("deliveryType"); 
+            String shippingAddress = ""; 
+
+            if (deliveryType.equals("delivery")) {
+                shippingAddress = "Address: " + request.getParameter("address") +
+                                  ", City: " + request.getParameter("city") +
+                                  ", State: " + request.getParameter("state") +
+                                  ", Country: " + request.getParameter("country") +
+                                  " (For: " + request.getParameter("firstName") + " " + request.getParameter("lastName") + ")";
+            }
+            else if (deliveryType.equals("click")) { 
+                shippingAddress = "Click & Collect at: " + request.getParameter("selectedStore");
+            }
+            else {
+                shippingAddress = "Ship to collection point: " + request.getParameter("collectionPoint");
+            }
+            
+            Order newOrder = new Order(user.getUserID(), new Date(), OrderStatus.Pending, shippingAddress);
+            newOrder.setOrderItems(orderItemsForNewOrder); 
+            dbm.createOrder(newOrder); 
+            dbm.clearBasket(basket.getBasketID());
+
+            session.setAttribute("latestOrderId", newOrder.getOrderID()); 
+            response.sendRedirect(request.getContextPath() + "/pdbSystem/receipt.jsp?orderId=" + newOrder.getOrderID() + "&success=" + URLEncoder.encode("Order placed successfully!", "UTF-8"));
+
+        }
+        catch (SQLException e) {
+            response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Database error: " + e.getMessage(), "UTF-8"));
+        }
+        catch (Exception e) { 
+            response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("An error occurred: " + e.getMessage(), "UTF-8"));
+        }
+    }
+}

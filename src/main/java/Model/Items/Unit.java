@@ -7,18 +7,18 @@ public class Unit {
     int UnitID;
     ItemType itemType;
     Date dateAdded;
-    Enum<Status> status;
+    Status status;
     Date datePurchased;
     Date ETA;
 
-    public Unit(int UnitID, ItemType itemType, Date dateAdded, Enum<Status> status) {
+    public Unit(int UnitID, ItemType itemType, Date dateAdded, Status status) {
         this.UnitID = UnitID;
         this.itemType = itemType;
         this.dateAdded = dateAdded;
         this.status = status;
     }
 
-    public Unit(int UnitID, ItemType itemType, Date dateAdded, Enum<Status> status, Date datePurchased, Date ETA) {
+    public Unit(int UnitID, ItemType itemType, Date dateAdded, Status status, Date datePurchased, Date ETA) {
         this.UnitID = UnitID;
         this.itemType = itemType;
         this.dateAdded = dateAdded;
@@ -39,7 +39,7 @@ public class Unit {
         return dateAdded;
     }
 
-    public Enum<Status> getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -63,7 +63,7 @@ public class Unit {
         this.dateAdded = dateAdded;
     }
 
-    public void setStatus(Enum<Status> status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

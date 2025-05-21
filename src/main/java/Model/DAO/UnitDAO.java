@@ -130,6 +130,21 @@ public class UnitDAO {
         return units;
     }
 
+    public List<Unit> getUnitsByStatusAndItemID(Status status, int itemTypeId) throws SQLException {
+        List<Unit> units = new ArrayList<>();
+        String sql = "SELECT * FROM Units WHERE Status = ? AND ItemTypeID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status.name());
+            ps.setInt(2, itemTypeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    units.add(resultToUnit(rs));
+                }
+            }
+        }
+        return units;
+    }
+
     public List<Unit> getUnitsByUserId(int userId) throws SQLException {
         List<Unit> units = new ArrayList<>();
         String sql = "SELECT * FROM Units WHERE UserID = ?";

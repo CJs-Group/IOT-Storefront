@@ -1,51 +1,97 @@
+<%@page import="Model.DAO.DBConnector"%>
+<%@page import="Model.DAO.DBManager"%>
+<%@page import="Model.Order.Order"%>
+<%@page import="Model.Order.OrderItem"%>
+<%@page import="Model.Items.Unit"%>
+<%@page import="Model.Items.ItemType"%>
+<%@page import="java.util.List"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+
 <html>
 <head>
-    <title>Receipt</title>
+    <title>Order Receipt</title>
 </head>
-<h1>Checkout</h1>
-
-<h2>Thank you for your purchase!</h2>
-
-<%
-  String deliveryType = request.getParameter("deliveryType");
-  %>
 <body>
+<h1>Order Confirmation</h1>
 
 <%
-  if (deliveryType.equals("delivery")){
-    String country = request.getParameter("country");
-    String address = request.getParameter("address");
-    String city = request.getParameter("city");
-    String state = request.getParameter("state");
-    String finalAddress = address + ", " + city + ", " + state + ", " + country;
+    String successMessage = request.getParameter("success");
+    if (successMessage != null && !successMessage.isEmpty()) {
 %>
-
-<a>You have selected a delivery to your address</a></br>
-<a>  Your order will be delivered to:</a></br>
-<%= finalAddress %></br>
-
+    <p style="color:green; font-weight:bold;"><%= successMessage %></p>
 <%
-  } else if (deliveryType.equals("click")){
-    String collectionPoint = request.getParameter("selectedStore");
+    }
+
+    String orderIdStr = request.getParameter("orderId");
+    Order order = null;
+    DBManager dbm = null;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, HH:mm");
+    try (DBConnector dbc = new DBConnector()) {
+        dbm = new DBManager(dbc.openConnection());
+        int orderId = Integer.parseInt(orderIdStr);
+        order = dbm.getOrderById(orderId, true);
 %>
+                <h2>Thank you for your purchase!</h2>
+                <p><strong>Order ID:</strong> <%= order.getOrderID() %></p>
+                <p><strong>Order Date:</strong> <%= sdf.format(order.getOrderDate()) %></p>
+                <p><strong>Order Status:</strong> <%= order.getOrderStatus().toString() %></p>
+                
+                <h3>Delivery Details:</h3>
+                <p><%= order.getShippingAddress() %></p>
 
-<a>You have selected a Click&Collect</a></br>
-<a>  Your order will be ready for collection at:</a></br>
-  <%= collectionPoint %></br>
-
+                <h3>Order Summary:</h3>
+                <table border="1" style="width:100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Price per Unit</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 <%
-
-  } else if (deliveryType.equals("collection")){
-    String collectionPoint = request.getParameter("collectionPoint");
+                    double grandTotal = 0;
+                    for (OrderItem item : order.getOrderItems()) {
+                        Unit unit = item.getUnit();
+                        ItemType itemType = unit.getItemType();
+                        String itemName = itemType.getName();
+                        int quantity = item.getQuantity();
+                        double priceAtPurchase = item.getPriceAtPurchase() / 100.0;
+                        double subtotal = quantity * priceAtPurchase;
+                        grandTotal += subtotal;
 %>
-
-<a>You have selected a delivery to a collection point</a></br>
-<a>  Your order will be delivered to: </a>
-  <%= collectionPoint %></br>
-
+                        <tr>
+                            <td><%= itemName %></td>
+                            <td style="text-align:center;"><%= quantity %></td>
+                            <td style="text-align:right;">$<%= String.format("%.2f", priceAtPurchase) %></td>
+                            <td style="text-align:right;">$<%= String.format("%.2f", subtotal) %></td>
+                        </tr>
 <%
-  }
+                    }
 %>
-Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align:right; font-weight:bold;">Grand Total:</td>
+                            <td style="text-align:right; font-weight:bold;">$<%= String.format("%.2f", grandTotal) %></td>
+                        </tr>
+                    </tfoot>
+                </table>
+<%
+    } catch (Exception e) {
+%>
+            <p style="color:red;">An unexpected error occurred while displaying your receipt. Please contact support.</p>
+<%
+    }
+%>
+
+<br/>
+<p>
+    Click <a href="../userHome.jsp">here</a> to return to the main page. <br/>
+    Click <a href="orders.jsp">here</a> to view all your orders. <br/>
+</p>
+
 </body>
 </html>
