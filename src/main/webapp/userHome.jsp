@@ -5,8 +5,22 @@
 
 <html>
 
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CJ MAXX</title>
+    <link rel="stylesheet" type = "text/css" href="css/IoTBay.css">
+    <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
+</head>
+
+<div class="topBar"></div>
+        <img src="images/CJ_MAXX.png" class="logo">
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+    <img src="images/CJ_MAXX.png" class="logoLarge">
+
     <body>
-        <h3> Welcome </h3>
         <%
         DBConnector dbc = new DBConnector();
         DBManager dbm = new DBManager(dbc.openConnection());
@@ -15,16 +29,20 @@
         // session.setAttribute("user", user);
         if (user != null) {
         %>
-            <p align="right"> You are logged in as <%= user.getUsername() %> <%= user.getEmail() %> <br/>
-            <a style="float:right" href="index.jsp">Storefront</a><br/>
+            <p class="homeText"> You are logged in as <%= user.getUsername() %><br/>
+            
+            <img src="images/storefront.png" class="storefrontImage">
+            <a href="index.jsp">Storefront</a><br/>
                 <%
                     if(user instanceof Customer) {
                 %>
-                        <a style="float:right" href="pdbSystem/basket.jsp">View basket</a><br/>
+                        <img src="images/cart.png" class="cartImage">
+                        <a href="pdbSystem/basket.jsp">View basket</a><br/>
                 <%
                     }
                 %>
-            <a style="float:right" href="logout.jsp">Logout</a><br>
+            <img src="images/user.png" class="logoutImage">
+            <a href="logout.jsp">Logout</a><br>
 
         <%
         } else {

@@ -258,3 +258,26 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+/* USER HOME */
+
+.homeText {
+    font-weight: 1000;
+    font-size: 5vh;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.storefrontImage {
+    height: 7vh;
+}
+
+.cartImage {
+    height: 7vh;
+}
+
+.logoutImage {
+    height: 7vh;
+}
