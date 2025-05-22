@@ -67,6 +67,7 @@ public class UpdatePaymentController extends HttpServlet {
                 Customer customer = (Customer)user;
                 customer.setPaymentInfo(newPaymentInfo);
                 dbm.updateUser(user);
+                dbm.createCardDetail(newPaymentInfo, userId);
             }
             catch (SQLException e) {
                 session.setAttribute("paymentErr", "User not found.");

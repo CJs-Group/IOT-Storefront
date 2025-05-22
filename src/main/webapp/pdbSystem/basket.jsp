@@ -28,7 +28,8 @@
     int userId = (int)session.getAttribute("userId");
     Customer customer = (Customer)dbm.getUserById(userId);
     Basket basket = dbm.getBasketByUserId(userId, true);
-    PaymentInfo paymentInfo = customer.getPaymentInfo();
+    List<PaymentInfo> paymentInfos = dbm.getCardDetailsByUserId(userId);
+    PaymentInfo paymentInfo = paymentInfos.get(0);
   
     if (paymentInfo == null || paymentInfo.getPaymentId() == -1) {
 %>
