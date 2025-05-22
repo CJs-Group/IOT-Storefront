@@ -23,7 +23,11 @@
 <body>
     <div class="topBar"></div>
         <img src="images/CJ_MAXX.png" class="logo">
-        <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+        <div class="searchBarPos">
+            <form action="/items.jsp" method="get">
+                <input type="text" name="q" placeholder="Search.." class="searchBar">
+            </form>
+        </div>
 
         <div class="buttonContainer">
             <a href="login.jsp" class="registerContainer">
