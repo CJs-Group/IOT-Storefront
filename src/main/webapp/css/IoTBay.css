@@ -182,7 +182,7 @@ body {
 }
 
 .prodImage {
-    height: 50vh;
+    width: 57vh;
     position: absolute;
     z-index: -1;
     border: 1px solid #3C3A41;
