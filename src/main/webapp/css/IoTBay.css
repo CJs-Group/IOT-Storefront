@@ -120,6 +120,7 @@ body {
     width: auto;
     object-fit: contain;
     margin-bottom: 10px;
+    border: 1px solid #3C3A41;
 }
 
 .logoLarge {

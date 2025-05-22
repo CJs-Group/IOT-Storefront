@@ -50,16 +50,16 @@ public class SeedDB {
         
             ItemType[] items = {
                 new ItemType(0, 1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.jpg"),
-                new ItemType(0, 2, "Switch", "A device that connects devices on a computer network by using packet switching to forward data to its destination", Types.Networking, "images/switch.png"),
-                new ItemType(0, 3, "Doorbell", "A device that signals the presence of a visitor at a door", Types.Security, "images/doorbell.png"),
-                new ItemType(0, 4, "Security Camera", "A device that records video footage of a specific area", Types.Security, "images/security_camera.png"),
-                new ItemType(0, 5, "Smart Light", "A light bulb that can be controlled remotely", Types.Smart_Home, "images/smart_light.png"),
-                new ItemType(0, 6, "Smart Thermostat", "A device that controls the temperature of a building", Types.Smart_Home, "images/smart_thermostat.png"),
-                new ItemType(0, 7, "Smart Lock", "A lock that can be controlled remotely", Types.Security, "images/smart_lock.png"),
-                new ItemType(0, 8, "Smart TV", "A television set that is connected to the internet", Types.Smart_Home, "images/smart_tv.png"),
-                new ItemType(0, 9, "Baby Monitor", "A device that allows parents to monitor their baby remotely", Types.Smart_Home, "images/baby_monitor.png"),
-                new ItemType(0, 10, "Amazon Echo", "A smart speaker that can control other smart devices", Types.Assistants, "images/amazon_echo.png"),
-                new ItemType(0, 11,  "Google Nest", "A smart speaker that can control other smart devices", Types.Assistants, "images/google_nest.png")
+                new ItemType(0, 2, "Switch", "A device that connects devices on a computer network by using packet switching to forward data to its destination", Types.Networking, "images/switch.jpg"),
+                new ItemType(0, 3, "Doorbell", "A device that signals the presence of a visitor at a door", Types.Security, "images/doorbell.jpg"),
+                new ItemType(0, 4, "Security Camera", "A device that records video footage of a specific area", Types.Security, "images/security-camera.jpg"),
+                new ItemType(0, 5, "Smart Light", "A light bulb that can be controlled remotely", Types.Smart_Home, "images/smart-light.jpg"),
+                new ItemType(0, 6, "Smart Thermostat", "A device that controls the temperature of a building", Types.Smart_Home, "images/smart-thermostat.jpg"),
+                new ItemType(0, 7, "Smart Lock", "A lock that can be controlled remotely", Types.Security, "images/smart-lock.jpg"),
+                new ItemType(0, 8, "Smart TV", "A television set that is connected to the internet", Types.Smart_Home, "images/smart-tv.jpeg"),
+                new ItemType(0, 9, "Baby Monitor", "A device that allows parents to monitor their baby remotely", Types.Smart_Home, "images/baby-monitor.jpg"),
+                new ItemType(0, 10, "Amazon Echo", "A smart speaker that can control other smart devices", Types.Assistants, "images/amazon-echo.png"),
+                new ItemType(0, 11,  "Google Nest", "A smart speaker that can control other smart devices", Types.Assistants, "images/google-nest.jpg")
             };
 
             for (int i = 0; i < items.length; i++) {
