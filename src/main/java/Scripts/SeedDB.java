@@ -33,6 +33,20 @@ public class SeedDB {
             db.createUser(new Staff(4, "Carol", hashPassword("passwordCarol"), "carol@gmail.com", "2233445566", false));
             db.createUser(new Staff(5, "Dave", hashPassword("passwordDave"), "dave@gmail.com", "3344556677", false));
             db.createUser(new Staff(6, "Admin", hashPassword("adminPassword"), "admin@example.com", "4455667788", true));
+            db.createUser(new Staff(7, "Michael", hashPassword("passwordMichael"), "michael@gmail.com", "0411991582", false));
+            db.createUser(new Customer(8, "Liam", hashPassword("passwordLiam"), "liam@gmail.com", "0919568302"));
+            db.createUser(new Customer(9, "Phillip", hashPassword("passwordPhillip"), "phillip@gmail.com", "5794832018"));
+            db.createUser(new Customer(10, "Alex", hashPassword("passwordAlex"), "alex@gmail.com", "5948302198"));
+            db.createUser(new Customer(11, "Kris", hashPassword("passwordKris"), "kris@gmail.com", "9475694302"));
+            db.createUser(new Staff(12, "Ben", hashPassword("passwordBen"), "ben@gmail.com", "2783049271", false));
+            db.createUser(new Staff(13, "Josh", hashPassword("passwordJosh"), "josh@gmail.com", "7584932098", true));
+            db.createUser(new Staff(14, "Asher", hashPassword("passwordAsher"), "asher@gmail.com", "849360192", false));
+            db.createUser(new Customer(15, "George", hashPassword("passwordGeorge"), "george@gmail.com", "5946309827"));
+            db.createUser(new Customer(16, "Mark", hashPassword("passwordMark"), "markg@gmail.com", "3984750923"));
+            db.createUser(new Customer(17, "Ilan", hashPassword("passwordIlan"), "ilan@gmail.com", "759483082"));
+            db.createUser(new Customer(18, "Deborah", hashPassword("passwordDeborah"), "deborah@gmail.com", "7489384792"));
+            db.createUser(new Staff(19, "Colin", hashPassword("passwordColin"), "colin@gmail.com", "8495704932", false));
+            db.createUser(new Staff(20, "Jenny", hashPassword("passwordJenny"), "jenny@gmail.com", "4837209873", false));
         
             ItemType[] items = {
                 new ItemType(0, 1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.jpg"),
