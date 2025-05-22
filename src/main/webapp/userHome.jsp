@@ -31,6 +31,8 @@
         %>
             <p class="homeText"> You are logged in as <%= user.getUsername() %><br/>
             
+            <br>
+
             <img src="images/storefront.png" class="storefrontImage">
             <a href="index.jsp">Storefront</a><br/>
                 <%
