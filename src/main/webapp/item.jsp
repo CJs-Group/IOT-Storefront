@@ -70,7 +70,7 @@ if (item == null) {
         <div class="descText">
             <h1><%= item.getName() %></h1>
             <div class="priceTextContainer">
-                <p class="priceText">Price: $<%= String.format("%.2f", item.getPrice() / 100.0) %></p>
+                <p class="priceText">Price: $<%= String.format("%.2f", item.getPrice() / 100.0 * 100) %></p>
             </div>
             <p>ID: <%= item.getItemID() %></p>
             <p><%= item.getDescription() %></p>

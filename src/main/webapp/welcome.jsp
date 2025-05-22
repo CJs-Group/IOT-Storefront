@@ -2,11 +2,16 @@
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
 
+<!DOCTYPE html>
 <html>
+
 <head>
-    <title>Welcome to IOT Storefront</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CJ MAXX</title>
+    <link rel="stylesheet" type = "text/css" href="css/IoTBay.css">
+    <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
 </head>
+
 <body>
     <%
         DBConnector dbc = new DBConnector();
@@ -15,20 +20,48 @@
         User user = dbm.getUserById(userId);
         session.setAttribute("user", user);
     %>
+
+    <div class="topBar"></div>
+        <img src="images/CJ_MAXX.png" class="logo">
+        <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+        <div class="buttonContainer">
+            <a href="login.jsp" class="registerContainer">
+                <img src="images/login.png" class="registerIcon">
+                <p class="registerText">Login</p>
+            </a>
+            
+            <a href="register.jsp" class="registerContainer">
+                <img src="images/user.png" class="registerIcon">
+                <p class="registerText">Register</p>
+            </a>
+
+            <a href="pdbSystem/basket.jsp" class="cartContainer">
+                <img src="images/cart.png" class="cartIcon">
+                <p class="cartText">Cart</p>
+            </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+    <img src="images/CJ_MAXX.png" class="logoLarge">
     
-    <div class="welcome-container">
-        <h1>Welcome to IOT Storefront</h1>
+    <div>
+
+        <p class="welcomeText">Welcome, <%= user.getUsername() %>, to the IOT Storefront!</p>
         
-        <div class="user-info">
-            <h2>Welcome, <%= user.getUsername() %>!</h2>
+        <div class="userInfo">
             <p>Your account details:</p>
             <ul>
                 <li>Email: <%= user.getEmail() %></li>
                 <li>Phone: <%= user.getPhoneNumber() %></li>
             </ul>
             
-            <p>Click <a href="userHome.jsp">here</a> to proceed to the main page.</p>
+            <br><br><br>
         </div>
+        <p class="returnText">Click <a href="userHome.jsp">here</a> to proceed to the main page.</p>
     </div>
+
 </body>
 </html>

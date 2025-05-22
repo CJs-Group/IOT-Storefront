@@ -230,3 +230,31 @@ body {
 .registerPageText {
     padding-left: 15vh;
 }
+
+/* WELCOME PAGE */
+
+.welcomeText {
+    font-weight: 1000;
+    font-size: 5vh;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.userInfo {
+    font-size: 3vh;
+    position: fixed;
+    padding-top: 10%;
+    left: 50%;
+    transform: translate(-50%);
+    font-weight: 100;
+}
+
+.returnText {
+    font-size: 4vh;
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
