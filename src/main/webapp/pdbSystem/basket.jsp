@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream
 <%@page import="Model.DB"%>
+=======
+>>>>>>> Stashed changes
 <%@page import="Model.Users.User"%>
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
@@ -35,7 +38,11 @@ try (DBConnector dbc = new DBConnector()) {
 <%
       
       for (Map.Entry<Integer, Integer> entry : items.entrySet()) {
+<<<<<<< Updated upstream
         String itemName = DB.getItemById(entry.getKey()).getName();
+=======
+        String itemName = dbm.getItemById(entry.getKey()).getName();
+>>>>>>> Stashed changes
 %>
     <label>Item: <%= itemName %>, Quantity: <%= entry.getValue() %></label>
     <form method="post" action="../updateBasket">

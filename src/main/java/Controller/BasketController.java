@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.WebServlet;
 
+<<<<<<< Updated upstream
 import Model.DB;
+=======
+>>>>>>> Stashed changes
 import Model.DAO.DBConnector;
 import Model.DAO.DBManager;
 import Model.Users.Customer;
@@ -22,15 +25,25 @@ public class BasketController extends HttpServlet {
             DBManager dbm = new DBManager(dbc.openConnection());
 
             HttpSession session = request.getSession();
+<<<<<<< Updated upstream
             String itemIdStr = request.getParameter("itemId");
             String action = request.getParameter("action");
             ItemType itemType = DB.getItemById(itemIdStr);
+=======
+            String action = request.getParameter("action");
+>>>>>>> Stashed changes
             Customer customer = new Customer(0, "", "", "", "");
 
             if (session.getAttribute("user") != null) {
                 customer = (Customer)session.getAttribute("user");
             }
+<<<<<<< Updated upstream
             if (itemIdStr != null && action != null) {
+=======
+            if (request.getParameter("itemId") != null && action != null) {
+                int itemId = Integer.parseInt(request.getParameter("itemId"));
+                ItemType itemType = dbm.getItemById(itemId);
+>>>>>>> Stashed changes
                 try {
                     switch (action) {
                         case "remove":
@@ -47,7 +60,11 @@ public class BasketController extends HttpServlet {
                             break;
                     }
                 } catch (NumberFormatException e) {
+<<<<<<< Updated upstream
                     System.out.println("Invalid item ID: " + itemIdStr);
+=======
+                    System.out.println("Invalid item ID: " + itemId);
+>>>>>>> Stashed changes
                 }
             }
             response.sendRedirect("pdbSystem/basket.jsp");

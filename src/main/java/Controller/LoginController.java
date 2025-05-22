@@ -45,11 +45,30 @@ public class LoginController extends HttpServlet {
 
             
             User user = dbm.getUserByEmail(email);
+<<<<<<< Updated upstream
             session.setAttribute("user", user);
             response.sendRedirect("welcome.jsp");
 
             if (user.getPassword() == hashedPassword) {
                 response.sendRedirect("register.jsp?existError=Incorrect username or password.");
+=======
+            if (user != null && user.getPassword().equals(hashedPassword)) {
+                session.setAttribute("userId", user.getUserID());
+                
+                // String userType = "User";
+                // if (user instanceof Model.Users.Customer) {
+                //     userType = "Customer";
+                // } else if (user instanceof Model.Users.Staff) {
+                //     Model.Users.Staff staffUser = (Model.Users.Staff) user;
+                //     userType = staffUser.isAdmin() ? "Admin" : "Staff";
+                // }
+                session.setAttribute("user", user);
+                
+                response.sendRedirect("welcome.jsp");
+            }
+            else {
+                response.sendRedirect("login.jsp?existError=Incorrect username or password.");
+>>>>>>> Stashed changes
             }
         }
         catch (SQLException e) {
