@@ -29,9 +29,8 @@
     Customer customer = (Customer)dbm.getUserById(userId);
     Basket basket = dbm.getBasketByUserId(userId, true);
     List<PaymentInfo> paymentInfos = dbm.getCardDetailsByUserId(userId);
-    PaymentInfo paymentInfo = paymentInfos.get(0);
   
-    if (paymentInfo == null || paymentInfo.getPaymentId() == -1) {
+    if (paymentInfos.size() == 0) {
 %>
 <a style="float:left">You havent provided your Payment Method</a><br>
 <a style="float:left">Please provide your Payment details</a><br>
