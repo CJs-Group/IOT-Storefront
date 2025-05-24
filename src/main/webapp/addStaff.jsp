@@ -30,6 +30,13 @@
                     <input type="email" name="email" required><br>
                     <label>Phone Number:</label><br>
                     <input type="text" name="phone"><br>
+                    <label>Staff Role:</label><br>
+                    <%@ page import="Model.Users.StaffRole" %>
+                    <select id="staffRole" name="staffRole">
+                        <% for (StaffRole type : StaffRole.values()) { %>
+                            <option value="<%= type.name() %>"><%= type.name() %></option>
+                        <% } %>
+                    </select><br>
                     <input type="submit" value="Add Staff">
                 </form>
                 <a href="userManagement.jsp">Cancel</a>

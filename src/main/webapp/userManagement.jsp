@@ -19,6 +19,11 @@
         let selectedTab = 'none';
         let selectedRow = null;
 
+        window.onload = function() {
+            document.getElementById('editButton').disabled = true;
+            document.getElementById('deleteButton').disabled = true;
+        }
+
             function expandCustomer() {
                 selectedTab = 'Customer';
                 document.getElementById('activeTab').value = 'Customer';
@@ -38,6 +43,9 @@
                 });
                 document.getElementById('customerContent').style.display = 'block';
                 document.getElementById('staffContent').style.display = 'none';
+
+                document.getElementById('editButton').disabled = true;
+                document.getElementById('deleteButton').disabled = true;
             }
 
             function expandStaff() {
@@ -59,6 +67,9 @@
                 });
                 document.getElementById('staffContent').style.display = 'block';
                 document.getElementById('customerContent').style.display = 'none';
+
+                document.getElementById('editButton').disabled = true;
+                document.getElementById('deleteButton').disabled = true;
             }
             function selectUser(id, rowElement) {
                 if (selectedRow) {
@@ -67,6 +78,9 @@
                 rowElement.classList.add('selected-row');
                 selectedRow = rowElement;
                 document.getElementById('selectedUserID').value = id;
+
+                document.getElementById('editButton').disabled = false;
+                document.getElementById('deleteButton').disabled = false;
 
                 // document.getElementById('selectForm').submit();
             }
@@ -89,7 +103,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Address</th>
+                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Address</th><th>Type</th><th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,6 +118,7 @@
                                 <td><%=c.getEmail()%></td>
                                 <td><%=c.getPhoneNumber()%></td>
                                 <td><%=c.getAddress()%></td>
+                                <td><%=c.getAccountType()%></td>
                             </tr>
                             <%   }
                             }
@@ -117,7 +132,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Admin?</th>
+                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Staff Role</th><th>Admin?</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,6 +146,7 @@
                                 <td><%=s.getUsername()%></td>
                                 <td><%=s.getEmail()%></td>
                                 <td><%=s.getPhoneNumber()%></td>
+                                <td><%=s.getStaffRole()%></td>
                                 <td><%=s.isAdmin()? "Yes":"No"%></td>
                             </tr>
                             <%   }
@@ -140,9 +156,9 @@
                         </table>
                     </div>
                     <div class="buttons">
-                        <button class="addButton smallbutton" type="submit" form="selectForm" name="addUser">Add</button>
-                        <button class="editButton smallbutton" type="submit" form="selectForm" name="editUser">Edit</button>
-                        <button class="deleteButton smallbutton" type="submit" form="selectForm" name="deleteUser">Delete</button>
+                        <button class="addButton smallbutton" type="submit" form="selectForm" name="addUser" id="addButton">Add</button>
+                        <button class="editButton smallbutton" type="submit" form="selectForm" name="editUser" id="editButton">Edit</button>
+                        <button class="deleteButton smallbutton" type="submit" form="selectForm" name="deleteUser" id="deleteButton">Delete</button>
                     </div>
                 </div>
             </div>
