@@ -13,4 +13,8 @@ public class Staff extends User {
     public boolean isAdmin() {
         return isAdmin;
     }
+
+    public StaffRole getStaffRole() {
+        return staffRole;
+    }
 }

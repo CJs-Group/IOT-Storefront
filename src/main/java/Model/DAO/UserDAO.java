@@ -70,10 +70,14 @@ public class UserDAO {
                 PasswordHash,
                 PhoneNumber,
                 Type,
+                AccountType,
+                StaffRole,
                 ShippingAddress
             )
             VALUES
             (
+                ?,
+                ?,
                 ?,
                 ?,
                 ?,
@@ -100,11 +104,20 @@ public class UserDAO {
             }
             ps.setString(5, userTypeString);
 
-            if (user instanceof Customer) {
-                ps.setString(6, ((Customer)user).getAddress());
+            ps.setString(6, user.getAccountType().toString());
+
+            if (user instanceof Staff) {
+                ps.setString(7, ((Staff) user).getStaffRole().toString());
             } else {
-                ps.setNull(6, Types.VARCHAR);
+                ps.setNull(7, java.sql.Types.VARCHAR);
             }
+
+            if (user instanceof Customer) {
+                ps.setString(8, ((Customer)user).getAddress());
+            } else {
+                ps.setNull(8, Types.VARCHAR);
+            }
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     newUserId = rs.getInt("UserID");
@@ -175,6 +188,7 @@ public class UserDAO {
                 Email = ?,
                 PasswordHash = ?,
                 PhoneNumber = ?,
+                AccountType = ?,
                 ShippingAddress = ?
             WHERE UserID = ?
         """);

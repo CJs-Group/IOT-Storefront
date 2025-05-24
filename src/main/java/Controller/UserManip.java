@@ -22,6 +22,8 @@ import Model.Order.PaymentInfo;
 import Model.Users.Customer;
 import Model.Users.Staff;
 import Model.Users.User;
+import Model.Users.AccountType;
+import Model.Users.StaffRole;
 
 @WebServlet("/userManip")
 public class UserManip extends HttpServlet {
@@ -40,6 +42,10 @@ public class UserManip extends HttpServlet {
             String password = request.getParameter("password");
             String phone = request.getParameter("phone");
             String address = request.getParameter("address");
+            String accountTypeStr = request.getParameter("accountType");
+            String staffRoleStr = request.getParameter("staffRole");
+
+            AccountType accountType = null;
                 switch (formAction) {
                 case "addCustomer":
                     formErrorRedirectPage = "addCustomer.jsp";
@@ -63,8 +69,9 @@ public class UserManip extends HttpServlet {
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
+                    accountType = AccountType.valueOf(accountTypeStr);
                     String hashedPassAddCust = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
-                    Customer newCustomer = new Customer(0, username, hashedPassAddCust, email, phone, address, null);
+                    Customer newCustomer = new Customer(0, username, hashedPassAddCust, email, phone, address, null, accountType);
                     dbm.createUser(newCustomer);
                     session.setAttribute("formSuccess", "Customer added successfully.");
                     response.sendRedirect(successRedirectPage);
@@ -136,9 +143,11 @@ public class UserManip extends HttpServlet {
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
+                    accountType = AccountType.valueOf(accountTypeStr);
+                    StaffRole staffRole = StaffRole.valueOf(staffRoleStr);
                     String hashedPassAddStaff = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
                     // Ensure new staff are NEVER created as admins through this form.
-                    Staff newStaff = new Staff(0, username, hashedPassAddStaff, email, phone, false); 
+                    Staff newStaff = new Staff(0, username, hashedPassAddStaff, email, phone, accountType, false, staffRole); 
                     dbm.createUser(newStaff);
                     session.setAttribute("formSuccess", "Staff added successfully.");
                     response.sendRedirect(successRedirectPage);
@@ -189,7 +198,9 @@ public class UserManip extends HttpServlet {
                                                           staffToEdit.getPassword(), 
                                                           staffToEdit.getEmail(),    
                                                           staffToEdit.getPhoneNumber(),
-                                                          staffToEdit.isAdmin());
+                                                          staffToEdit.getAccountType(),
+                                                          staffToEdit.isAdmin(),
+                                                          staffToEdit.getStaffRole());
                     
                     dbm.updateUser(updatedStaffDetails); 
                     session.setAttribute("formSuccess", "Staff updated successfully.");

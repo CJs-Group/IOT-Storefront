@@ -2,8 +2,7 @@ package Model.Users;
 
 public enum AccountType {
     Individual,
-    Enterprise,
-    Guest;
+    Enterprise;
 
     public static AccountType fromString(String text) {
         if (text != null) {
