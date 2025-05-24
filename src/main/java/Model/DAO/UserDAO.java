@@ -5,6 +5,8 @@ import Model.Items.ItemType;
 import Model.Users.Customer;
 import Model.Users.Staff;
 import Model.Users.User;
+import Model.Users.AccountType;
+import Model.Users.StaffRole;
 import Model.Order.PaymentInfo;
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,25 +27,30 @@ public class UserDAO {
 
     private User resultToUser(ResultSet rs) throws SQLException {
         String type  = rs.getString("Type");
+        AccountType accountType = AccountType.fromString(rs.getString("AccountType"));
         if (type.equals("Customer")) {
             Customer c = new Customer(
                 rs.getInt("UserID"),
                 rs.getString("Name"),
                 rs.getString("PasswordHash"),
                 rs.getString("Email"),
-                rs.getString("PhoneNumber")
+                rs.getString("PhoneNumber"),
+                accountType
             );
             c.setAddress(rs.getString("ShippingAddress"));
             return c;
         }
         else {
+            StaffRole staffRole = StaffRole.fromString(rs.getString("StaffRole"));
             Staff s = new Staff(
                 rs.getInt("UserID"),
                 rs.getString("Name"),
                 rs.getString("PasswordHash"),
                 rs.getString("Email"),
                 rs.getString("PhoneNumber"),
-                type.equals("Admin")
+                accountType,
+                type.equals("Admin"),
+                staffRole
             );
             return s;
         }
@@ -198,6 +205,7 @@ public class UserDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
+                AccountType accountType = AccountType.fromString(rs.getString("AccountType").toUpperCase());
                 Customer c = new Customer(
                     rs.getInt("UserID"),
                     rs.getString("Name"),
@@ -205,7 +213,8 @@ public class UserDAO {
                     rs.getString("Email"),
                     rs.getString("PhoneNumber"),
                     rs.getString("ShippingAddress"),
-                    new PaymentInfo()
+                    new PaymentInfo(),
+                    accountType
                 );
                 customers.add(c);
             }
@@ -219,14 +228,18 @@ public class UserDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
+                AccountType accountType = AccountType.fromString(rs.getString("AccountType"));
                 boolean isAdmin = "Admin".equals(rs.getString("Type"));
+                StaffRole staffRole = StaffRole.fromString(rs.getString("StaffRole"));
                 Staff s = new Staff(
                     rs.getInt("UserID"),
                     rs.getString("Name"),
                     rs.getString("PasswordHash"),
                     rs.getString("Email"),
                     rs.getString("PhoneNumber"),
-                    isAdmin
+                    accountType,
+                    isAdmin,
+                    staffRole
                 );
                 staffList.add(s);
             }

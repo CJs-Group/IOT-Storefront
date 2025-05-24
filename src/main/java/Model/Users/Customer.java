@@ -6,14 +6,14 @@ public class Customer extends User {
     PaymentInfo paymentInfo;
     String address;
 
-    public Customer(int userID, String username, String password, String email, String phoneNumber, String address, PaymentInfo paymentInfo) {
-        super(userID, username, password, email, phoneNumber);
+    public Customer(int userID, String username, String password, String email, String phoneNumber, String address, PaymentInfo paymentInfo, AccountType accountType) {
+        super(userID, username, password, email, phoneNumber, accountType);
         this.address = address;
         this.paymentInfo = paymentInfo;
     }
 
-    public Customer(int userID, String username, String password, String email, String phoneNumber) {
-        super(userID, username, password, email, phoneNumber);
+    public Customer(int userID, String username, String password, String email, String phoneNumber, AccountType accountType) {
+        super(userID, username, password, email, phoneNumber, accountType);
         paymentInfo = new PaymentInfo();
     }
 
