@@ -44,13 +44,13 @@ public class UserManip extends HttpServlet {
             String address = request.getParameter("address");
             String accountTypeStr = request.getParameter("accountType");
             String staffRoleStr = request.getParameter("staffRole");
-
             AccountType accountType = null;
+            StaffRole staffRole = null;
                 switch (formAction) {
                 case "addCustomer":
                     formErrorRedirectPage = "addCustomer.jsp";
-                    if (username == null || username.isEmpty() || email == null || email.isEmpty() || password == null || password.isEmpty()) {
-                        session.setAttribute("formError", "Username, Email, and Password are required.");
+                    if (username == null || username.isEmpty() || email == null || email.isEmpty() || password == null || password.isEmpty() || accountTypeStr == null || accountTypeStr.isEmpty()) {
+                        session.setAttribute("formError", "Username, Email, Password, and Account Type are required.");
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
@@ -80,8 +80,8 @@ public class UserManip extends HttpServlet {
                 case "editCustomer":
                     formErrorRedirectPage = "editCustomer.jsp";
                     int custId = Integer.parseInt(selectedUserIDStr);
-                    if (username == null || username.isEmpty() || email == null || email.isEmpty()) {
-                        session.setAttribute("formError", "Username and Email are required.");
+                    if (username == null || username.isEmpty() || email == null || email.isEmpty() || accountTypeStr == null || accountTypeStr.isEmpty()) {
+                        session.setAttribute("formError", "Username, Email, and Account Type are required.");
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
@@ -104,10 +104,18 @@ public class UserManip extends HttpServlet {
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
+                    try {
+                        accountType = AccountType.valueOf(accountTypeStr);
+                    } catch (IllegalArgumentException e) {
+                        session.setAttribute("formError", "Invalid Account Type selected.");
+                        response.sendRedirect(formErrorRedirectPage);
+                        return;
+                    }
                     customerToEdit.setUsername(username);
-                    customerToEdit.setEmail(email); 
+                    customerToEdit.setEmail(email);
                     customerToEdit.setPhoneNumber(phone);
                     customerToEdit.setAddress(address);
+                    customerToEdit.setAccountType(accountType);
                     if (password != null && !password.isEmpty()) {
                         if (!Validator.validatePassword(password)) {
                             session.setAttribute("formError", "Password must be at least 4 characters long.");
@@ -123,8 +131,8 @@ public class UserManip extends HttpServlet {
 
                 case "addStaff":
                     formErrorRedirectPage = "addStaff.jsp";
-                    if (username == null || username.isEmpty() || email == null || email.isEmpty() || password == null || password.isEmpty()) {
-                        session.setAttribute("formError", "Username, Email, and Password are required.");
+                    if (username == null || username.isEmpty() || email == null || email.isEmpty() || password == null || password.isEmpty() || staffRoleStr == null || staffRoleStr.isEmpty()) {
+                        session.setAttribute("formError", "Username, Email, Password, and Staff Role are required.");
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
@@ -143,21 +151,25 @@ public class UserManip extends HttpServlet {
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
-                    accountType = AccountType.valueOf(accountTypeStr);
-                    StaffRole staffRole = StaffRole.valueOf(staffRoleStr);
+                    try {
+                        staffRole = StaffRole.valueOf(staffRoleStr);
+                    } catch (IllegalArgumentException e) {
+                        session.setAttribute("formError", "Invalid Staff Role selected.");
+                        response.sendRedirect(formErrorRedirectPage);
+                        return;
+                    }
                     String hashedPassAddStaff = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
                     // Ensure new staff are NEVER created as admins through this form.
-                    Staff newStaff = new Staff(0, username, hashedPassAddStaff, email, phone, accountType, false, staffRole); 
+                    Staff newStaff = new Staff(0, username, hashedPassAddStaff, email, phone, false, staffRole); 
                     dbm.createUser(newStaff);
                     session.setAttribute("formSuccess", "Staff added successfully.");
                     response.sendRedirect(successRedirectPage);
                     break;
-
                 case "editStaff":
                     formErrorRedirectPage = "editStaff.jsp";
                     int staffId = Integer.parseInt(selectedUserIDStr);
-                    if (username == null || username.isEmpty() || email == null || email.isEmpty()) {
-                        session.setAttribute("formError", "Username and Email are required.");
+                    if (username == null || username.isEmpty() || email == null || email.isEmpty() || staffRoleStr == null || staffRoleStr.isEmpty()) {
+                        session.setAttribute("formError", "Username, Email, and Staff Role are required.");
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
@@ -180,9 +192,17 @@ public class UserManip extends HttpServlet {
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
+                    try {
+                        staffRole = StaffRole.valueOf(staffRoleStr);
+                    } catch (IllegalArgumentException e) {
+                        session.setAttribute("formError", "Invalid Staff Role selected.");
+                        response.sendRedirect(formErrorRedirectPage);
+                        return;
+                    }
                     staffToEdit.setUsername(username);
                     staffToEdit.setEmail(email);
                     staffToEdit.setPhoneNumber(phone);
+                    staffToEdit.setStaffRole(staffRole);
 
                     if (password != null && !password.isEmpty()) {
                          if (!Validator.validatePassword(password)) {
@@ -192,17 +212,8 @@ public class UserManip extends HttpServlet {
                         }
                         staffToEdit.setPassword(Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString());
                     }
-
-                    Staff updatedStaffDetails = new Staff(staffToEdit.getUserID(), 
-                                                          staffToEdit.getUsername(), 
-                                                          staffToEdit.getPassword(), 
-                                                          staffToEdit.getEmail(),    
-                                                          staffToEdit.getPhoneNumber(),
-                                                          staffToEdit.getAccountType(),
-                                                          staffToEdit.isAdmin(),
-                                                          staffToEdit.getStaffRole());
                     
-                    dbm.updateUser(updatedStaffDetails); 
+                    dbm.updateUser(staffToEdit); 
                     session.setAttribute("formSuccess", "Staff updated successfully.");
                     response.sendRedirect(successRedirectPage);
                     break;

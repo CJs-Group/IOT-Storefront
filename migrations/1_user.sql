@@ -7,7 +7,7 @@ CREATE TABLE "Users" (
 	"PasswordHash"	TEXT NOT NULL,
 	"PhoneNumber"	TEXT,
 	"Type" TEXT CHECK("Type" IN ('Customer', 'Staff', 'Admin')) NOT NULL,
-	"AccountType" TEXT CHECK("AccountType" IN ('Individual', 'Business', 'Enterprise')) NOT NULL,
+	"AccountType" TEXT CHECK("AccountType" IN ('Individual', 'Business', 'Enterprise')),
 	"StaffRole" TEXT,
 	"ShippingAddress" TEXT,
 	CHECK (

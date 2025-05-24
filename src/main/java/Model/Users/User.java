@@ -8,15 +8,13 @@ public abstract class User {
     String password;
     String email;
     String phoneNumber;
-    AccountType accountType;
 
-    public User(int userID, String username, String password, String email, String phoneNumber, AccountType accountType) {
+    public User(int userID, String username, String password, String email, String phoneNumber) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.accountType = accountType;
     }
 
     public int getUserID() {
@@ -57,13 +55,5 @@ public abstract class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public AccountType getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
     }
 }

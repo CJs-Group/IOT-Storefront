@@ -4,6 +4,7 @@
 <%@page import="Model.Users.User"%>
 <%@page import="Model.Users.Customer"%>
 <%@page import="Model.Users.Staff"%>
+<%@page import="Model.Users.StaffRole"%>
 <%@page import="java.util.List"%>
 <%
     DBConnector dbc = new DBConnector();
@@ -22,6 +23,14 @@
         <div class="content-wrapper">
             <div class="container shown">
                 <h2>Edit Staff</h2>
+                    <% 
+                        String formError = (String) session.getAttribute("formError");
+                        if (formError != null) {
+                    %>
+                        <p style="color: red;"><%= formError %></p>
+                    <%
+                    }
+                    %>
                 <form action="${pageContext.request.contextPath}/userManip" method="post">
                     <input type="hidden" name="formAction" value="editStaff">
                     <input type="hidden" name="selectedUserID" value="<%= staff.getUserID() %>">
@@ -32,7 +41,13 @@
                     <label>New Password (leave blank to keep current):</label><br>
                     <input type="password" name="password"><br>
                     <label>Phone Number:</label><br>
-                    <input type="text" name="phoneNumber" value="<%= staff.getPhoneNumber() != null ? staff.getPhoneNumber() : "" %>"><br>
+                    <input type="text" name="phone" value="<%= staff.getPhoneNumber() != null ? staff.getPhoneNumber() : "" %>"><br>
+                    <label>Staff Role:</label><br>
+                    <select name="staffRole" required>
+                        <% for (StaffRole role : StaffRole.values()) { %>
+                            <option value="<%= role.name() %>" <%= staff.getStaffRole() == role ? "selected" : "" %>><%= role.toString() %></option>
+                        <% } %>
+                    </select><br><br>
                     <input type="submit" value="Update Staff">
                 </form>
                 <a href="userManagement.jsp">Cancel</a>

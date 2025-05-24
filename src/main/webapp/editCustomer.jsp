@@ -4,6 +4,7 @@
 <%@page import="Model.Users.User"%>
 <%@page import="Model.Users.Customer"%>
 <%@page import="Model.Users.Staff"%>
+<%@page import="Model.Users.AccountType"%>
 <%@page import="java.util.List"%>
 <%
     DBConnector dbc = new DBConnector();
@@ -22,6 +23,14 @@
         <div class="content-wrapper">
             <div class="container shown">
                 <h2>Edit Customer</h2>
+                    <% 
+                        String formError = (String) session.getAttribute("formError");
+                        if (formError != null) {
+                    %>
+                        <p style="color: red;"><%= formError %></p>
+                    <%
+                    }
+                    %>
                     <form action="${pageContext.request.contextPath}/userManip" method="post">
                     <input type="hidden" name="formAction" value="editCustomer">
                     <input type="hidden" name="selectedUserID" value="<%= customer.getUserID() %>">
@@ -32,9 +41,15 @@
                     <label>New Password (leave blank to keep current):</label><br>
                     <input type="password" name="password"><br>
                     <label>Phone Number:</label><br>
-                    <input type="text" name="phoneNumber" value="<%= customer.getPhoneNumber() != null ? customer.getPhoneNumber() : "" %>"><br>
+                    <input type="text" name="phone" value="<%= customer.getPhoneNumber() != null ? customer.getPhoneNumber() : "" %>"><br>
                     <label>Address:</label><br>
                     <input type="text" name="address" value="<%= customer.getAddress() != null ? customer.getAddress() : "" %>"><br>
+                    <label>Account Type:</label><br>
+                    <select name="accountType" required>
+                        <% for (AccountType type : AccountType.values()) { %>
+                            <option value="<%= type.name() %>" <%= customer.getAccountType() == type ? "selected" : "" %>><%= type.toString() %></option>
+                        <% } %>
+                    </select><br><br>
                     <input type="submit" value="Update Customer">
                 </form>
                 <a href="userManagement.jsp">Cancel</a>

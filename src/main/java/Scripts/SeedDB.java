@@ -32,23 +32,23 @@ public class SeedDB {
             db.createUser(new Customer(1, "John", hashPassword("password"), "john@gmail.com", "1234567890", AccountType.Individual));
             db.createUser(new Customer(2, "Alice", hashPassword("passwordAlice"), "alice@gmail.com", "0987654321", AccountType.Individual));
             db.createUser(new Customer(3, "Bob", hashPassword("passwordBob"), "bob@gmail.com", "1122334455", AccountType.Individual));
-            db.createUser(new Staff(4, "Carol", hashPassword("passwordCarol"), "carol@gmail.com", "2233445566", AccountType.Individual, false, StaffRole.RetailMember));
-            db.createUser(new Staff(5, "Dave", hashPassword("passwordDave"), "dave@gmail.com", "3344556677", AccountType.Individual, false, StaffRole.SalesStaff));
-            db.createUser(new Staff(6, "Admin", hashPassword("adminPassword"), "admin@example.com", "4455667788", AccountType.Enterprise, true, StaffRole.Owner));
-            db.createUser(new Staff(7, "Michael", hashPassword("passwordMichael"), "michael@gmail.com", "0411991582", AccountType.Individual, false, StaffRole.StockCoordinator));
+            db.createUser(new Staff(4, "Carol", hashPassword("passwordCarol"), "carol@gmail.com", "2233445566", false, StaffRole.RetailMember));
+            db.createUser(new Staff(5, "Dave", hashPassword("passwordDave"), "dave@gmail.com", "3344556677", false, StaffRole.SalesStaff));
+            db.createUser(new Staff(6, "Admin", hashPassword("adminPassword"), "admin@example.com", "4455667788", true, StaffRole.Owner));
+            db.createUser(new Staff(7, "Michael", hashPassword("passwordMichael"), "michael@gmail.com", "0411991582", false, StaffRole.StockCoordinator));
             db.createUser(new Customer(8, "Liam", hashPassword("passwordLiam"), "liam@gmail.com", "0919568302", AccountType.Individual));
             db.createUser(new Customer(9, "Phillip", hashPassword("passwordPhillip"), "phillip@gmail.com", "5794832018", AccountType.Individual));
             db.createUser(new Customer(10, "Alex", hashPassword("passwordAlex"), "alex@gmail.com", "5948302198", AccountType.Individual));
             db.createUser(new Customer(11, "Kris", hashPassword("passwordKris"), "kris@gmail.com", "9475694302", AccountType.Individual));
-            db.createUser(new Staff(12, "Ben", hashPassword("passwordBen"), "ben@gmail.com", "2783049271", AccountType.Individual, false, StaffRole.RetailMember));
-            db.createUser(new Staff(13, "Josh", hashPassword("passwordJosh"), "josh@gmail.com", "7584932098", AccountType.Individual, true, StaffRole.Manager));
-            db.createUser(new Staff(14, "Asher", hashPassword("passwordAsher"), "asher@gmail.com", "849360192", AccountType.Individual, false, StaffRole.AssistantManager));
+            db.createUser(new Staff(12, "Ben", hashPassword("passwordBen"), "ben@gmail.com", "2783049271", false, StaffRole.RetailMember));
+            db.createUser(new Staff(13, "Josh", hashPassword("passwordJosh"), "josh@gmail.com", "7584932098", true, StaffRole.Manager));
+            db.createUser(new Staff(14, "Asher", hashPassword("passwordAsher"), "asher@gmail.com", "849360192", false, StaffRole.AssistantManager));
             db.createUser(new Customer(15, "George", hashPassword("passwordGeorge"), "george@gmail.com", "5946309827", AccountType.Individual));
             db.createUser(new Customer(16, "Mark", hashPassword("passwordMark"), "markg@gmail.com", "3984750923", AccountType.Individual));
             db.createUser(new Customer(17, "Ilan", hashPassword("passwordIlan"), "ilan@gmail.com", "759483082", AccountType.Individual));
             db.createUser(new Customer(18, "Deborah", hashPassword("passwordDeborah"), "deborah@gmail.com", "7489384792", AccountType.Individual));
-            db.createUser(new Staff(19, "Colin", hashPassword("passwordColin"), "colin@gmail.com", "8495704932", AccountType.Individual, false, StaffRole.SalesStaff));
-            db.createUser(new Staff(20, "Jenny", hashPassword("passwordJenny"), "jenny@gmail.com", "4837209873", AccountType.Individual, false, StaffRole.SalesStaff));
+            db.createUser(new Staff(19, "Colin", hashPassword("passwordColin"), "colin@gmail.com", "8495704932", false, StaffRole.SalesStaff));
+            db.createUser(new Staff(20, "Jenny", hashPassword("passwordJenny"), "jenny@gmail.com", "4837209873", false, StaffRole.SalesStaff));
         
             ItemType[] items = {
                 new ItemType(0, 1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.jpg"),

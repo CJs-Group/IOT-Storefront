@@ -5,9 +5,64 @@
 <%@page import="Model.Users.Customer"%>
 <%@page import="Model.Users.Staff"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="Model.Users.AccountType"%>
+<%@page import="Model.Users.StaffRole"%>
 <%
     DBConnector dbc = new DBConnector();
     DBManager dbm = new DBManager(dbc.openConnection());
+    List<Customer> customers = new ArrayList<>();
+    List<Staff> staff = new ArrayList<>();
+
+    String activeTab = (String) session.getAttribute("activeTab");
+    if (activeTab == null) {
+        String paramActiveTab = request.getParameter("activeTab");
+        if (paramActiveTab != null && !paramActiveTab.isEmpty()){
+            activeTab = paramActiveTab;
+        }
+        else {
+            activeTab = "";
+        }
+    }
+    String currentCustomerNameSearch = request.getParameter("customerNameSearch");
+    if (currentCustomerNameSearch == null) {
+        currentCustomerNameSearch = (String) session.getAttribute("customerNameSearch");
+        if (currentCustomerNameSearch == null) currentCustomerNameSearch = "";
+    } else {
+        session.setAttribute("customerNameSearch", currentCustomerNameSearch);
+    }
+
+    String currentCustomerAccountTypeSearch = request.getParameter("customerAccountTypeSearch");
+    if (currentCustomerAccountTypeSearch == null) {
+        currentCustomerAccountTypeSearch = (String) session.getAttribute("customerAccountTypeSearch");
+        if (currentCustomerAccountTypeSearch == null) currentCustomerAccountTypeSearch = "";
+    }
+    else {
+        session.setAttribute("customerAccountTypeSearch", currentCustomerAccountTypeSearch);
+    }
+
+    String currentStaffNameSearch = request.getParameter("staffNameSearch");
+    if (currentStaffNameSearch == null) {
+        currentStaffNameSearch = (String) session.getAttribute("staffNameSearch");
+        if (currentStaffNameSearch == null) currentStaffNameSearch = "";
+    }
+    else {
+        session.setAttribute("staffNameSearch", currentStaffNameSearch);
+    }
+
+    String currentStaffRoleSearch = request.getParameter("staffRoleSearch");
+    if (currentStaffRoleSearch == null) {
+        currentStaffRoleSearch = (String) session.getAttribute("staffRoleSearch");
+        if (currentStaffRoleSearch == null) currentStaffRoleSearch = "";
+    }
+    else{
+        session.setAttribute("staffRoleSearch", currentStaffRoleSearch);
+    }
+    String customerNameQuery = currentCustomerNameSearch;
+    String customerAccountTypeQuery = currentCustomerAccountTypeSearch;
+    String staffNameQuery = currentStaffNameSearch;
+    String staffRoleQuery = currentStaffRoleSearch;
 %>
 <!DOCTYPE html>
 <html>
@@ -19,7 +74,28 @@
         let selectedTab = 'none';
         let selectedRow = null;
 
-            function expandCustomer() {
+            function removeNoTransitionFromElements() {
+                const customerButton = document.querySelector('.customerButton');
+                const staffButton = document.querySelector('.staffButton');
+                const container = document.querySelector('.container');
+                const smallbuttons = document.querySelectorAll('.smallbutton');
+                const elements = [document.body, container, customerButton, staffButton, ...Array.from(smallbuttons)];
+                
+                elements.forEach(el => {
+                    if (el && el.classList.contains('no-transition')) {
+                         el.classList.remove('no-transition');
+                    }
+                });
+            }
+
+            function expandCustomer(isInitialCall = false) {
+                if (!isInitialCall) {
+                    removeNoTransitionFromElements();
+                }
+                let editButton = document.querySelector('.editButton');
+                let deleteButton = document.querySelector('.deleteButton');
+                if (editButton) editButton.disabled = true;
+                if (deleteButton) deleteButton.disabled = true;
                 selectedTab = 'Customer';
                 document.getElementById('activeTab').value = 'Customer';
                 const customerButton = document.querySelector('.customerButton');
@@ -40,7 +116,14 @@
                 document.getElementById('staffContent').style.display = 'none';
             }
 
-            function expandStaff() {
+            function expandStaff(isInitialCall = false) {
+                if (!isInitialCall) {
+                    removeNoTransitionFromElements();
+                }
+                let editButton = document.querySelector('.editButton');
+                let deleteButton = document.querySelector('.deleteButton');
+                if (editButton) editButton.disabled = true;
+                if (deleteButton) deleteButton.disabled = true;
                 selectedTab = 'Staff';
                 document.getElementById('activeTab').value = 'Staff';
                 const staffButton = document.querySelector('.staffButton');
@@ -60,16 +143,48 @@
                 document.getElementById('staffContent').style.display = 'block';
                 document.getElementById('customerContent').style.display = 'none';
             }
+
             function selectUser(id, rowElement) {
+                let editButton = document.querySelector('.editButton');
+                let deleteButton = document.querySelector('.deleteButton');
                 if (selectedRow) {
                     selectedRow.classList.remove('selected-row');
                 }
                 rowElement.classList.add('selected-row');
                 selectedRow = rowElement;
                 document.getElementById('selectedUserID').value = id;
-
-                // document.getElementById('selectForm').submit();
+                if (editButton) editButton.disabled = false;
+                if (deleteButton) deleteButton.disabled = false;
             }
+
+            window.onload = function() {
+                let activeTabFromJSP = '<%= activeTab %>'; 
+                const customerButton = document.querySelector('.customerButton');
+                const staffButton = document.querySelector('.staffButton');
+                const container = document.querySelector('.container');
+                const smallbuttons = document.querySelectorAll('.smallbutton');
+
+                const elementsToMakeInstant = [document.body, container, customerButton, staffButton, ...Array.from(smallbuttons)]; // Corrected to use Array.from
+                elementsToMakeInstant.forEach(el => {
+                    if (el) el.classList.add('no-transition');
+                });
+                if (activeTabFromJSP === 'Customer') {
+                    expandCustomer(true);
+                }
+                else if (activeTabFromJSP === 'Staff') {
+                    expandStaff(true);
+                }
+                if (container) void container.offsetWidth;
+                setTimeout(() => {
+                    removeNoTransitionFromElements();
+                }, 0);
+                if (document.getElementById('customerContent').style.display === 'block') {
+                    document.getElementById('activeTab').value = 'Customer';
+                }
+                else if (document.getElementById('staffContent').style.display === 'block') {
+                    document.getElementById('activeTab').value = 'Staff';
+                }
+            };
         </script>
     </head>
     <body>
@@ -82,19 +197,33 @@
                 <div class="container">
                     <form id="selectForm" action="userManagement" method="post">
                         <input type="hidden" name="selectedUserID" id="selectedUserID"/>
-                        <input type="hidden" name="activeTab" id="activeTab" value=""/>
+                        <input type="hidden" name="activeTab" id="activeTab" value="<%= activeTab %>"/>
                     </form>
                     <div id="customerContent" style="display:none; width:100%;">
                         <h2>Customers</h2>
+                        <form method="GET" action="userManagement" class="search-form">
+                            <input type="hidden" name="activeTab" value="Customer"/>
+                            Name: <input type="text" name="customerNameSearch" id="customerNameSearchInput" value="<%= currentCustomerNameSearch %>"/>
+                            Type: 
+                            <select name="customerAccountTypeSearch" id="customerAccountTypeSearchSelect">
+                                <option value="">All</option>
+                                <% for (AccountType type : AccountType.values()) { %>
+                                    <option value="<%= type.name() %>" <%= type.name().equals(currentCustomerAccountTypeSearch) ? "selected" : "" %>>
+                                        <%= type.name() %>
+                                    </option>
+                                <% } %>
+                            </select>
+                            <button type="submit" class="smallbutton">Search</button>
+                        </form>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Address</th>
+                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Address</th><th>Type</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <% 
-                            List<Customer> customers = (List<Customer>)dbm.getCustomers();
+                            customers = (List<Customer>)dbm.getCustomers(customerNameQuery, customerAccountTypeQuery);
                             if (customers != null) {
                                 for(Customer c: customers) { 
                             %>
@@ -102,8 +231,9 @@
                                 <td><%=c.getUserID()%></td>
                                 <td><%=c.getUsername()%></td>
                                 <td><%=c.getEmail()%></td>
-                                <td><%=c.getPhoneNumber()%></td>
-                                <td><%=c.getAddress()%></td>
+                                <td><%=c.getPhoneNumber() == null ? "" : c.getPhoneNumber()%></td>
+                                <td><%=c.getAddress() == null ? "" : c.getAddress()%></td>
+                                <td><%=c.getAccountType() == null ? "" : c.getAccountType().name() %></td>
                             </tr>
                             <%   }
                             }
@@ -114,15 +244,29 @@
 
                     <div id="staffContent" style="display:none; width:100%;">
                         <h2>Staff</h2>
+                        <form method="GET" action="userManagement" class="search-form">
+                            <input type="hidden" name="activeTab" value="Staff"/>
+                            Name: <input type="text" name="staffNameSearch" id="staffNameSearchInput" value="<%= currentStaffNameSearch %>"/>
+                            Role: 
+                            <select name="staffRoleSearch" id="staffRoleSearchSelect">
+                                <option value="">All</option>
+                                <% for (StaffRole role : StaffRole.values()) { %>
+                                    <option value="<%= role.name() %>" <%= role.name().equals(currentStaffRoleSearch) ? "selected" : "" %>>
+                                        <%= role.name() %>
+                                    </option>
+                                <% } %>
+                            </select>
+                            <button type="submit" class="smallbutton">Search</button>
+                        </form>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Admin?</th>
+                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Role</th><th>Admin?</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <% 
-                            List<Staff> staff = (List<Staff>)dbm.getStaff();
+                            staff = (List<Staff>)dbm.getStaff(staffNameQuery, staffRoleQuery);
                             if (staff != null) {
                                 for(Staff s: staff) { 
                             %>
@@ -130,7 +274,8 @@
                                 <td><%=s.getUserID()%></td>
                                 <td><%=s.getUsername()%></td>
                                 <td><%=s.getEmail()%></td>
-                                <td><%=s.getPhoneNumber()%></td>
+                                <td><%=s.getPhoneNumber() == null ? "" : s.getPhoneNumber()%></td>
+                                <td><%=s.getStaffRole() == null ? "" : s.getStaffRole().name() %></td>
                                 <td><%=s.isAdmin()? "Yes":"No"%></td>
                             </tr>
                             <%   }
@@ -141,8 +286,8 @@
                     </div>
                     <div class="buttons">
                         <button class="addButton smallbutton" type="submit" form="selectForm" name="addUser">Add</button>
-                        <button class="editButton smallbutton" type="submit" form="selectForm" name="editUser">Edit</button>
-                        <button class="deleteButton smallbutton" type="submit" form="selectForm" name="deleteUser">Delete</button>
+                        <button class="editButton smallbutton" type="submit" form="selectForm" name="editUser" disabled>Edit</button>
+                        <button class="deleteButton smallbutton" type="submit" form="selectForm" name="deleteUser" disabled>Delete</button>
                     </div>
                 </div>
             </div>

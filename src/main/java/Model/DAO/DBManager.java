@@ -84,8 +84,16 @@ public class DBManager {
         return userDAO.getCustomers();
     }
 
+    public List<Customer> getCustomers(String nameSearch, String accountTypeSearch) throws SQLException {
+        return userDAO.getCustomers(nameSearch, accountTypeSearch);
+    }
+
     public List<Staff> getStaff() throws SQLException {
         return userDAO.getStaff();
+    }
+
+    public List<Staff> getStaff(String nameSearch, String staffRoleSearch) throws SQLException {
+        return userDAO.getStaff(nameSearch, staffRoleSearch);
     }
 
     public boolean doesEmailExist(String email) throws SQLException {
