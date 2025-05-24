@@ -114,6 +114,9 @@
                 });
                 document.getElementById('customerContent').style.display = 'block';
                 document.getElementById('staffContent').style.display = 'none';
+
+                document.getElementById('editButton').disabled = true;
+                document.getElementById('deleteButton').disabled = true;
             }
 
             function expandStaff(isInitialCall = false) {
@@ -142,6 +145,9 @@
                 });
                 document.getElementById('staffContent').style.display = 'block';
                 document.getElementById('customerContent').style.display = 'none';
+
+                document.getElementById('editButton').disabled = true;
+                document.getElementById('deleteButton').disabled = true;
             }
 
             function selectUser(id, rowElement) {
