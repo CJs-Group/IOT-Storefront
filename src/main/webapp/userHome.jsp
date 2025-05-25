@@ -48,7 +48,7 @@
                         <a href="orders.jsp">View orders</a><br/>
                         
                         <img src="images/user.png" class="logoutImage">
-                        <a href="paymentHistory.jsp">Payment history</a><br/>
+                        <a href="paymentManagement">Payment management</a><br/>
                 <%
                     }
                 %>
