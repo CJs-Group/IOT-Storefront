@@ -319,5 +319,5 @@ body {
     padding-left: 10%;
     padding-top: 20vh;
     position: relative;
-    z-index: -1000;
+    z-index: 10;
 }

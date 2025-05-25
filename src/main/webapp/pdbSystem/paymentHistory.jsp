@@ -145,7 +145,7 @@
 
 <br/>
 <p>
-    <a href="updatePaymentMethod.jsp">Add New Payment Method</a><br/>
+    <a href="../updatePaymentMethod.jsp">Add New Payment Method</a><br/>
     <a href="../userHome.jsp">Back to Home</a>
 </p>
 
