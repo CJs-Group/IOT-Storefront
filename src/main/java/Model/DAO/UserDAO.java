@@ -21,7 +21,7 @@ public class UserDAO {
         this.conn = conn;   
     }
 
-    public ItemType getItemById(int id) {
+    public ItemType getItemTypeById(int id) {
         return null;
     }
 
