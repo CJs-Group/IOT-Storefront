@@ -87,7 +87,7 @@
 %>
 <a>You have yet to add a Payment Method.</a><br>
 </br><a>Please provide your Payment details through the link below.</a><br>
-<a href="updatePaymentMethod.jsp">Add a payment method.</a>.<br>
+<a href="updatePaymentMethod.jsp">Add a payment method.</a><br>
 <%
       } else {
 %>
@@ -102,14 +102,14 @@
 <%
   if (paymentInfos.size() == 0) {
 %>
-<a>You havent provided your Payment Method</a><br>
-<a>Please provide your Payment details</a><br>
-<a href="updatePaymentMethod.jsp">Add a payment method</a><br>
+<a>You have yet to add a Payment Method.</a><br>
+<a>Please provide your Payment details through the link below.</a><br>
+<a href="updatePaymentMethod.jsp">Add a payment method.</a><br>
 <%
   } else {
 %>
-<label>Payment Details have been provided</label><br>
-<a href="updatePaymentMethod.jsp">Change a payment method</a><br>
+<label>Payment Details have been provided.</label><br>
+<a href="updatePaymentMethod.jsp">Change payment method.</a><br>
 <%
   }
     }
@@ -142,7 +142,7 @@ else {
   // Only show checkout link if user has payment details or is a guest
   if (paymentInfos.size() > 0) {
 %>
-  Click <a href="checkout.jsp">here </a>to proceed for checkout. <br/>
+  Click <a href="checkout.jsp">here </a>to proceed for checkout.<br/>
 <%
   } else {
 %>
@@ -151,7 +151,7 @@ else {
     }
   }
 %>
-Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
+Click <a href="../userHome.jsp">here </a>to proceed to the main page.<br/>
 <%
   }
   catch (Exception e) {
