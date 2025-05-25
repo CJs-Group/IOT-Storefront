@@ -1,7 +1,32 @@
 <html>
 <head>
     <title>Checkout</title>
+    <link rel="stylesheet" type="text/css" href="../css/IoTBay.css">
+    <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
+
+<body>
+<div class="topBar"></div>
+    <img src="../images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="../images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="../images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+<div class=bodyText>
+<br>
 <h1>Checkout</h1>
 <%
     String errorMessage = request.getParameter("error");
@@ -11,8 +36,6 @@
 <%
     }
 %>
-
-<body>
 <h2>Delivery method:</h2>
 <form>
     <select id="deliveryMethod" name="deliveryMethod" required>
@@ -91,4 +114,5 @@
 %>
 Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
 Click <a href="basket.jsp">here </a>to proceed to the basket. <br/>
+</div>
 </html>

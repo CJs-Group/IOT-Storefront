@@ -282,3 +282,25 @@ body {
 .logoutImage {
     height: 7vh;
 }
+
+/* BASKET */
+.basketText {
+    font-size: 5vh;
+    padding-left: 10%
+}
+
+.bodyText {
+    padding-left: 10%;
+}
+.orderText {
+    padding-left: 6%
+}
+
+.logoutText {
+    font-weight: 1000;
+    font-size: 3vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
