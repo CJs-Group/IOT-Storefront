@@ -31,7 +31,7 @@ public class UpdatePaymentController extends HttpServlet {
         if (cardNo == null || fullName == null || expiryDate == null || cvvStr == null ||
         cardNo.isEmpty() || fullName.isEmpty() || expiryDate.isEmpty() || cvvStr.isEmpty()) {
             session.setAttribute("paymentErr", "All fields are required.");
-            response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+            response.sendRedirect("updatePaymentMethod.jsp");
             return;
         }
         
@@ -41,7 +41,7 @@ public class UpdatePaymentController extends HttpServlet {
         }
         catch(NumberFormatException e) {
             session.setAttribute("paymentErr", "Invalid CVV format.");
-            response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+            response.sendRedirect("updatePaymentMethod.jsp");
             return;
         }
         
@@ -49,13 +49,13 @@ public class UpdatePaymentController extends HttpServlet {
         try {
             if(!newPaymentInfo.validate()) {
                 session.setAttribute("paymentErr", "Invalid payment details. Please re-enter details.");
-                response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+                response.sendRedirect("updatePaymentMethod.jsp");
                 return;
             }
         }
         catch(DateTimeParseException e) {
             session.setAttribute("paymentErr", "Expiry date format is invalid. Use MM/yy.");
-            response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+            response.sendRedirect("updatePaymentMethod.jsp");
             return;
         }
         
@@ -75,14 +75,14 @@ public class UpdatePaymentController extends HttpServlet {
                 }
                 catch (SQLException e) {
                     session.setAttribute("paymentErr", "User not found.");
-                    response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+                    response.sendRedirect("updatePaymentMethod.jsp");
                     return;
                 }
                 session.setAttribute("paymentSuccess", "Payment details updated successfully.");
             }
             catch (SQLException e) {
                 session.setAttribute("paymentErr", "Database error: " + e.getMessage());
-                response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+                response.sendRedirect("updatePaymentMethod.jsp");
                 return;
             }
         }
@@ -93,11 +93,11 @@ public class UpdatePaymentController extends HttpServlet {
             session.setAttribute("paymentSuccess", "Payment details saved for this session.");
         }
         
-        response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+        response.sendRedirect("updatePaymentMethod.jsp");
     }
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect("pdbSystem/updatePaymentMethod.jsp");
+        response.sendRedirect("updatePaymentMethod.jsp");
     }
 }

@@ -40,7 +40,7 @@
                 <p class="registerText">Register</p>
             </a>
 
-            <a href="pdbSystem/basket.jsp" class="cartContainer">
+            <a href="basket.jsp" class="cartContainer">
                 <img src="images/cart.png" class="cartIcon">
                 <p class="cartText">Cart</p>
             </a>
@@ -48,16 +48,6 @@
 
     <div class="leftBar"></div>
     <div class="rightBar"></div>
-
-    <%-- PREVIOUS REGISTER AND LOGIN BUTTONS --%>
-    <%-- Currently waiting on confirmation on merging register and login into one page --%>
-
-    <%-- <div>
-        <a class="button" href="register.jsp">Register</a>
-    </div>
-    <div>
-        <a class="button" href="login.jsp">Login</a>
-    </div> --%>
 
     <img src="images/CJ_MAXX.png" class="logoLarge">
 
@@ -72,15 +62,6 @@
         <% } %>    
     </div>
         
-    <%-- PREVIOUS ITEMS LIST --%>
-    <%-- <h2>Items</h2>
-    <% for (ItemType it : DB.items) { %>
-        <a href="/item.jsp?id=<%= it.getItemID() %>">
-            <%= it.getItemID() %>
-            <%= it.getName() %>
-        </a>
-        <br />
-    <% } %> --%>
 </body>
 
 </html>

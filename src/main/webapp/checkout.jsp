@@ -1,9 +1,35 @@
 <html>
 <head>
     <title>Checkout</title>
+    <link rel="stylesheet" type="text/css" href="../css/IoTBay.css">
+    <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
+
+<body>
+<div class="topBar"></div>
+    <img src="../images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="../images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="../images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+<div class=mainText>
+<br>
 <h1>Checkout</h1>
-<%
+<%    
+    boolean disableSave = (session.getAttribute("userId") == null);
     String errorMessage = request.getParameter("error");
     if (errorMessage != null && !errorMessage.isEmpty()) {
 %>
@@ -11,8 +37,6 @@
 <%
     }
 %>
-
-<body>
 <h2>Delivery method:</h2>
 <form>
     <select id="deliveryMethod" name="deliveryMethod" required>
@@ -58,7 +82,8 @@
             <option value="NT">NT</option>
             <option value="WA">WA</option>
         </select><br>
-        <input type="submit" value="Submit">
+        <input type="submit" name="action" value="Submit Order">
+        <input type="submit" name="action" value="Save Order" <%= disableSave ? "disabled" : "" %>>
     </form>
 <%
         } else if (deliveryMethod.equals("Click&Collect")){
@@ -69,7 +94,8 @@
     <label><input type="radio" name="selectedStore" value="Central Storefront" required > Central Storefront </label><br>
     <label><input type="radio" name="selectedStore" value="Lidcombe Storefront" > Lidcombe Storefront </label><br>
     <label><input type="radio" name="selectedStore" value="Bankstown Storefront" > Bankstown Storefront </label><br>
-    <input type="submit" value="Submit">
+    <input type="submit" name="action" value="Submit Order">
+    <input type="submit" name="action" value="Save Order" <%= disableSave ? "disabled" : "" %>>
 </form>
 <%
         } else if (deliveryMethod.equals("Ship")){
@@ -83,12 +109,15 @@
         <option value="ParcelPoint">ParcelPoint</option>
         <option value="HUBBED">HUBBED</option>
     </select><br>
-    <input type="submit" value="Submit">
+    <input type="submit" name="action" value="Submit Order">
+    <input type="submit" name="action" value="Save Order" <%= disableSave ? "disabled" : "" %>>
 </form>
 <%
         }
     }
 %>
+Only registered users can save orders. <br>
 Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
 Click <a href="basket.jsp">here </a>to proceed to the basket. <br/>
+</div>
 </html>

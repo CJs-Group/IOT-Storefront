@@ -41,10 +41,10 @@
                     if(user instanceof Customer) {
                 %>
                         <img src="images/cart.png" class="cartImage">
-                        <a href="pdbSystem/basket.jsp">View basket</a><br/>
+                        <a href="basket.jsp">View basket</a><br/>
                         
                         <img src="images/user.png" class="logoutImage">
-                        <a href="pdbSystem/orders.jsp">View orders</a><br/>
+                        <a href="orders.jsp">View orders</a><br/>
                         
                         <img src="images/user.png" class="logoutImage">
                         <a href="paymentManagement">Payment management</a><br/>
@@ -65,7 +65,7 @@
         %>
             <p align="center"> You are not logged in <br/>
             <a href="index.jsp">Storefront</a><br/>
-            <a style="float:left" href="register.jsp">Register</a>
+            <a href="register.jsp">Register</a>
         <%
         }
         %>

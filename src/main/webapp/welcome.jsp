@@ -36,7 +36,7 @@
                 <p class="registerText">Register</p>
             </a>
 
-            <a href="pdbSystem/basket.jsp" class="cartContainer">
+            <a href="basket.jsp" class="cartContainer">
                 <img src="images/cart.png" class="cartIcon">
                 <p class="cartText">Cart</p>
             </a>

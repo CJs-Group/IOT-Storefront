@@ -98,6 +98,6 @@ public class BasketController extends HttpServlet {
             }
         }
         
-        response.sendRedirect("pdbSystem/basket.jsp");
+        response.sendRedirect("basket.jsp");
     }
 }

@@ -14,21 +14,42 @@
 
 <html>
 <head>
-  <title>Basket</title>
+    <title>Basket</title>
+    <link rel="stylesheet" type="text/css" href="../css/IoTBay.css">
+    <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
+
 <body>
+
+<div class="topBar"></div>
+    <img src="../images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="../images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="../images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+
+<div class="mainText">
 <h1>Basket</h1>
 <%
-  String errorMessage = request.getParameter("error");
-  if (errorMessage != null && !errorMessage.isEmpty()) {
+    String errorMessage = request.getParameter("error");
+    if (errorMessage != null && !errorMessage.isEmpty()) {
 %>
-<div style="color: red;">
-  <strong>Error:</strong> <%= errorMessage %>
-</div>
+    <p style="color:red; font-weight:bold;"><%= errorMessage.replace("+", " ") %></p>
 <%
-  }
-%>
-<%
+    }
   Connection conn = null;
   DBManager dbm = null;
   Basket basket = null;
@@ -138,5 +159,7 @@ Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
     e.printStackTrace(new java.io.PrintWriter(out));
   }
 %>
+
+</div>
 </body>
 </html>
