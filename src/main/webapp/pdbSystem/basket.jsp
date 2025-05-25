@@ -6,6 +6,7 @@
 <%@page import="Model.Users.Customer"%>
 <%@page import="Model.DAO.DBManager"%>
 <%@page import="Model.DAO.DBConnector"%>
+
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.List"%>
@@ -38,15 +39,15 @@
     
       if (paymentInfos.size() == 0) {
 %>
-<a style="float:left">You havent provided your Payment Method</a><br>
-<a style="float:left">Please provide your Payment details</a><br>
-<a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br>
+<a style="float:left">You have yet to add a Payment Method.</a><br>
+</br><a style="float:left">Please provide your Payment details through the link below.</a><br>
+<a style="float:left" href="updatePaymentMethod.jsp">Add a payment method.</a>.<br>
 <%
 }
 else {
 %>
-<label>Payment Details have been provided</label><br>
-<a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
+<label>Payment Details have been provided.</label><br>
+<a style="float:left" href="updatePaymentMethod.jsp">Change payment method.</a><br>
 <%
       }
     } else {
@@ -54,18 +55,18 @@ else {
       basket = (Basket) session.getAttribute("sessionBasket");
 %>
 <label>Shopping as Guest</label><br>
-<a style="float:left">You can checkout as a guest or <a href="../login.jsp">login</a> for a better experience</a><br>
+<a style="float:left">You can checkout as a guest or <a href="../login.jsp">login</a> for a better experience.</a><br>
 <%
     }
     
     if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
 %>
-<label> Basket is empty </label><br>
+<label>Your Basket is empty.</label><br>
 <%
 }
 else {
 %>
-<label> Your Basket contains: </label><br>
+</br><label>Your Basket currently contains: </label><br>
 <%
     // Updated loop to iterate over List<BasketItem>
     for (BasketItem basketItem : basket.getItems()) {

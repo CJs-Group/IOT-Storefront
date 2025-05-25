@@ -2,8 +2,10 @@
 <%@page import="Model.Order.PaymentInfo"%>
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
+
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Connection"%>
+
 <html>
 <head>
     <title>Update Payment Method</title>
@@ -66,6 +68,7 @@
         }
     }
 %>
+
 <h1>Update Payment Method</h1>
 <form action="../updatePaymentMethod" method="post">
     <label>Credit Card Number:</label><br>
@@ -78,8 +81,10 @@
     <input type="password" name="cvv" value=""><br><br>
     <input type="submit" value="Submit">
 </form>
+
 <br/>
-Click <a href="../userHome.jsp">here</a> to proceed to the main page.<br/>
-Click <a href="basket.jsp">here</a> to proceed to the basket.<br/>
+Click <a href="basket.jsp">here</a> to go to your basket.<br/>
+Click <a href="../paymentManagement">here</a> to go to your payment history.</a><br/>
+Click <a href="../userHome.jsp">here</a> to return to your home page.<br/>
 </body>
 </html>
