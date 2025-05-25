@@ -57,12 +57,17 @@ public class OrderController extends HttpServlet {
             else {
                 basket = (Basket) session.getAttribute("sessionBasket");
             }
-
-            if (basket == null || basket.getItems().isEmpty()) {
-                String redirectUrl = isGuest ? "/pdbSystem/basket.jsp" : "/pdbSystem/checkout.jsp";
-                response.sendRedirect(request.getContextPath() + redirectUrl + "?error=" + URLEncoder.encode("Your basket is empty.", "UTF-8"));
+            String action = request.getParameter("action");
+            if (action == null || action.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Invalid action.", "UTF-8"));
                 return;
             }
+            if (action.equals("Submit Order") || action.equals("Save Order")){
+                if (basket == null || basket.getItems().isEmpty()) {
+                    String redirectUrl = isGuest ? "/pdbSystem/basket.jsp" : "/pdbSystem/checkout.jsp";
+                    response.sendRedirect(request.getContextPath() + redirectUrl + "?error=" + URLEncoder.encode("Your basket is empty.", "UTF-8"));
+                    return;
+                }
 
             Map<ItemType, List<Unit>> unitsToReserveForOrder = new HashMap<>();
             for (BasketItem basketItem : basket.getItems()) {
@@ -121,9 +126,21 @@ public class OrderController extends HttpServlet {
             else {
                 shippingAddress = "Ship to collection point: " + request.getParameter("collectionPoint");
             }
-            
+
             int orderUserId = isGuest ? -1 : user.getUserID();
-            Order newOrder = new Order(orderUserId, new Date(), OrderStatus.Pending, shippingAddress);
+            Order newOrder = null;
+            if (action.equals("Submit Order")) {
+                newOrder = new Order(orderUserId, new Date(), OrderStatus.Completed, shippingAddress);
+            } else if (action.equals("Save Order")) {
+                if (!isGuest) {
+                    newOrder = new Order(user.getUserID(), new Date(), OrderStatus.Saved, shippingAddress);
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Couldn't process the order", "UTF-8"));
+                }
+            } else {
+                response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Couldn't process the order", "UTF-8"));
+                return;
+            }
             newOrder.setOrderItems(orderItemsForNewOrder);
 
             if (!isGuest) {
@@ -137,7 +154,6 @@ public class OrderController extends HttpServlet {
                 if (guestOrders == null) {
                     guestOrders = new ArrayList<>();
                 }
-                
                 int guestOrderId = guestOrders.size() + 1;
                 newOrder.setOrderID(guestOrderId);
                 guestOrders.add(newOrder);
@@ -147,7 +163,79 @@ public class OrderController extends HttpServlet {
             }
 
             response.sendRedirect(request.getContextPath() + "/pdbSystem/receipt.jsp?orderId=" + newOrder.getOrderID() + "&success=" + URLEncoder.encode("Order placed successfully!", "UTF-8"));
-
+            } else if (action.equals("cancelOrder")) {
+                int orderId = Integer.parseInt(request.getParameter("orderId"));
+                Order order = dbm.getOrderById(orderId, true);
+                if (order == null) {
+                    response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?error=" + URLEncoder.encode("Order not found.", "UTF-8"));
+                    return;
+                }
+                if (order.getOrderStatus() != OrderStatus.Saved) {
+                    response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?error=" + URLEncoder.encode("Only saved orders can be cancelled.", "UTF-8"));
+                    return;
+                }
+                List<OrderItem> orderItems = order.getOrderItems();
+                for (OrderItem orderItem : orderItems) {
+                    Unit unit = orderItem.getUnit();
+                    unit.setStatus(Status.In_Stock);
+                    unit.setDatePurchased(null); 
+                    dbm.updateUnit(unit, null); 
+                }
+                dbm.cancelOrder(orderId);
+                response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Order cancelled successfully!", "UTF-8"));
+            } else if (action.equals("completeOrder")){
+                int orderId = Integer.parseInt(request.getParameter("orderId"));
+                for (OrderItem orderItem : dbm.getOrderById(orderId, true).getOrderItems()) {
+                    Unit unit = orderItem.getUnit();
+                    unit.setStatus(Status.Out_for_Delivery);
+                    unit.setDatePurchased(new Date()); 
+                    dbm.updateUnit(unit, user.getUserID()); 
+                }
+                dbm.updateOrderStatus(orderId, OrderStatus.Completed);
+                response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Order completed successfully!", "UTF-8"));
+            } else if (action.equals("removeItem")){
+                int orderId = Integer.parseInt(request.getParameter("orderId"));
+                int unitId = Integer.parseInt(request.getParameter("unitId"));
+                Order order = dbm.getOrderById(orderId, true);
+                for (OrderItem orderItem : order.getOrderItems()) {
+                    if (orderItem.getUnit().getUnitID() == unitId) {
+                        dbm.deleteOrderItem(orderItem.getOrderItemID());
+                        break;
+                    }
+                }
+                List<OrderItem> orderItems = dbm.getOrderItemsByOrderId(orderId);
+                if (orderItems.isEmpty()) {
+                    dbm.deleteOrder(orderId); 
+                    response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Order item removed and order cancelled as it is empty.", "UTF-8"));
+                    return;
+                }
+                Unit unit = dbm.getUnitById(unitId);
+                unit.setStatus(Status.In_Stock);
+                unit.setDatePurchased(null);
+                dbm.updateUnit(unit, null);
+                response.sendRedirect(request.getContextPath() + "/pdbSystem/editOrder.jsp?orderId=" + orderId); 
+            } else if (action.equals("Change Delivery Method")){
+                int orderId = Integer.parseInt(request.getParameter("orderId"));
+                String deliveryType = request.getParameter("deliveryType"); 
+                String shippingAddress = ""; 
+                if (deliveryType.equals("delivery")) {
+                    shippingAddress = "Address: " + request.getParameter("address") +
+                                    ", City: " + request.getParameter("city") +
+                                    ", State: " + request.getParameter("state") +
+                                    ", Country: " + request.getParameter("country") +
+                                    " (For: " + request.getParameter("firstName") + " " + request.getParameter("lastName") + ")";
+                }
+                else if (deliveryType.equals("click")) { 
+                    shippingAddress = "Click & Collect at: " + request.getParameter("selectedStore");
+                }
+                else {
+                    shippingAddress = "Ship to collection point: " + request.getParameter("collectionPoint");
+                }
+                Order order = dbm.getOrderById(orderId, true);
+                order.setShippingAddress(shippingAddress);
+                dbm.updateOrder(order);
+                response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Delivery method has been updated", "UTF-8"));
+            }
         }
         catch (SQLException e) {
             String redirectUrl = isGuest ? "/pdbSystem/basket.jsp" : "/pdbSystem/checkout.jsp";

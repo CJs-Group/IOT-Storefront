@@ -55,8 +55,7 @@
                 <table border="1" style="width:100%; border-collapse: collapse;">
                     <thead>
                         <tr>
-                            <th>Item Name</th>
-                            <th>Quantity</th>
+                            <th>Item [Unit #]</th>
                             <th>Price per Unit</th>
                             <th>Subtotal</th>
                         </tr>
@@ -74,8 +73,7 @@
                         grandTotal += subtotal;
 %>
                         <tr>
-                            <td><%= itemName %></td>
-                            <td style="text-align:center;"><%= quantity %></td>
+                            <td><%= itemName + " [ " + unit.getUnitID() + " ]" %></td>
                             <td style="text-align:right;">$<%= String.format("%.2f", priceAtPurchase) %></td>
                             <td style="text-align:right;">$<%= String.format("%.2f", subtotal) %></td>
                         </tr>
@@ -85,7 +83,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="3" style="text-align:right; font-weight:bold;">Grand Total:</td>
+                            <td colspan="2" style="text-align:right; font-weight:bold;">Grand Total:</td>
                             <td style="text-align:right; font-weight:bold;">$<%= String.format("%.2f", grandTotal) %></td>
                         </tr>
                     </tfoot>
