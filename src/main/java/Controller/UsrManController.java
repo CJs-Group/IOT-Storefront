@@ -24,34 +24,32 @@ import Model.Users.User;
 
 @WebServlet("/userManagement")
 public class UsrManController extends HttpServlet {
-    // Check if user is an admin
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Uncomment to check if admin
-        // HttpSession session = request.getSession(false);
-        // if (session == null) {
-        //     response.sendRedirect("login.jsp");
-        //     return;
-        // }
-        // Object userIdObj = session.getAttribute("userId");
-        // if (userIdObj == null) {
-        //     response.sendRedirect("/login.jsp?error=User not logged in. Please log in.");
-        //     return;
-        // }
-        // try (DBConnector dbc = new DBConnector()) {
-        //     // Before anything else check if user is an admin
-        //     DBManager dbm = new DBManager(dbc.openConnection());
-        //     int UserID = (int)session.getAttribute("userId");
-        //     User user = dbm.getUserById(UserID);
-        //     if (user == null || !(user instanceof Model.Users.Staff) || !((Model.Users.Staff) user).isAdmin()) {
-        //         response.sendRedirect("login.jsp?error=You are not authorized to access this page.");
-        //         return;
-        //     }
-        // }
-        // catch (SQLException e) {
-        //     response.sendRedirect("register.jsp?error=" +  e.getMessage());
-        // }
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        Object userIdObj = session.getAttribute("userId");
+        if (userIdObj == null) {
+            response.sendRedirect("/login.jsp?error=User not logged in. Please log in.");
+            return;
+        }
+        try (DBConnector dbc = new DBConnector()) {
+            DBManager dbm = new DBManager(dbc.openConnection());
+            int UserID = (int)session.getAttribute("userId");
+            User user = dbm.getUserById(UserID);
+            if (user == null || !(user instanceof Model.Users.Staff) || !((Model.Users.Staff) user).isAdmin()) {
+                response.sendRedirect("login.jsp?error=You are not authorized to access this page.");
+                return;
+            }
+        }
+        catch (SQLException e) {
+            response.sendRedirect("register.jsp?error=" +  e.getMessage());
+        }
         request.getRequestDispatcher("/userManagement.jsp").forward(request, response);
     }
 
@@ -64,9 +62,11 @@ public class UsrManController extends HttpServlet {
             String addUserAction = request.getParameter("addUser");
             String editUserAction = request.getParameter("editUser");
             String deleteUserAction = request.getParameter("deleteUser");
+            String activateUserAction = request.getParameter("activateUser");
+            String deactivateUserAction = request.getParameter("deactivateUser");
             session.setAttribute("selectedUserID", selectedUserIDStr);
             request.setAttribute("selectedUserID", selectedUserIDStr);
-            if (selectedUserIDStr == null || selectedUserIDStr.isEmpty() || (addUserAction == null && editUserAction == null && deleteUserAction == null)) {
+            if (selectedUserIDStr == null || selectedUserIDStr.isEmpty() || (addUserAction == null && editUserAction == null && deleteUserAction == null && activateUserAction == null && deactivateUserAction == null)) {
                 response.sendRedirect("userManagement.jsp");
                 return;
             }
@@ -77,6 +77,17 @@ public class UsrManController extends HttpServlet {
                     response.sendRedirect("userManagement.jsp?error=You cannot edit or delete an admin.");
                     return;
                 }
+            }
+            if (activateUserAction != null || deactivateUserAction != null) {
+                int selectedUserID = Integer.parseInt(selectedUserIDStr);
+                if (activateUserAction != null) {
+                    dbm.setUserActivated(selectedUserID, true);
+                    response.sendRedirect("userManagement.jsp?success=User activated successfully.");
+                } else {
+                    dbm.setUserActivated(selectedUserID, false);
+                    response.sendRedirect("userManagement.jsp?success=User deactivated successfully.");
+                }
+                return;
             }
             if (deleteUserAction != null) {
                 response.sendRedirect("deleteUserConfirm.jsp");

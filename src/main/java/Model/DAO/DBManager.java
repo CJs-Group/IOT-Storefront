@@ -108,6 +108,14 @@ public class DBManager {
         userDAO.deleteUser(userId);
     }
 
+    public boolean isUserActivated(int userId) throws SQLException {
+        return userDAO.isUserActivated(userId);
+    }
+
+    public void setUserActivated(int userId, boolean activated) throws SQLException {
+        userDAO.setUserActivated(userId, activated);
+    }
+
     public void createItemType(ItemType itemType) throws SQLException {
         itemTypeDAO.createItemType(itemType);
     }
