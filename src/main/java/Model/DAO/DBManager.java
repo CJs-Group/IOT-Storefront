@@ -12,9 +12,11 @@ import Model.Order.Order;
 import Model.Order.OrderItem;
 import Model.Order.OrderStatus;
 import Model.Order.PaymentInfo;
+import Model.Order.Payment;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 import Model.Items.Status;
 
 /* 
@@ -33,6 +35,7 @@ public class DBManager {
     private BasketDAO basketDAO;
     private BasketItemDAO basketItemDAO;
     private CardDetailDAO cardDetailDAO;
+    private PaymentDAO paymentDAO;
     
     public DBManager(Connection conn) {
         this.conn = conn;
@@ -44,6 +47,7 @@ public class DBManager {
         this.basketItemDAO = new BasketItemDAO(conn, this.itemTypeDAO);
         this.basketDAO = new BasketDAO(conn, this.basketItemDAO);
         this.cardDetailDAO = new CardDetailDAO(conn);
+        this.paymentDAO = new PaymentDAO(conn, this.cardDetailDAO);
     }
 
     public void close() throws SQLException {
@@ -270,5 +274,30 @@ public class DBManager {
 
     public void deleteCardDetail(int cardId) throws SQLException {
         cardDetailDAO.deleteCardDetail(cardId);
+    }
+
+    // payment management methods
+    public void createPayment(Payment payment) throws SQLException {
+        paymentDAO.createPayment(payment);
+    }
+
+    public Payment getPaymentById(int paymentId) throws SQLException {
+        return paymentDAO.getPaymentById(paymentId);
+    }
+
+    public List<Payment> getPaymentsByUserId(int userId) throws SQLException {
+        return paymentDAO.getPaymentsByUserId(userId);
+    }
+
+    public List<Payment> searchPaymentsByUserIdAndCriteria(int userId, Integer paymentId, Date startDate, Date endDate) throws SQLException {
+        return paymentDAO.searchPaymentsByUserIdAndCriteria(userId, paymentId, startDate, endDate);
+    }
+
+    public void updatePaymentStatus(int paymentId, Payment.PaymentStatus newStatus) throws SQLException {
+        paymentDAO.updatePaymentStatus(paymentId, newStatus);
+    }
+
+    public void deletePayment(int paymentId) throws SQLException {
+        paymentDAO.deletePayment(paymentId);
     }
 }

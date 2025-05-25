@@ -28,6 +28,8 @@ import Model.Items.Status;
 import Model.Order.Order;
 import Model.Order.OrderItem;
 import Model.Order.OrderStatus;
+import Model.Order.Payment;
+import Model.Order.PaymentInfo;
 
 @WebServlet("/order")
 public class OrderController extends HttpServlet {
@@ -53,9 +55,17 @@ public class OrderController extends HttpServlet {
                     return;
                 }
                 basket = dbm.getBasketByUserId(userId, true);
+                
+                // checking if logged-in user has payment method
+                List<PaymentInfo> paymentMethods = dbm.getCardDetailsByUserId(userId);
+                if (paymentMethods.isEmpty()) {
+                    response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Please add a payment method before placing an order.", "UTF-8"));
+                    return;
+                }
             }
             else {
                 basket = (Basket) session.getAttribute("sessionBasket");
+                // guest users don't need payment methods for now, could add this later
             }
 
             if (basket == null || basket.getItems().isEmpty()) {
@@ -128,10 +138,21 @@ public class OrderController extends HttpServlet {
 
             if (!isGuest) {
                 dbm.createOrder(newOrder); 
+                
+                // creating payment record for logged-in users
+                List<PaymentInfo> paymentMethods = dbm.getCardDetailsByUserId(user.getUserID());
+                PaymentInfo userPaymentMethod = paymentMethods.get(0); // uses first available payment method
+                int totalAmount = basket.getTotalPrice(); // should be in cents
+                
+                Payment payment = new Payment(newOrder.getOrderID(), userPaymentMethod.getPaymentId(), 
+                                             totalAmount, Payment.PaymentStatus.Completed);
+                dbm.createPayment(payment);
+                
                 dbm.clearBasket(basket.getBasketID());
                 session.setAttribute("latestOrderId", newOrder.getOrderID()); 
             }
             else {
+                // guest user handling (no payment record created)
                 @SuppressWarnings("unchecked")
                 List<Order> guestOrders = (List<Order>) session.getAttribute("guestOrders");
                 if (guestOrders == null) {
