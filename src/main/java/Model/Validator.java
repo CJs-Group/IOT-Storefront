@@ -13,6 +13,7 @@ public class Validator implements Serializable {
     private static String emailPattern = "([a-zA-Z0-9]+)(([._-])([a-zA-Z0-9]+))*(@)([a-z]+)(.)([a-z]{3})((([.])[a-z]{0,2})*)";
     // private static String namePattern = "([A-Z][a-z]+[\\s])+[A-Z][a-z]*"; // Unused for now, if we want to check names uncomment
     private static String passwordPattern = ".{4,}"; //Simple check for at least 4 characters
+    private static String phonePattern = "\\d+";
 
     public Validator() {
         //
@@ -34,5 +35,9 @@ public class Validator implements Serializable {
 
     public static boolean validatePassword(String password) {
         return validate(passwordPattern, password);
+    }
+
+    public static boolean validatePhone(String phone) {
+        return validate(phonePattern, phone);
     }
 }
