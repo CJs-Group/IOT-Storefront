@@ -9,7 +9,7 @@
     <title>Payment Management</title>
 </head>
 <body>
-<h1>Payment Management</h1>
+<h1>Payment History</h1>
 
 <%
     String error = request.getParameter("error");
