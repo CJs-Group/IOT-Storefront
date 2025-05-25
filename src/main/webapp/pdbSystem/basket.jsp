@@ -42,6 +42,12 @@
 
 <div class="bodyText">
 <%
+    String errorMessage = request.getParameter("error");
+    if (errorMessage != null && !errorMessage.isEmpty()) {
+%>
+    <p style="color:red; font-weight:bold;"><%= errorMessage.replace("+", " ") %></p>
+<%
+    }
   Connection conn = null;
   DBManager dbm = null;
   Basket basket = null;
@@ -89,7 +95,7 @@ else {
 }
 else {
 %>
-<label> Your Basket contains: </label><br>
+<h3> Your Basket contains: </h3>
 <%
     // Updated loop to iterate over List<BasketItem>
     for (BasketItem basketItem : basket.getItems()) {

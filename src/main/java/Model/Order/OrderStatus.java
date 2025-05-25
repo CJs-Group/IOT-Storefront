@@ -1,6 +1,7 @@
 package Model.Order;
 
 public enum OrderStatus {
+    Saved,
     Pending,
     Processing,
     Shipped,

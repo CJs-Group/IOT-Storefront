@@ -154,7 +154,7 @@ public class OrderDAO {
             ps.executeUpdate();
         }
     }
-    
+
     public void updateOrderStatus(int orderId, OrderStatus newStatus) throws SQLException {
         String sql = "UPDATE Orders SET OrderStatus = ? WHERE OrderID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -165,15 +165,21 @@ public class OrderDAO {
     }
 
     public void deleteOrder(int orderId) throws SQLException {
+        String sql = "DELETE FROM Orders WHERE OrderID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+        }
+        }
+
+    public void cancelOrder(int orderId) throws SQLException {
         boolean originalAutoCommit = conn.getAutoCommit();
         try {
             conn.setAutoCommit(false); 
-
-            orderItemDAO.deleteOrderItemsByOrderId(orderId);
-
-            String sql = "DELETE FROM Orders WHERE OrderID = ?";
+            String sql = "UPDATE Orders SET OrderStatus = ? WHERE OrderID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setInt(1, orderId);
+                ps.setString(1, OrderStatus.Cancelled.name());
+                ps.setInt(2, orderId);
                 ps.executeUpdate();
             }
             conn.commit();

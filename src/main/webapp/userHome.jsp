@@ -59,7 +59,7 @@
         %>
             <p align="center"> You are not logged in <br/>
             <a href="index.jsp">Storefront</a><br/>
-            <a style="float:left" href="register.jsp">Register</a>
+            <a href="register.jsp">Register</a>
         <%
         }
         %>

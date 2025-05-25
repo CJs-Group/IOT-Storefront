@@ -180,12 +180,16 @@ public class DBManager {
         orderDAO.updateOrder(order);
     }
 
+    public void deleteOrder(int orderId) throws SQLException {
+        orderDAO.deleteOrder(orderId);
+    }
+
     public void updateOrderStatus(int orderId, OrderStatus newStatus) throws SQLException {
         orderDAO.updateOrderStatus(orderId, newStatus);
     }
 
-    public void deleteOrder(int orderId) throws SQLException {
-        orderDAO.deleteOrder(orderId);
+    public void cancelOrder(int orderId) throws SQLException {
+        orderDAO.cancelOrder(orderId);
     }
 
     public void createOrderItem(OrderItem orderItem, int orderId) throws SQLException {
