@@ -22,12 +22,14 @@
 
     <body>
         <%
-        DBConnector dbc = new DBConnector();
-        DBManager dbm = new DBManager(dbc.openConnection());
-        int userId = (int)session.getAttribute("userId");
-        User user = dbm.getUserById(userId);
-        // session.setAttribute("user", user);
-        if (user != null) {
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj != null) {
+            DBConnector dbc = new DBConnector();
+            DBManager dbm = new DBManager(dbc.openConnection());
+            int userId = userIdObj;
+            User user = dbm.getUserById(userId);
+            
+            if (user != null) {
         %>
             <p class="homeText"> You are logged in as <%= user.getUsername() %><br/>
             
@@ -47,9 +49,16 @@
             <a href="logout.jsp">Logout</a><br>
 
         <%
+            } else {
+        %>
+            <p align="center"> User not found <br/>
+            <a href="index.jsp">Storefront</a><br/>
+        <%
+            }
         } else {
         %>
             <p align="center"> You are not logged in <br/>
+            <a href="index.jsp">Storefront</a><br/>
             <a style="float:left" href="register.jsp">Register</a>
         <%
         }

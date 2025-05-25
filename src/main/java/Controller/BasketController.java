@@ -22,42 +22,82 @@ import Model.Users.Customer;
 @WebServlet("/updateBasket")
 public class BasketController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try (DBConnector dbc = new DBConnector()) {
-            HttpSession session = request.getSession();
-            DBManager dbm = new DBManager(dbc.openConnection());
-            String itemIdStr = request.getParameter("itemId");
-            String action = request.getParameter("action");
-            if (itemIdStr != null && action != null) {
+        HttpSession session = request.getSession();
+        String itemIdStr = request.getParameter("itemId");
+        String action = request.getParameter("action");
+        if (itemIdStr != null && action != null) {
             try {
-                int basketID = dbm.getBasketByUserId((int)session.getAttribute("userId"), false).getBasketID();
                 int itemId = Integer.parseInt(itemIdStr);
-                ItemType item = dbm.getItemById(itemId);
-                int userId = (int)session.getAttribute("userId");
-                switch (action) {
-                    case "remove":
-                        dbm.removeItemTypeFromBasket(basketID, itemId);
-                        break;
-                    case "+1":
-                        dbm.addItemToBasket(basketID, item, 1);
-                        break;
-                    case "-1":
-                        dbm.addItemToBasket(basketID, item, -1);
-                        break;
+                Object userIdObj = session.getAttribute("userId");
+                if (userIdObj != null) {
+                    // User is logged in - use database basket
+                    try (DBConnector dbc = new DBConnector()) {
+                        DBManager dbm = new DBManager(dbc.openConnection());
+                        int userId = (int) userIdObj;
+                        int basketID = dbm.getBasketByUserId(userId, false).getBasketID();
+                        ItemType item = dbm.getItemById(itemId);
+                        switch (action) {
+                            case "remove":
+                                dbm.removeItemTypeFromBasket(basketID, itemId);
+                                break;
+                            case "+1":
+                                dbm.addItemToBasket(basketID, item, 1);
+                                break;
+                            case "-1":
+                                dbm.addItemToBasket(basketID, item, -1);
+                                break;
+                        }
                     }
-                    // session.setAttribute("basket", basket);
+                    catch (SQLException e) {
+                        System.out.println("Error updating basket: " + e.getMessage());
+                    }
+                } else {
+                    // User is not logged in - use session basket
+                    try (DBConnector dbc = new DBConnector()) {
+                        DBManager dbm = new DBManager(dbc.openConnection());
+                        ItemType item = dbm.getItemById(itemId);
+                        Basket sessionBasket = (Basket) session.getAttribute("sessionBasket");
+                        if (sessionBasket == null) {
+                            sessionBasket = new Basket(-1);
+                            session.setAttribute("sessionBasket", sessionBasket);
+                        }
+                        switch (action) {
+                            case "remove":
+                                sessionBasket.getItems().removeIf(basketItem -> 
+                                    basketItem.getItemType().getItemID() == itemId);
+                                break;
+                            case "+1":
+                                BasketItem existingItem = sessionBasket.getBasketItemByType(itemId);
+                                if (existingItem != null) {
+                                    existingItem.setQuantity(existingItem.getQuantity() + 1);
+                                }
+                                else {
+                                    BasketItem newItem = new BasketItem(-1, item, 1, item.getPrice());
+                                    sessionBasket.addBasketItem(newItem);
+                                }
+                                break;
+                            case "-1":
+                                BasketItem existingItemMinus = sessionBasket.getBasketItemByType(itemId);
+                                if (existingItemMinus != null) {
+                                    if (existingItemMinus.getQuantity() > 1) {
+                                        existingItemMinus.setQuantity(existingItemMinus.getQuantity() - 1);
+                                    } else {
+                                        sessionBasket.getItems().removeIf(basketItem -> 
+                                            basketItem.getItemType().getItemID() == itemId);
+                                    }
+                                }
+                                break;
+                        }
+                        session.setAttribute("sessionBasket", sessionBasket);
+                    } catch (SQLException e) {
+                        System.out.println("Error accessing item: " + e.getMessage());
+                    }
                 }
-                catch (NumberFormatException e) {
-                    System.out.println("Invalid item ID: " + itemIdStr);
-                }
-                catch (SQLException e) {
-                    System.out.println("Error updating basket: " + e.getMessage());
-                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid item ID: " + itemIdStr);
             }
-            
-            response.sendRedirect("pdbSystem/basket.jsp");
         }
-        catch (SQLException e) {
-            response.sendRedirect("pdbSystem/basket.jsp?error=" + e.getMessage());
-        }
+        
+        response.sendRedirect("pdbSystem/basket.jsp");
     }
 }

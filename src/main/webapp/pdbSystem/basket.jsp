@@ -20,17 +20,23 @@
 <%
   Connection conn = null;
   DBManager dbm = null;
+  Basket basket = null;
+  boolean isLoggedIn = false;
   try {
     DBConnector dbConnector = new DBConnector();
     conn = dbConnector.openConnection();
     dbm = new DBManager(conn);
 
-    int userId = (int)session.getAttribute("userId");
-    Customer customer = (Customer)dbm.getUserById(userId);
-    Basket basket = dbm.getBasketByUserId(userId, true);
-    List<PaymentInfo> paymentInfos = dbm.getCardDetailsByUserId(userId);
-  
-    if (paymentInfos.size() == 0) {
+    Object userIdObj = session.getAttribute("userId");
+
+    if (userIdObj != null) {
+      isLoggedIn = true;
+      int userId = (int) userIdObj;
+      Customer customer = (Customer)dbm.getUserById(userId);
+      basket = dbm.getBasketByUserId(userId, true);
+      List<PaymentInfo> paymentInfos = dbm.getCardDetailsByUserId(userId);
+    
+      if (paymentInfos.size() == 0) {
 %>
 <a style="float:left">You havent provided your Payment Method</a><br>
 <a style="float:left">Please provide your Payment details</a><br>
@@ -42,8 +48,17 @@ else {
 <label>Payment Details have been provided</label><br>
 <a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
 <%
-  }
-  if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
+      }
+    } else {
+      // User is not logged in - use session basket
+      basket = (Basket) session.getAttribute("sessionBasket");
+%>
+<label>Shopping as Guest</label><br>
+<a style="float:left">You can checkout as a guest or <a href="../login.jsp">login</a> for a better experience</a><br>
+<%
+    }
+    
+    if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
 %>
 <label> Basket is empty </label><br>
 <%

@@ -30,7 +30,18 @@
     try (DBConnector dbc = new DBConnector()) {
         dbm = new DBManager(dbc.openConnection());
         int orderId = Integer.parseInt(orderIdStr);
-        order = dbm.getOrderById(orderId, true);
+        Object userIdObj = session.getAttribute("userId");
+
+        if (userIdObj != null) {
+            order = dbm.getOrderById(orderId, true);
+        }
+        else {
+            List<Order> guestOrders = (List<Order>) session.getAttribute("guestOrders");
+            order = guestOrders.stream()
+                .filter(o -> o.getOrderID() == orderId)
+                .findFirst()
+                .orElse(null);
+        }
 %>
                 <h2>Thank you for your purchase!</h2>
                 <p><strong>Order ID:</strong> <%= order.getOrderID() %></p>

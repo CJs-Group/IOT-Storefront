@@ -19,20 +19,31 @@
 
 <%
     Integer userIdObj = (Integer) session.getAttribute("userId");
-    if (userIdObj == null) {
-        response.sendRedirect("../login.jsp?error=Session+expired");
-        return;
-    }
-    int userId = userIdObj;
     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, HH:mm");
-    DBManager dbm = null;
+    List<Order> orders = null;
+    boolean isGuest = (userIdObj == null);
 
-    try (DBConnector dbc = new DBConnector()) {
-        dbm = new DBManager(dbc.openConnection());
-        User user = dbm.getUserById(userId);
-        List<Order> orders = dbm.getOrdersByUserId(userId, true); 
-        if (orders != null && !orders.isEmpty()) {
-            for (Order order : orders) {
+    if (!isGuest) {
+        try (DBConnector dbc = new DBConnector()) {
+            DBManager dbm = new DBManager(dbc.openConnection());
+            int userId = userIdObj;
+            User user = dbm.getUserById(userId);
+            orders = dbm.getOrdersByUserId(userId, true); 
+        }
+        catch (Exception e) {
+%>
+            <p style="color:red;">An error occurred while loading your orders. Please try again later.</p>
+<%
+            return;
+        }
+    } else {
+        @SuppressWarnings("unchecked")
+        List<Order> guestOrders = (List<Order>) session.getAttribute("guestOrders");
+        orders = guestOrders;
+    }
+
+    if (orders != null && !orders.isEmpty()) {
+        for (Order order : orders) {
 %>
                 <div class="order-container" style="border: 1px solid #ccc; margin-bottom: 20px; padding: 15px;">
                     <h2>Order ID: <%= order.getOrderID() %></h2>
@@ -89,11 +100,6 @@
             <p>You have no orders yet.</p>
 <%
         }
-    } catch (Exception e) {
-%>
-        <p style="color:red;">An error occurred while loading your orders. Please try again later.</p>
-<%
-    }
 %>
 <br/>
 <p>
