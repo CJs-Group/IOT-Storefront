@@ -411,4 +411,30 @@ public class UserDAO {
             ps.executeUpdate();
         }
     }
+
+    public boolean isUserActivated(int userId) throws SQLException {
+        String sql = "SELECT Activated FROM Users WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBoolean("Activated");
+                } else {
+                    throw new SQLException("User not found with ID: " + userId);
+                }
+            }
+        }
+    }
+
+    public void setUserActivated(int userId, boolean activated) throws SQLException {
+        String sql = "UPDATE Users SET Activated = ? WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, activated);
+            ps.setInt(2, userId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("User not found with ID: " + userId);
+            }
+        }
+    }
 }

@@ -50,6 +50,10 @@ public class LoginController extends HttpServlet {
             
             User user = dbm.getUserByEmail(email);
             if (user != null && user.getPassword().equals(hashedPassword)) {
+                if (!dbm.isUserActivated(user.getUserID())) {
+                    response.sendRedirect("login.jsp?existError=Your account has been deactivated. Please contact an administrator.");
+                    return;
+                }
                 session.setAttribute("userId", user.getUserID());
                 
                 String userType = "User";

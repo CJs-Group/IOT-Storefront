@@ -42,7 +42,13 @@
                     if(user instanceof Customer) {
                 %>
                         <img src="images/cart.png" class="cartImage">
-                        <a href="pdbSystem/basket.jsp">View basket</a><br/>
+                        <a href="basket.jsp">View basket</a><br/>
+                        
+                        <img src="images/user.png" class="logoutImage">
+                        <a href="orders.jsp">View orders</a><br/>
+                        
+                        <img src="images/user.png" class="logoutImage">
+                        <a href="paymentHistory.jsp">Payment history</a><br/>
                 <%
                     }
                 %>

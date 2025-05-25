@@ -94,8 +94,12 @@
                 }
                 let editButton = document.querySelector('.editButton');
                 let deleteButton = document.querySelector('.deleteButton');
+                let activateButton = document.querySelector('.activateButton');
+                let deactivateButton = document.querySelector('.deactivateButton');
                 if (editButton) editButton.disabled = true;
                 if (deleteButton) deleteButton.disabled = true;
+                if (activateButton) activateButton.disabled = true;
+                if (deactivateButton) deactivateButton.disabled = true;
                 selectedTab = 'Customer';
                 document.getElementById('activeTab').value = 'Customer';
                 const customerButton = document.querySelector('.customerButton');
@@ -117,6 +121,8 @@
 
                 document.getElementById('editButton').disabled = true;
                 document.getElementById('deleteButton').disabled = true;
+                document.getElementById('activateButton').disabled = true;
+                document.getElementById('deactivateButton').disabled = true;
             }
 
             function expandStaff(isInitialCall = false) {
@@ -125,8 +131,12 @@
                 }
                 let editButton = document.querySelector('.editButton');
                 let deleteButton = document.querySelector('.deleteButton');
+                let activateButton = document.querySelector('.activateButton');
+                let deactivateButton = document.querySelector('.deactivateButton');
                 if (editButton) editButton.disabled = true;
                 if (deleteButton) deleteButton.disabled = true;
+                if (activateButton) activateButton.disabled = true;
+                if (deactivateButton) deactivateButton.disabled = true;
                 selectedTab = 'Staff';
                 document.getElementById('activeTab').value = 'Staff';
                 const staffButton = document.querySelector('.staffButton');
@@ -148,11 +158,15 @@
 
                 document.getElementById('editButton').disabled = true;
                 document.getElementById('deleteButton').disabled = true;
+                document.getElementById('activateButton').disabled = true;
+                document.getElementById('deactivateButton').disabled = true;
             }
 
             function selectUser(id, rowElement) {
                 let editButton = document.querySelector('.editButton');
                 let deleteButton = document.querySelector('.deleteButton');
+                let activateButton = document.querySelector('.activateButton');
+                let deactivateButton = document.querySelector('.deactivateButton');
                 if (selectedRow) {
                     selectedRow.classList.remove('selected-row');
                 }
@@ -161,6 +175,8 @@
                 document.getElementById('selectedUserID').value = id;
                 if (editButton) editButton.disabled = false;
                 if (deleteButton) deleteButton.disabled = false;
+                if (activateButton) activateButton.disabled = false;
+                if (deactivateButton) deactivateButton.disabled = false;
             }
 
             window.onload = function() {
@@ -170,7 +186,7 @@
                 const container = document.querySelector('.container');
                 const smallbuttons = document.querySelectorAll('.smallbutton');
 
-                const elementsToMakeInstant = [document.body, container, customerButton, staffButton, ...Array.from(smallbuttons)]; // Corrected to use Array.from
+                const elementsToMakeInstant = [document.body, container, customerButton, staffButton, ...Array.from(smallbuttons)];
                 elementsToMakeInstant.forEach(el => {
                     if (el) el.classList.add('no-transition');
                 });
@@ -224,7 +240,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Address</th><th>Type</th>
+                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Address</th><th>Type</th><th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -232,14 +248,20 @@
                             customers = (List<Customer>)dbm.getCustomers(customerNameQuery, customerAccountTypeQuery);
                             if (customers != null) {
                                 for(Customer c: customers) { 
+                                    boolean isActivated = dbm.isUserActivated(c.getUserID());
                             %>
-                            <tr onclick="selectUser(<%=c.getUserID()%>, this)" style="cursor:pointer;">
+                            <tr onclick="selectUser(<%=c.getUserID()%>, this)" style="cursor:pointer;" class="<%= isActivated ? "" : "deactivated-user" %>">
                                 <td><%=c.getUserID()%></td>
                                 <td><%=c.getUsername()%></td>
                                 <td><%=c.getEmail()%></td>
                                 <td><%=c.getPhoneNumber() == null ? "" : c.getPhoneNumber()%></td>
                                 <td><%=c.getAddress() == null ? "" : c.getAddress()%></td>
                                 <td><%=c.getAccountType() == null ? "" : c.getAccountType().name() %></td>
+                                <td class="status-cell">
+                                    <span class="status-badge <%= isActivated ? "status-active" : "status-inactive" %>">
+                                        <%= isActivated ? "Active" : "Inactive" %>
+                                    </span>
+                                </td>
                             </tr>
                             <%   }
                             }
@@ -267,7 +289,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Role</th><th>Admin?</th>
+                                    <th>ID</th><th>Username</th><th>Email</th><th>Phone</th><th>Role</th><th>Admin?</th><th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -275,14 +297,20 @@
                             staff = (List<Staff>)dbm.getStaff(staffNameQuery, staffRoleQuery);
                             if (staff != null) {
                                 for(Staff s: staff) { 
+                                    boolean isActivated = dbm.isUserActivated(s.getUserID());
                             %>
-                            <tr onclick="selectUser(<%=s.getUserID()%>, this)" style="cursor:pointer;">
+                            <tr onclick="selectUser(<%=s.getUserID()%>, this)" style="cursor:pointer;" class="<%= isActivated ? "" : "deactivated-user" %>">
                                 <td><%=s.getUserID()%></td>
                                 <td><%=s.getUsername()%></td>
                                 <td><%=s.getEmail()%></td>
                                 <td><%=s.getPhoneNumber() == null ? "" : s.getPhoneNumber()%></td>
                                 <td><%=s.getStaffRole() == null ? "" : s.getStaffRole().name() %></td>
                                 <td><%=s.isAdmin()? "Yes":"No"%></td>
+                                <td class="status-cell">
+                                    <span class="status-badge <%= isActivated ? "status-active" : "status-inactive" %>">
+                                        <%= isActivated ? "Active" : "Inactive" %>
+                                    </span>
+                                </td>
                             </tr>
                             <%   }
                             }
@@ -294,6 +322,8 @@
                         <button class="addButton smallbutton" type="submit" form="selectForm" name="addUser">Add</button>
                         <button class="editButton smallbutton" type="submit" form="selectForm" name="editUser" disabled>Edit</button>
                         <button class="deleteButton smallbutton" type="submit" form="selectForm" name="deleteUser" disabled>Delete</button>
+                        <button class="activateButton smallbutton" type="submit" form="selectForm" name="activateUser" disabled>Activate</button>
+                        <button class="deactivateButton smallbutton" type="submit" form="selectForm" name="deactivateUser" disabled>Deactivate</button>
                     </div>
                 </div>
             </div>

@@ -28,6 +28,8 @@ import Model.Items.Status;
 import Model.Order.Order;
 import Model.Order.OrderItem;
 import Model.Order.OrderStatus;
+import Model.Order.Payment;
+import Model.Order.PaymentInfo;
 
 @WebServlet("/order")
 public class OrderController extends HttpServlet {
@@ -53,18 +55,26 @@ public class OrderController extends HttpServlet {
                     return;
                 }
                 basket = dbm.getBasketByUserId(userId, true);
+                
+                // checking if logged-in user has payment method
+                List<PaymentInfo> paymentMethods = dbm.getCardDetailsByUserId(userId);
+                if (paymentMethods.isEmpty()) {
+                    response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Please add a payment method before placing an order.", "UTF-8"));
+                    return;
+                }
             }
             else {
                 basket = (Basket) session.getAttribute("sessionBasket");
+                // guest users don't need payment methods for now, could add this later
             }
             String action = request.getParameter("action");
             if (action == null || action.isEmpty()) {
-                response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Invalid action.", "UTF-8"));
+                response.sendRedirect(request.getContextPath() + "checkout.jsp?error=" + URLEncoder.encode("Invalid action.", "UTF-8"));
                 return;
             }
             if (action.equals("Submit Order") || action.equals("Save Order")){
                 if (basket == null || basket.getItems().isEmpty()) {
-                    String redirectUrl = isGuest ? "/pdbSystem/basket.jsp" : "/pdbSystem/checkout.jsp";
+                    String redirectUrl = isGuest ? "basket.jsp" : "checkout.jsp";
                     response.sendRedirect(request.getContextPath() + redirectUrl + "?error=" + URLEncoder.encode("Your basket is empty.", "UTF-8"));
                     return;
                 }
@@ -79,7 +89,7 @@ public class OrderController extends HttpServlet {
                     String errorMessage = "Not enough stock for " + itemType.getName() +
                                           ". Required: " + requiredQuantity +
                                           ", Available: " + availableUnits.size() + ".";
-                    String redirectUrl = isGuest ? "/pdbSystem/basket.jsp" : "/pdbSystem/checkout.jsp";
+                    String redirectUrl = isGuest ? "basket.jsp" : "checkout.jsp";
                     response.sendRedirect(request.getContextPath() + redirectUrl + "?error=" + URLEncoder.encode(errorMessage, "UTF-8"));
                     return;
                 }
@@ -131,24 +141,36 @@ public class OrderController extends HttpServlet {
             Order newOrder = null;
             if (action.equals("Submit Order")) {
                 newOrder = new Order(orderUserId, new Date(), OrderStatus.Completed, shippingAddress);
-            } else if (action.equals("Save Order")) {
+            }
+            else if (action.equals("Save Order")) {
                 if (!isGuest) {
                     newOrder = new Order(user.getUserID(), new Date(), OrderStatus.Saved, shippingAddress);
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Couldn't process the order", "UTF-8"));
+                    response.sendRedirect(request.getContextPath() + "checkout.jsp?error=" + URLEncoder.encode("Couldn't process the order", "UTF-8"));
                 }
             } else {
-                response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Couldn't process the order", "UTF-8"));
+                response.sendRedirect(request.getContextPath() + "checkout.jsp?error=" + URLEncoder.encode("Couldn't process the order", "UTF-8"));
                 return;
             }
             newOrder.setOrderItems(orderItemsForNewOrder);
 
             if (!isGuest) {
                 dbm.createOrder(newOrder); 
+                
+                // creating payment record for logged-in users
+                List<PaymentInfo> paymentMethods = dbm.getCardDetailsByUserId(user.getUserID());
+                PaymentInfo userPaymentMethod = paymentMethods.get(0); // uses first available payment method
+                int totalAmount = basket.getTotalPrice(); // should be in cents
+                
+                Payment payment = new Payment(newOrder.getOrderID(), userPaymentMethod.getPaymentId(), 
+                                             totalAmount, Payment.PaymentStatus.Completed);
+                dbm.createPayment(payment);
+                
                 dbm.clearBasket(basket.getBasketID());
                 session.setAttribute("latestOrderId", newOrder.getOrderID()); 
             }
             else {
+                // guest user handling (no payment record created)
                 @SuppressWarnings("unchecked")
                 List<Order> guestOrders = (List<Order>) session.getAttribute("guestOrders");
                 if (guestOrders == null) {
@@ -162,16 +184,16 @@ public class OrderController extends HttpServlet {
                 session.setAttribute("latestOrderId", guestOrderId);
             }
 
-            response.sendRedirect(request.getContextPath() + "/pdbSystem/receipt.jsp?orderId=" + newOrder.getOrderID() + "&success=" + URLEncoder.encode("Order placed successfully!", "UTF-8"));
+            response.sendRedirect(request.getContextPath() + "receipt.jsp?orderId=" + newOrder.getOrderID() + "&success=" + URLEncoder.encode("Order placed successfully!", "UTF-8"));
             } else if (action.equals("cancelOrder")) {
                 int orderId = Integer.parseInt(request.getParameter("orderId"));
                 Order order = dbm.getOrderById(orderId, true);
                 if (order == null) {
-                    response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?error=" + URLEncoder.encode("Order not found.", "UTF-8"));
+                    response.sendRedirect(request.getContextPath() + "orders.jsp?error=" + URLEncoder.encode("Order not found.", "UTF-8"));
                     return;
                 }
                 if (order.getOrderStatus() != OrderStatus.Saved) {
-                    response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?error=" + URLEncoder.encode("Only saved orders can be cancelled.", "UTF-8"));
+                    response.sendRedirect(request.getContextPath() + "orders.jsp?error=" + URLEncoder.encode("Only saved orders can be cancelled.", "UTF-8"));
                     return;
                 }
                 List<OrderItem> orderItems = order.getOrderItems();
@@ -182,7 +204,7 @@ public class OrderController extends HttpServlet {
                     dbm.updateUnit(unit, null); 
                 }
                 dbm.cancelOrder(orderId);
-                response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Order cancelled successfully!", "UTF-8"));
+                response.sendRedirect(request.getContextPath() + "orders.jsp?success=" + URLEncoder.encode("Order cancelled successfully!", "UTF-8"));
             } else if (action.equals("completeOrder")){
                 int orderId = Integer.parseInt(request.getParameter("orderId"));
                 for (OrderItem orderItem : dbm.getOrderById(orderId, true).getOrderItems()) {
@@ -192,7 +214,7 @@ public class OrderController extends HttpServlet {
                     dbm.updateUnit(unit, user.getUserID()); 
                 }
                 dbm.updateOrderStatus(orderId, OrderStatus.Completed);
-                response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Order completed successfully!", "UTF-8"));
+                response.sendRedirect(request.getContextPath() + "orders.jsp?success=" + URLEncoder.encode("Order completed successfully!", "UTF-8"));
             } else if (action.equals("removeItem")){
                 int orderId = Integer.parseInt(request.getParameter("orderId"));
                 int unitId = Integer.parseInt(request.getParameter("unitId"));
@@ -206,14 +228,14 @@ public class OrderController extends HttpServlet {
                 List<OrderItem> orderItems = dbm.getOrderItemsByOrderId(orderId);
                 if (orderItems.isEmpty()) {
                     dbm.deleteOrder(orderId); 
-                    response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Order item removed and order cancelled as it is empty.", "UTF-8"));
+                    response.sendRedirect(request.getContextPath() + "orders.jsp?success=" + URLEncoder.encode("Order item removed and order cancelled as it is empty.", "UTF-8"));
                     return;
                 }
                 Unit unit = dbm.getUnitById(unitId);
                 unit.setStatus(Status.In_Stock);
                 unit.setDatePurchased(null);
                 dbm.updateUnit(unit, null);
-                response.sendRedirect(request.getContextPath() + "/pdbSystem/editOrder.jsp?orderId=" + orderId); 
+                response.sendRedirect(request.getContextPath() + "editOrder.jsp?orderId=" + orderId); 
             } else if (action.equals("Change Delivery Method")){
                 int orderId = Integer.parseInt(request.getParameter("orderId"));
                 String deliveryType = request.getParameter("deliveryType"); 
@@ -234,15 +256,15 @@ public class OrderController extends HttpServlet {
                 Order order = dbm.getOrderById(orderId, true);
                 order.setShippingAddress(shippingAddress);
                 dbm.updateOrder(order);
-                response.sendRedirect(request.getContextPath() + "/pdbSystem/orders.jsp?success=" + URLEncoder.encode("Delivery method has been updated", "UTF-8"));
+                response.sendRedirect(request.getContextPath() + "orders.jsp?success=" + URLEncoder.encode("Delivery method has been updated", "UTF-8"));
             }
         }
         catch (SQLException e) {
-            String redirectUrl = isGuest ? "/pdbSystem/basket.jsp" : "/pdbSystem/checkout.jsp";
+            String redirectUrl = isGuest ? "basket.jsp" : "checkout.jsp";
             response.sendRedirect(request.getContextPath() + redirectUrl + "?error=" + URLEncoder.encode("Database error: " + e.getMessage(), "UTF-8"));
         }
         catch (Exception e) { 
-            String redirectUrl = isGuest ? "/pdbSystem/basket.jsp" : "/pdbSystem/checkout.jsp";
+            String redirectUrl = isGuest ? "basket.jsp" : "checkout.jsp";
             response.sendRedirect(request.getContextPath() + redirectUrl + "?error=" + URLEncoder.encode("An error occurred: " + e.getMessage(), "UTF-8"));
         }
     }
