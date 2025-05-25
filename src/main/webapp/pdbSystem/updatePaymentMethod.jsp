@@ -99,7 +99,13 @@
 
 <br/>
 Click <a href="basket.jsp">here</a> to go to your basket.<br/>
-Click <a href="../paymentManagement">here</a> to go to your payment history.</a><br/>
+<%
+    if (isLoggedIn) {
+%>
+Click <a href="../paymentManagement">here</a> to go to your payment history.<br/>
+<%
+    }
+%>
 Click <a href="../userHome.jsp">here</a> to return to your home page.<br/>
 </body>
 </html>
