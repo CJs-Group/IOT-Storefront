@@ -38,9 +38,10 @@
     <div class="leftBar"></div>
     <div class="rightBar"></div>
 
-<p class="basketText">Basket</p>
 
-<div class="bodyText">
+<div class="mainText">
+<h1>Basket</h1>
+
 <%
     String errorMessage = request.getParameter("error");
     if (errorMessage != null && !errorMessage.isEmpty()) {

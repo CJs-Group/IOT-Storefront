@@ -7,6 +7,7 @@
 <%@page import="Model.Items.Unit"%>
 <%@page import="Model.Items.ItemType"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 
@@ -39,7 +40,7 @@
     <div class="leftBar"></div>
     <div class="rightBar"></div>
 
-<div class="orderText">
+<div class="mainText">
 <br>
 <h1>Your Orders</h1>
             <form>
@@ -85,13 +86,18 @@
     } else {
         @SuppressWarnings("unchecked")
         List<Order> guestOrders = (List<Order>) session.getAttribute("guestOrders");
-        orders = guestOrders;
+        orders = new ArrayList<>(guestOrders);
+        String filterString = request.getParameter("filter");
+        if (filterString != null && !filterString.isEmpty()) {
+            noOrdersMessage = "No orders found matching your search.";
+            orders.removeIf(order -> !String.valueOf(order.getOrderID()).contains(filterString));
+        }
     }
 
     if (orders != null && !orders.isEmpty()) {
         for (Order order : orders) {
 %>
-                <div class="order-container" style="border: 1px solid #ccc; margin-bottom: 20px; padding: 15px;">
+                <div class="order-container" style="width:80%; border: 1px solid #ccc; margin-bottom: 20px; padding: 15px;">
                     <h2>Order ID: <%= order.getOrderID() %></h2>
                     <p><strong>Date:</strong> <%= sdf.format(order.getOrderDate()) %></p>
                     <p><strong>Status:</strong> <%= order.getOrderStatus().toString() %></p>
@@ -143,7 +149,7 @@
                             <form method="post" action="/order">
                                 <input type="hidden" name="orderId" value="<%= order.getOrderID() %>">
                                 <button type="submit" name="action" value="cancelOrder">Cancel Order</button>
-                                <button type="button" onclick="location.href='/pdbSystem/editOrder.jsp?orderId=<%= order.getOrderID() %>'">Edit Order</button>
+                                <button type="button" onclick="location.href='editOrder.jsp?orderId=<%= order.getOrderID() %>'">Edit Order</button>
                                 <button type="submit" name="action" value="completeOrder">Complete Order</button>
                             </form>
 

@@ -36,7 +36,7 @@
     <div class="leftBar"></div>
     <div class="rightBar"></div>
 
-<div class="bodyText">
+<div class="mainText">
 <br>
 <h1>Order Confirmation</h1>
 
@@ -77,7 +77,7 @@
                 <p><%= order.getShippingAddress() %></p>
 
                 <h3>Order Summary:</h3>
-                <table border="1" style="width:100%; border-collapse: collapse;">
+                <table border="1" style="width:50%; border-collapse: collapse;">
                     <thead>
                         <tr>
                             <th>Item [Unit #]</th>

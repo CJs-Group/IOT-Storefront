@@ -11,8 +11,30 @@
 <html>
 <head>
     <title>Order Edit</title>
+    <link rel="stylesheet" type="text/css" href="../css/IoTBay.css">
+    <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
 <body>
+<div class="topBar"></div>
+    <img src="../images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="../images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="../images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+<div class="mainText">
 <h1>Order Edit</h1>
 
 <%
@@ -114,7 +136,7 @@
 %>
 
                 <h3>Order Items:</h3>
-                <table border="1" style="width:100%; border-collapse: collapse;">
+                <table border="1" style="width:80%; border-collapse: collapse;">
                     <thead>
                         <tr>
                             <th>Item Name</th>
@@ -177,8 +199,8 @@
 
 <br/>
 <p>
-    <a href="/pdbSystem/orders.jsp"><button type="button">Back to Orders</button></a>
+    <a href="orders.jsp"><button type="button">Back to Orders</button></a>
 </p>
-
+</div>
 </body>
 </html>

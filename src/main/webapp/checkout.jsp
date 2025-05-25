@@ -25,7 +25,7 @@
     <div class="leftBar"></div>
     <div class="rightBar"></div>
 
-<div class=bodyText>
+<div class=mainText>
 <br>
 <h1>Checkout</h1>
 <%    
