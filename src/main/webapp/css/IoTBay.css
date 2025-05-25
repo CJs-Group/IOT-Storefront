@@ -13,7 +13,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: 1;
 
     box-sizing: border-box;
     border-top: 5px solid #3C3A41;
@@ -41,6 +41,7 @@ body {
     padding-right: 7%;
     display: flex;
     justify-content: center;
+    z-index: 2;
 }
 
 .registerContainer, .cartContainer {
@@ -63,15 +64,17 @@ body {
 }
 
 .searchBarPos {
-    position: absolute;
+    position: fixed;
     align-self: center;
     padding-left: 35vh;
     top: 4%;
+    z-index: 2;
 }
 
 .searchBar {
     height: 5vh;
     width: 25vh;
+
 }
 
 .leftBar, .rightBar {
@@ -138,7 +141,7 @@ body {
     font-weight: 1000;
     font-size: 3vh;
     position: fixed;
-    top: 50%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -146,13 +149,17 @@ body {
 /* ITEMS PAGE */
 
 .mainText {
-    padding-top: 5%;
+    padding-top: 25vh;
     padding-left: 10%;
 }
 
 .logo {
     height: 100px;
+    top: 0;
+    padding-top: 10px;
+    position: fixed;
     padding-left: 7%;
+    z-index: 2;
 }
 
 .botBar {
@@ -230,6 +237,8 @@ body {
 
 .registerPageText {
     padding-left: 15vh;
+    top: 20vh;
+    position: relative;
 }
 
 /* WELCOME PAGE */
@@ -246,7 +255,7 @@ body {
 .userInfo {
     font-size: 3vh;
     position: fixed;
-    padding-top: 10%;
+    padding-top: 30vh;
     left: 50%;
     transform: translate(-50%);
     font-weight: 100;
@@ -266,7 +275,7 @@ body {
     font-weight: 1000;
     font-size: 5vh;
     position: fixed;
-    top: 30%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -286,11 +295,12 @@ body {
 /* BASKET */
 .basketText {
     font-size: 5vh;
-    padding-left: 10%
 }
 
 .bodyText {
     padding-left: 10%;
+    padding-top: 10%;
+    z-index: -1000;
 }
 .orderText {
     padding-left: 6%
@@ -303,4 +313,11 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.paymentMethodBodyText {
+    padding-left: 10%;
+    padding-top: 20vh;
+    position: relative;
+    z-index: -1000;
 }
