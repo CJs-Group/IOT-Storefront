@@ -437,4 +437,29 @@ public class UserDAO {
             }
         }
     }
+
+    public void updateLastLoginDate(int userId) throws SQLException {
+        String sql = "UPDATE Users SET LastLoginDate = CURRENT_TIMESTAMP WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("User not found with ID: " + userId);
+            }
+        }
+    }
+
+    public Timestamp getLastLoginDate(int userId) throws SQLException {
+        String sql = "SELECT LastLoginDate FROM Users WHERE UserID = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getTimestamp("LastLoginDate");
+                } else {
+                    throw new SQLException("User not found with ID: " + userId);
+                }
+            }
+        }
+    }
 }

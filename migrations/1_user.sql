@@ -11,6 +11,7 @@ CREATE TABLE "Users" (
 	"StaffRole" TEXT,
 	"ShippingAddress" TEXT,
 	"Activated" BOOLEAN NOT NULL DEFAULT 1,
+	"LastLoginDate" DATETIME,
 	CHECK (
         ("Type" != 'Customer' AND  "ShippingAddress" IS NULL) OR 
         ("Type" = 'Customer')

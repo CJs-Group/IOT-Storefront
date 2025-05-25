@@ -54,6 +54,10 @@ public class LoginController extends HttpServlet {
                     response.sendRedirect("login.jsp?existError=Your account has been deactivated. Please contact an administrator.");
                     return;
                 }
+                java.sql.Timestamp lastLoginTime = dbm.getLastLoginDate(user.getUserID());
+                session.setAttribute("lastLoginTime", lastLoginTime);
+                dbm.updateLastLoginDate(user.getUserID());
+
                 session.setAttribute("userId", user.getUserID());
                 
                 String userType = "User";

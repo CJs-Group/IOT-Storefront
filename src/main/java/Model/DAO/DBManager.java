@@ -120,6 +120,14 @@ public class DBManager {
         userDAO.setUserActivated(userId, activated);
     }
 
+    public void updateLastLoginDate(int userId) throws SQLException {
+        userDAO.updateLastLoginDate(userId);
+    }
+
+    public Timestamp getLastLoginDate(int userId) throws SQLException {
+        return userDAO.getLastLoginDate(userId);
+    }
+
     public void createItemType(ItemType itemType) throws SQLException {
         itemTypeDAO.createItemType(itemType);
     }
