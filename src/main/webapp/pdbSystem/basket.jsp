@@ -9,6 +9,7 @@
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 
 <html>
 <head>
@@ -16,7 +17,16 @@
 </head>
 <body>
 <h1>Basket</h1>
-
+<%
+  String errorMessage = request.getParameter("error");
+  if (errorMessage != null && !errorMessage.isEmpty()) {
+%>
+<div style="color: red;">
+  <strong>Error:</strong> <%= errorMessage %>
+</div>
+<%
+  }
+%>
 <%
   Connection conn = null;
   DBManager dbm = null;
@@ -28,34 +38,58 @@
     dbm = new DBManager(conn);
 
     Object userIdObj = session.getAttribute("userId");
-
+    List<PaymentInfo> paymentInfos = null;
     if (userIdObj != null) {
       isLoggedIn = true;
       int userId = (int) userIdObj;
       Customer customer = (Customer)dbm.getUserById(userId);
       basket = dbm.getBasketByUserId(userId, true);
-      List<PaymentInfo> paymentInfos = dbm.getCardDetailsByUserId(userId);
+      paymentInfos = dbm.getCardDetailsByUserId(userId);
+    }
+    else {
+      // User is not logged in - use session basket and payment info
+      basket = (Basket) session.getAttribute("sessionBasket");
+      if (basket == null) {
+        basket = new Basket(-1);
+        session.setAttribute("sessionBasket", basket);
+      }
+      paymentInfos = (List<PaymentInfo>) session.getAttribute("paymentInfos");
+      if (paymentInfos == null) {
+        paymentInfos = new ArrayList<>();
+        session.setAttribute("paymentInfos", paymentInfos);
+      }
+    }
     
+    if (isLoggedIn) {
       if (paymentInfos.size() == 0) {
 %>
-<a style="float:left">You havent provided your Payment Method</a><br>
-<a style="float:left">Please provide your Payment details</a><br>
-<a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br>
+<a>You havent provided your Payment Method</a><br>
+<a>Please provide your Payment details</a><br>
+<a href="updatePaymentMethod.jsp">Add a payment method</a><br>
 <%
-}
-else {
+      } else {
 %>
 <label>Payment Details have been provided</label><br>
-<a style="float:left" href="updatePaymentMethod.jsp">Change a payment method</a><br>
+<a href="updatePaymentMethod.jsp">Change a payment method</a><br>
 <%
       }
     } else {
-      // User is not logged in - use session basket
-      basket = (Basket) session.getAttribute("sessionBasket");
 %>
 <label>Shopping as Guest</label><br>
-<a style="float:left">You can checkout as a guest or <a href="../login.jsp">login</a> for a better experience</a><br>
+<a>You can checkout as a guest or <a href="../login.jsp">login</a> for a better experience</a><br>
 <%
+  if (paymentInfos.size() == 0) {
+%>
+<a>You havent provided your Payment Method</a><br>
+<a>Please provide your Payment details</a><br>
+<a href="updatePaymentMethod.jsp">Add a payment method</a><br>
+<%
+  } else {
+%>
+<label>Payment Details have been provided</label><br>
+<a href="updatePaymentMethod.jsp">Change a payment method</a><br>
+<%
+  }
     }
     
     if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
@@ -67,7 +101,6 @@ else {
 %>
 <label> Your Basket contains: </label><br>
 <%
-    // Updated loop to iterate over List<BasketItem>
     for (BasketItem basketItem : basket.getItems()) {
       ItemType itemType = basketItem.getItemType();
       int quantity = basketItem.getQuantity();
@@ -83,8 +116,17 @@ else {
 <%
     }
 %>
+<%
+  // Only show checkout link if user has payment details or is a guest
+  if (paymentInfos.size() > 0) {
+%>
   Click <a href="checkout.jsp">here </a>to proceed for checkout. <br/>
 <%
+  } else {
+%>
+  <label>Please provide payment details before checkout.</label><br/>
+<%
+    }
   }
 %>
 Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
