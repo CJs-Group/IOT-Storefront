@@ -66,7 +66,11 @@ public class UsrManController extends HttpServlet {
             String deleteUserAction = request.getParameter("deleteUser");
             session.setAttribute("selectedUserID", selectedUserIDStr);
             request.setAttribute("selectedUserID", selectedUserIDStr);
-            if (selectedUserIDStr != null && deleteUserAction == null && addUserAction == null) {
+            if (selectedUserIDStr == null || selectedUserIDStr.isEmpty() || (addUserAction == null && editUserAction == null && deleteUserAction == null)) {
+                response.sendRedirect("userManagement.jsp");
+                return;
+            }
+            if (selectedUserIDStr != null && addUserAction == null) {
                 int selectedUserID = Integer.parseInt(selectedUserIDStr);
                 User selectedUser = dbm.getUserById(selectedUserID);
                 if (selectedUser != null && selectedUser instanceof Model.Users.Staff && ((Model.Users.Staff) selectedUser).isAdmin()) {

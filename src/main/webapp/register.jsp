@@ -37,6 +37,19 @@
                 <input type="text" id="username" name="username"><br>
                 <label>Password: </label><br>
                 <input type="password" id ="password" name="password"><br>
+                <label>Account Type: </lavel><br>
+                <%@ page import="Model.Users.AccountType" %>
+                <select id="accountType" name="accountType">
+                    <% for (AccountType type : AccountType.values()) { %>
+                        <option value="<%= type.name() %>"><%= type.name() %></option>
+                    <% } %>
+                </select><br>
+
+                <%-- <select id="accountType" name="accountType">
+                    <option value="Individual">Individual</option>
+                    <option value="Business">Business</option>
+                    <option value="Enterprise">Enterprise</option>
+                </select><br> --%>
                 <label>Do You Agree to the Terms of Service?: </label>
                 <input type="checkbox" name="tos"><br>
                 <input type="submit" value="Submit">

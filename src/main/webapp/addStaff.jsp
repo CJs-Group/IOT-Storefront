@@ -4,6 +4,7 @@
 <%@page import="Model.Users.User"%>
 <%@page import="Model.Users.Customer"%>
 <%@page import="Model.Users.Staff"%>
+<%@page import="Model.Users.StaffRole"%>
 <%@page import="java.util.List"%>
 <%
     DBConnector dbc = new DBConnector();
@@ -20,6 +21,14 @@
         <div class="content-wrapper">
             <div class="container shown">
                 <h2>Add Staff</h2>
+                    <% 
+                        String formError = (String) session.getAttribute("formError");
+                        if (formError != null) {
+                    %>
+                        <p style="color: red;"><%= formError %></p>
+                    <%
+                    }
+                    %>
                 <form action="${pageContext.request.contextPath}/userManip" method="post">
                     <input type="hidden" name="formAction" value="addStaff">
                     <label>Username:</label><br>
@@ -30,6 +39,12 @@
                     <input type="email" name="email" required><br>
                     <label>Phone Number:</label><br>
                     <input type="text" name="phone"><br>
+                    <label>Staff Role:</label><br>
+                    <select name="staffRole" required>
+                        <% for (StaffRole role : StaffRole.values()) { %>
+                            <option value="<%= role.name() %>"><%= role.toString() %></option>
+                        <% } %>
+                    </select><br><br>
                     <input type="submit" value="Add Staff">
                 </form>
                 <a href="userManagement.jsp">Cancel</a>

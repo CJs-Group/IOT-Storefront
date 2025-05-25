@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import Model.DAO.DBConnector;
 import Model.DAO.DBManager;
 import Model.Users.Customer;
+import Model.Users.AccountType;
 import Model.Validator;
 
 @WebServlet("/register")
@@ -28,9 +29,17 @@ public class RegisterController extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String email = request.getParameter("email");
+            String accountTypeStr = request.getParameter("accountType");
 
-            if (username == null || password == null || email == null) { // Check for null values
+            if (username == null || password == null || email == null || accountTypeStr == null) { // Check for null values
                 response.sendRedirect("register.jsp?error=All fields are required.");
+                return;
+            }
+            AccountType accountType;
+            try {
+                accountType = AccountType.fromString(accountTypeStr);
+            } catch (IllegalArgumentException e) {
+                response.sendRedirect("register.jsp?error=Invalid account type");
                 return;
             }
             if (dbm.doesEmailExist(email)) {
@@ -53,7 +62,7 @@ public class RegisterController extends HttpServlet {
                 .hashString(password, StandardCharsets.UTF_8)
                 .toString();
 
-            Customer newCustomer = new Customer(0, username, password, email, "");
+            Customer newCustomer = new Customer(0, username, password, email, "", accountType);
                 dbm.createUser(newCustomer);
             
             // Add the new user id to session

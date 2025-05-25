@@ -127,7 +127,6 @@ thead {
 thead th {
   padding: 12px 15px;
   color: #fff;
-  text-align: left;
   font-weight: 600;
 }
 
@@ -164,4 +163,16 @@ th, td {
     padding: 10px 20px;
     margin: 5px;
     transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.smallbutton:disabled {
+    filter: grayscale(80%) opacity(60%);
+    color: #6e6e6e;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.no-transition {
+    transition: none !important;
 }
