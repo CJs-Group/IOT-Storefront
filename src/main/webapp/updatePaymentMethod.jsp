@@ -2,8 +2,10 @@
 <%@page import="Model.Order.PaymentInfo"%>
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
+
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Connection"%>
+
 <html>
 
 <head>
@@ -38,59 +40,75 @@
     PaymentInfo paymentInfo = null;
     String paymentErr = (String) session.getAttribute("paymentErr");
     String paymentSuccess = (String) session.getAttribute("paymentSuccess");
+    boolean isLoggedIn = false;
 
     Integer userId = (Integer)session.getAttribute("userId");
 
-    if (userId == null) {
-        response.sendRedirect("../login.jsp?error=Please login to update payment method.");
-        return;
-    }
+    if (userId != null) {
+        isLoggedIn = true;
+        try {
+            DBConnector dbConnector = new DBConnector();
+            Connection conn = dbConnector.openConnection();
+            dbm = new DBManager(conn);
 
-    try {
-        DBConnector dbConnector = new DBConnector();
-        Connection conn = dbConnector.openConnection();
-        dbm = new DBManager(conn);
-
-        List<PaymentInfo> userPaymentInfos = dbm.getCardDetailsByUserId(userId);
-        if (userPaymentInfos != null && !userPaymentInfos.isEmpty()) {
-            paymentInfo = userPaymentInfos.get(0);
+            List<PaymentInfo> userPaymentInfos = dbm.getCardDetailsByUserId(userId);
+            if (userPaymentInfos != null && !userPaymentInfos.isEmpty()) {
+                paymentInfo = userPaymentInfos.get(0);
+            }
+            else {
+                paymentInfo = new PaymentInfo();
+            }
         }
-        else {
+        catch (Exception e) {
+            e.printStackTrace();
+            paymentErr = "Error retrieving payment information: " + e.getMessage();
+            if (paymentInfo == null) {
+                paymentInfo = new PaymentInfo();
+            }
+        }
+        finally {
+            if (dbm != null) {
+                try {
+                    dbm.close();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    } else {
+        isLoggedIn = false;
+        @SuppressWarnings("unchecked")
+        List<PaymentInfo> sessionPaymentInfos = (List<PaymentInfo>) session.getAttribute("paymentInfos");
+        if (sessionPaymentInfos != null && !sessionPaymentInfos.isEmpty()) {
+            paymentInfo = sessionPaymentInfos.get(0);
+        } else {
             paymentInfo = new PaymentInfo();
         }
+    }
 
-        if(paymentErr != null) {
+    if(paymentErr != null) {
 %>
     <p style="color:red;"><%= paymentErr %></p>
 <%
-            session.removeAttribute("paymentErr");
-        }
-        if(paymentSuccess != null) {
+        session.removeAttribute("paymentErr");
+    }
+    if(paymentSuccess != null) {
 %>
     <p style="color:green;"><%= paymentSuccess %></p>
 <%
-            session.removeAttribute("paymentSuccess");
-        }
-    }
-    catch (Exception e) {
-        e.printStackTrace();
-        paymentErr = "Error retrieving payment information: " + e.getMessage();
-        if (paymentInfo == null) {
-            paymentInfo = new PaymentInfo();
-        }
-    }
-    finally {
-        if (dbm != null) {
-            try {
-                dbm.close();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        session.removeAttribute("paymentSuccess");
     }
 %>
+
 <h1>Update Payment Method</h1>
+<%
+    if (!isLoggedIn) {
+%>
+<p><em>Shopping as Guest - Payment information will be stored for this session only</em></p>
+<%
+    }
+%>
 <form action="../updatePaymentMethod" method="post">
     <label>Credit Card Number:</label><br>
     <input type="text" name="creditCardNumber" value="<%= paymentInfo.getCardNo() != null ? paymentInfo.getCardNo() : "" %>"><br>
@@ -102,9 +120,16 @@
     <input type="password" name="cvv" value=""><br><br>
     <input type="submit" value="Submit">
 </form>
+
 <br/>
-Click <a href="../userHome.jsp">here</a> to proceed to the main page.<br/>
-Click <a href="basket.jsp">here</a> to proceed to the basket.<br/>
-</div>
+Click <a href="basket.jsp">here</a> to go to your basket.<br/>
+<%
+    if (isLoggedIn) {
+%>
+Click <a href="paymentManagement">here</a> to go to your payment history.<br/>
+<%
+    }
+%>
+Click <a href="userHome.jsp">here</a> to return to your home page.<br/>
 </body>
 </html>
