@@ -12,11 +12,35 @@
 
 <html>
 <head>
-  <title>Basket</title>
+    <title>Basket</title>
+    <link rel="stylesheet" type="text/css" href="../css/IoTBay.css">
+    <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
-<body>
-<h1>Basket</h1>
 
+<body>
+
+<div class="topBar"></div>
+    <img src="../images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="../images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="../images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+<p class="basketText">Basket</p>
+
+<div class="bodyText">
 <%
     String errorMessage = request.getParameter("error");
     if (errorMessage != null && !errorMessage.isEmpty()) {
@@ -45,8 +69,8 @@
       if (paymentInfos.size() == 0) {
 %>
 <a style="float:left">You havent provided your Payment Method</a><br>
-<a style="float:left">Please provide your Payment details</a><br>
-<a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br>
+<a style="float:left">Please provide your Payment details</a><br><br>
+<a style="float:left" href="updatePaymentMethod.jsp">Add a payment method</a><br><br>
 <%
 }
 else {
@@ -66,7 +90,7 @@ else {
     
     if (basket == null || basket.getItems() == null || basket.getItems().isEmpty()){ 
 %>
-<label> Basket is empty </label><br>
+<label> Basket is empty </label><br><br>
 <%
 }
 else {
@@ -101,5 +125,7 @@ Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
     e.printStackTrace(new java.io.PrintWriter(out));
   }
 %>
+
+</div>
 </body>
 </html>

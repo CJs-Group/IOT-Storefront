@@ -14,9 +14,33 @@
 <html>
 <head>
     <title>Your Orders</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/IoTBay.css">
+    <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
+
 <body>
+
+<div class="topBar"></div>
+    <img src="../images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="../images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="../images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+<div class="orderText">
+<br>
 <h1>Your Orders</h1>
             <form>
                 <label>Search Orders: </label><br>
@@ -135,5 +159,11 @@
 <%
         }
 %>
+<br/>
+<p>
+    Click <a href="../userHome.jsp">here</a> to return to your home page.<br/>
+</p>
+
+</div>
 </body>
 </html>
