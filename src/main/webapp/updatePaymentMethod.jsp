@@ -126,11 +126,7 @@ Click <a href="basket.jsp">here</a> to go to your basket.<br/>
 <%
     if (isLoggedIn) {
 %>
-<<<<<<< Updated upstream
-Click <a href="paymentManagement">here</a> to go to your payment history.<br/>
-=======
 Click <a href="paymentHistory.jsp">here</a> to go to your payment history.<br/>
->>>>>>> Stashed changes
 <%
     }
 %>

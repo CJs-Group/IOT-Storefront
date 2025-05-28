@@ -146,11 +146,7 @@
 <br/>
 <p>
     <a href="updatePaymentMethod.jsp">Add New Payment Method</a><br/>
-<<<<<<< Updated upstream
-    <a href="../userHome.jsp">Back to Home</a>
-=======
     <a href="userHome.jsp">Back to Home</a>
->>>>>>> Stashed changes
 </p>
 
 </body>

@@ -85,14 +85,8 @@
     if (isLoggedIn) {
       if (paymentInfos.size() == 0) {
 %>
-<<<<<<< Updated upstream
-<a>You have yet to add a Payment Method.</a><br>
-</br><a>Please provide your Payment details through the link below.</a><br>
-<a href="updatePaymentMethod.jsp">Add a payment method.</a>.<br>
-=======
 <a>No payment details present.</a><br>
 <a>Please provide payment details <a href="updatePaymentMethod.jsp">here</a>.<br>
->>>>>>> Stashed changes
 <%
       } else {
 %>
@@ -108,16 +102,6 @@
 <%
   if (paymentInfos.size() == 0) {
 %>
-<<<<<<< Updated upstream
-<a>You havent provided your Payment Method</a><br>
-<a>Please provide your Payment details</a><br>
-<a href="updatePaymentMethod.jsp">Add a payment method</a><br>
-<%
-  } else {
-%>
-<label>Payment Details have been provided</label><br>
-<a href="updatePaymentMethod.jsp">Change a payment method</a><br>
-=======
 <a>No payment details present.</a><br>
 <a>Please provide payment details <a href="updatePaymentMethod.jsp">here</a>.<br>
 <%
@@ -125,7 +109,6 @@
 %>
 <label>Payment details have been provided.</label><br>
 <a>Change payment method <a href="updatePaymentMethod.jsp">here</a>.<br>
->>>>>>> Stashed changes
 <%
   }
     }
@@ -141,7 +124,6 @@
 else {
 %>
 </br><label>Your basket currently contains: </label><br>
-<br/>
 <%
     for (BasketItem basketItem : basket.getItems()) {
       ItemType itemType = basketItem.getItemType();
@@ -163,12 +145,7 @@ else {
   // Only show checkout link if user has payment details or is a guest
   if (paymentInfos.size() > 0) {
 %>
-<<<<<<< Updated upstream
-  Click <a href="checkout.jsp">here </a>to proceed for checkout. <br/>
-=======
-  Click <a href="checkout.jsp">here</a> to proceed for checkout.<br>
-  <br/>
->>>>>>> Stashed changes
+  Click <a href="checkout.jsp">here </a>to proceed for checkout.<br/>
 <%
   } else {
 %>
@@ -178,11 +155,7 @@ else {
     }
   }
 %>
-<<<<<<< Updated upstream
-Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
-=======
 Click <a href="userHome.jsp">here</a> to go to your home page.<br>
->>>>>>> Stashed changes
 <%
   }
   catch (Exception e) {
