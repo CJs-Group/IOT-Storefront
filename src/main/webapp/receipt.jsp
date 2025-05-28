@@ -17,6 +17,11 @@
 
 <body>
 
+<style>
+  body {
+    overflow: auto;
+  }
+</style>
 <div class="topBar"></div>
     <img src="../images/CJ_MAXX.png" class="logo">
     <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
