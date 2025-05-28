@@ -8,10 +8,39 @@
 <html>
 <head>
   <title>Stock Management</title>
+  <link rel="stylesheet" type="text/css" href="../css/IoTBay.css">
+  <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
-<body>
-<h1>Total Stock</h1>
 
+<body>
+
+<style>
+  body {
+    overflow: auto;
+  }
+</style>
+
+<div class="topBar"></div>
+<img src="../images/CJ_MAXX.png" class="logo">
+<div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+<div class="buttonContainer">
+    <a href="login.jsp" class="registerContainer">
+        <img src="../images/login.png" class="registerIcon">
+        <p class="registerText">Login</p>
+    </a>
+    
+    <a href="register.jsp" class="registerContainer">
+        <img src="../images/user.png" class="registerIcon">
+        <p class="registerText">Register</p>
+    </a>
+</div>
+
+<div class="leftBar"></div>
+<div class="rightBar"></div>
+
+<div class="registerPageText">
+<h1>Total Stock</h1>
 <%
   Connection conn = null;
   DBManager dbm = null;
@@ -44,7 +73,6 @@
           <button type="submit" name="action" value="+1">+1</button>
           <button type="submit" name="action" value="-1">-1</button>
         </form>
-
 <%
       }
     }
@@ -56,5 +84,6 @@
     e.printStackTrace(new java.io.PrintWriter(out));
   }
 %>
+</div>
 </body>
 </html>
