@@ -59,7 +59,7 @@ public class OrderController extends HttpServlet {
                 // checking if logged-in user has payment method
                 List<PaymentInfo> paymentMethods = dbm.getCardDetailsByUserId(userId);
                 if (paymentMethods.isEmpty()) {
-                    response.sendRedirect(request.getContextPath() + "/pdbSystem/checkout.jsp?error=" + URLEncoder.encode("Please add a payment method before placing an order.", "UTF-8"));
+                    response.sendRedirect(request.getContextPath() + "/checkout.jsp?error=" + URLEncoder.encode("Please add a payment method before placing an order.", "UTF-8"));
                     return;
                 }
             }

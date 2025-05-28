@@ -84,11 +84,11 @@ public class PaymentController extends HttpServlet {
             
             request.setAttribute("payments", payments);
             request.setAttribute("savedPaymentMethods", savedPaymentMethods);
-            request.getRequestDispatcher("/pdbSystem/paymentHistory.jsp").forward(request, response);
+            request.getRequestDispatcher("paymentHistory.jsp").forward(request, response);
             
         } catch (SQLException e) {
             request.setAttribute("error", "Database error: " + e.getMessage());
-            request.getRequestDispatcher("/pdbSystem/paymentHistory.jsp").forward(request, response);
+            request.getRequestDispatcher("paymentHistory.jsp").forward(request, response);
         }
     }
     

@@ -49,7 +49,7 @@
                 <input type="submit" value="Search">
             </form>
 <p>
-    Click <a href="../userHome.jsp">here</a> to return to your home page.<br/>
+    Click <a href="index.jsp">here</a> to return to your home page.<br/>
 </p>
 
 <%
@@ -167,7 +167,7 @@
 %>
 <br/>
 <p>
-    Click <a href="../userHome.jsp">here</a> to return to your home page.<br/>
+    Click <a href="index.jsp">here</a> to return to your home page.<br/>
 </p>
 
 </div>

@@ -7,8 +7,30 @@
 <html>
 <head>
     <title>Payment Management</title>
+    <link rel="stylesheet" type = "text/css" href="css/IoTBay.css">
+    <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
 </head>
 <body>
+<div class="topBar"></div>
+    <img src="../images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="../images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="../images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
+
+<div class="mainText">
 <h1>Payment Management</h1>
 
 <%
@@ -146,8 +168,9 @@
 <br/>
 <p>
     <a href="../updatePaymentMethod.jsp">Add New Payment Method</a><br/>
-    <a href="../userHome.jsp">Back to Home</a>
+    <a href="index.jsp">Back to Home</a>
 </p>
+</div>
 
 </body>
 </html>
