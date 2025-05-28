@@ -51,22 +51,26 @@ public class SeedDB {
             db.createUser(new Staff(20, "Jenny", hashPassword("passwordJenny"), "jenny@gmail.com", "4837209873", false, StaffRole.SalesStaff));
         
             ItemType[] items = {
-                new ItemType(0, 1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.jpg", 10),
-                new ItemType(0, 2, "Switch", "A device that connects devices on a computer network by using packet switching to forward data to its destination", Types.Networking, "images/switch.jpg", 11),
-                new ItemType(0, 3, "Doorbell", "A device that signals the presence of a visitor at a door", Types.Security, "images/doorbell.jpg", 12),
-                new ItemType(0, 4, "Security Camera", "A device that records video footage of a specific area", Types.Security, "images/security-camera.jpg", 13),
-                new ItemType(0, 5, "Smart Light", "A light bulb that can be controlled remotely", Types.Smart_Home, "images/smart-light.jpg", 14),
-                new ItemType(0, 6, "Smart Thermostat", "A device that controls the temperature of a building", Types.Smart_Home, "images/smart-thermostat.jpg", 15),
-                new ItemType(0, 7, "Smart Lock", "A lock that can be controlled remotely", Types.Security, "images/smart-lock.jpg", 16),
-                new ItemType(0, 8, "Smart TV", "A television set that is connected to the internet", Types.Smart_Home, "images/smart-tv.jpeg", 17),
-                new ItemType(0, 9, "Baby Monitor", "A device that allows parents to monitor their baby remotely", Types.Smart_Home, "images/baby-monitor.jpg", 18),
-                new ItemType(0, 10, "Amazon Echo", "A smart speaker that can control other smart devices", Types.Assistants, "images/amazon-echo.png", 19),
-                new ItemType(0, 11,  "Google Nest", "A smart speaker that can control other smart devices", Types.Assistants, "images/google-nest.jpg", 20)
+                new ItemType(0, 1, "Router", "A device that forwards data packets between computer networks", Types.Networking, "images/router.jpg"),
+                new ItemType(0, 2, "Switch", "A device that connects devices on a computer network by using packet switching to forward data to its destination", Types.Networking, "images/switch.jpg"),
+                new ItemType(0, 3, "Doorbell", "A device that signals the presence of a visitor at a door", Types.Security, "images/doorbell.jpg"),
+                new ItemType(0, 4, "Security Camera", "A device that records video footage of a specific area", Types.Security, "images/security-camera.jpg"),
+                new ItemType(0, 5, "Smart Light", "A light bulb that can be controlled remotely", Types.Smart_Home, "images/smart-light.jpg"),
+                new ItemType(0, 6, "Smart Thermostat", "A device that controls the temperature of a building", Types.Smart_Home, "images/smart-thermostat.jpg"),
+                new ItemType(0, 7, "Smart Lock", "A lock that can be controlled remotely", Types.Security, "images/smart-lock.jpg"),
+                new ItemType(0, 8, "Smart TV", "A television set that is connected to the internet", Types.Smart_Home, "images/smart-tv.jpeg"),
+                new ItemType(0, 9, "Baby Monitor", "A device that allows parents to monitor their baby remotely", Types.Smart_Home, "images/baby-monitor.jpg"),
+                new ItemType(0, 10, "Amazon Echo", "A smart speaker that can control other smart devices", Types.Assistants, "images/amazon-echo.png"),
+                new ItemType(0, 11,  "Google Nest", "A smart speaker that can control other smart devices", Types.Assistants, "images/google-nest.jpg")
             };
 
             for (int i = 0; i < items.length; i++) {
                 ItemType itemType = items[i];
                 db.createItemType(itemType);
+                for (int j = 0; j < 10; j++) {
+                    Unit unit = new Unit(0, itemType, new java.util.Date(), Model.Items.Status.In_Stock); //UnitID auto generated
+                    db.createUnit(unit, null);
+                }
             }
 
             List<Customer> customers = db.getCustomers();

@@ -39,8 +39,10 @@ public class StockController extends HttpServlet {
                         }
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid item ID: " + itemIdStr);
+                    response.sendRedirect("stock.jsp?error=" + "Invalid item ID: " + itemIdStr);
                 } catch (SQLException e) {
                     System.out.println("Error updating stock: " + e.getMessage());
+                    response.sendRedirect("stock.jsp?error=" + e.getMessage());
                 }
             }
             response.sendRedirect("stock.jsp");

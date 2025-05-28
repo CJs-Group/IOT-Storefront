@@ -42,6 +42,17 @@
 <div class="registerPageText">
 <h1>Total Stock</h1>
 <%
+  String error = request.getParameter("error");
+  if (error != null && !error.trim().isEmpty()) {
+%>
+    <div style="color: red;">
+        <strong>Error:</strong> <%= error %>
+    </div>
+<%
+  }
+%>
+
+<%
   Connection conn = null;
   DBManager dbm = null;
   try {
@@ -62,9 +73,8 @@
       <%-- <a style="float:left" href="addItem.jsp">Add an item.</a><br> --%>
       <label> Your Stock contains: </label><br>
 <%
-      // Updated loop to iterate over List<ItemType>
       for (ItemType item : items) {
-        int quantity = item.getQuantity();
+        int quantity = dbm.getItemQuantity(item.getItemID());
 %>
         <label>Item: <%= item.getName() %>, Quantity: <%= quantity %></label>
         <form method="post" action="../updateStock">

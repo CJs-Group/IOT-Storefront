@@ -2,6 +2,8 @@ package Model.DAO;
 
 import Model.Items.ItemType;
 import Model.Items.Types;
+import Model.Items.Unit;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import Model.Items.ItemType;
+import Model.Items.Types;
+import Model.Items.Unit;
+import Model.Items.Status;
 
 public class ItemTypeDAO {
     private Connection conn;
@@ -24,8 +30,7 @@ public class ItemTypeDAO {
             rs.getString("Name"),
             rs.getString("Description"),
             Types.valueOf(rs.getString("Type")),
-            rs.getString("ImagePath"),
-            rs.getInt("Quantity")
+            rs.getString("ImagePath")
         );
     }
 
@@ -70,14 +75,13 @@ public class ItemTypeDAO {
     }
 
     public void createItemType(ItemType itemType) throws SQLException {
-        String sql = "INSERT INTO ItemTypes (Name, Description, ImagePath, Type, Price, Quantity) VALUES (?, ?, ?, ?, ?, ?) RETURNING ItemTypeID";
+        String sql = "INSERT INTO ItemTypes (Name, Description, ImagePath, Type, Price) VALUES (?, ?, ?, ?, ?) RETURNING ItemTypeID";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, itemType.getName());
             ps.setString(2, itemType.getDescription());
             ps.setString(3, itemType.getImagePath());
             ps.setString(4, itemType.getType().name());
             ps.setInt(5, itemType.getPrice());
-            ps.setInt(6, itemType.getQuantity());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -106,14 +110,6 @@ public class ItemTypeDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, itemTypeId);
             ps.executeUpdate();
-        }
-    }
-
-    public void addItemQuantity(ItemType itemType, int newQuantity) throws SQLException {
-        int currentQuantity = itemType.getQuantity();
-        if ((newQuantity < 0 && currentQuantity > 0) || newQuantity > 0) {
-            itemType.setQuantity(currentQuantity + newQuantity);
-            this.updateItemType(itemType);
         }
     }
 }

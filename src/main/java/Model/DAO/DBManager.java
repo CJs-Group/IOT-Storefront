@@ -145,10 +145,14 @@ public class DBManager {
     }
 
     public void addItemQuantity(ItemType itemType, int newQuantity) throws SQLException {
-        itemTypeDAO.addItemQuantity(itemType, newQuantity);
+        unitDAO.addItemQuantity(itemType, newQuantity);
     }
 
-        public void createUnit(Unit unit, Integer userID) throws SQLException {
+    public int getItemQuantity(int itemTypeId) throws SQLException {
+        return unitDAO.getItemQuantity(itemTypeId);
+    }
+
+    public void createUnit(Unit unit, Integer userID) throws SQLException {
         unitDAO.createUnit(unit, userID);
     }
 
