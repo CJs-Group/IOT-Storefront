@@ -1,6 +1,7 @@
 <%@page import="Model.Users.User"%>
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
+<%@page import="java.sql.Timestamp"%>
 
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,7 @@
         int userId = (int)session.getAttribute("userId");
         User user = dbm.getUserById(userId);
         session.setAttribute("user", user);
+        Timestamp lastLoginTime = (Timestamp)session.getAttribute("lastLoginTime");
     %>
 
     <div class="topBar"></div>
@@ -56,6 +58,11 @@
             <ul>
                 <li>Email: <%= user.getEmail() %></li>
                 <li>Phone: <%= user.getPhoneNumber() %></li>
+                <% if (lastLoginTime != null) { %>
+                    <li>Last login: <%= lastLoginTime %></li>
+                <% } else { %>
+                    <li>Welcome! This is your first login.</li>
+                <% } %>
             </ul>
             
             <br><br><br>

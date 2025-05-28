@@ -112,6 +112,22 @@ public class DBManager {
         userDAO.deleteUser(userId);
     }
 
+    public boolean isUserActivated(int userId) throws SQLException {
+        return userDAO.isUserActivated(userId);
+    }
+
+    public void setUserActivated(int userId, boolean activated) throws SQLException {
+        userDAO.setUserActivated(userId, activated);
+    }
+
+    public void updateLastLoginDate(int userId) throws SQLException {
+        userDAO.updateLastLoginDate(userId);
+    }
+
+    public Timestamp getLastLoginDate(int userId) throws SQLException {
+        return userDAO.getLastLoginDate(userId);
+    }
+
     public void createItemType(ItemType itemType) throws SQLException {
         itemTypeDAO.createItemType(itemType);
     }

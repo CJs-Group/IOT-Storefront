@@ -64,6 +64,11 @@ public class UserManip extends HttpServlet {
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
+                    if (phone != null && !phone.isEmpty() && !Validator.validatePhone(phone)) {
+                        session.setAttribute("formError", "Phone number must contain only numbers.");
+                        response.sendRedirect(formErrorRedirectPage);
+                        return;
+                    }
                     if (dbm.doesEmailExist(email)) {
                         session.setAttribute("formError", "Email already exists.");
                         response.sendRedirect(formErrorRedirectPage);
@@ -87,6 +92,11 @@ public class UserManip extends HttpServlet {
                     }
                     if (!Validator.validateEmail(email)) {
                         session.setAttribute("formError", "Invalid email format.");
+                        response.sendRedirect(formErrorRedirectPage);
+                        return;
+                    }
+                    if (phone != null && !phone.isEmpty() && !Validator.validatePhone(phone)) {
+                        session.setAttribute("formError", "Phone number must contain only numbers.");
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
@@ -146,6 +156,11 @@ public class UserManip extends HttpServlet {
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }
+                    if (phone != null && !phone.isEmpty() && !Validator.validatePhone(phone)) {
+                        session.setAttribute("formError", "Phone number must contain only numbers.");
+                        response.sendRedirect(formErrorRedirectPage);
+                        return;
+                    }
                     if (dbm.doesEmailExist(email)) {
                         session.setAttribute("formError", "Email already exists.");
                         response.sendRedirect(formErrorRedirectPage);
@@ -175,6 +190,11 @@ public class UserManip extends HttpServlet {
                     }
                     if (!Validator.validateEmail(email)) {
                         session.setAttribute("formError", "Invalid email format.");
+                        response.sendRedirect(formErrorRedirectPage);
+                        return;
+                    }
+                    if (phone != null && !phone.isEmpty() && !Validator.validatePhone(phone)) {
+                        session.setAttribute("formError", "Phone number must contain only numbers.");
                         response.sendRedirect(formErrorRedirectPage);
                         return;
                     }

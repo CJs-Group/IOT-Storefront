@@ -31,6 +31,7 @@
             
             if (user != null) {
         %>
+
             <p class="homeText"> You are logged in as <%= user.getUsername() %><br/>
             
             <br>

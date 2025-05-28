@@ -14,6 +14,8 @@
     <link rel="icon" type="image/png" href="../images/CJ_MAXX.png">
 </head>
 
+<body>
+
 <div class="topBar"></div>
     <img src="../images/CJ_MAXX.png" class="logo">
     <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
@@ -32,8 +34,8 @@
 
     <div class="leftBar"></div>
     <div class="rightBar"></div>
-<body>
-<div class="bodyText">
+
+<div class="paymentMethodBodyText">
 <br>
 <%
     DBManager dbm = null;

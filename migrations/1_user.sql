@@ -10,6 +10,8 @@ CREATE TABLE "Users" (
 	"AccountType" TEXT CHECK("AccountType" IN ('Individual', 'Business', 'Enterprise')),
 	"StaffRole" TEXT,
 	"ShippingAddress" TEXT,
+	"Activated" BOOLEAN NOT NULL DEFAULT 1,
+	"LastLoginDate" DATETIME,
 	CHECK (
         ("Type" != 'Customer' AND  "ShippingAddress" IS NULL) OR 
         ("Type" = 'Customer')

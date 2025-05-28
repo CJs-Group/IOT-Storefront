@@ -21,6 +21,12 @@
 
 <body>
 
+<style>
+  body {
+    overflow: auto;
+  }
+</style>
+
 <div class="topBar"></div>
     <img src="../images/CJ_MAXX.png" class="logo">
     <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
@@ -41,8 +47,9 @@
     <div class="rightBar"></div>
 
 
-<div class="mainText">
-<h1>Basket</h1>
+
+<div class="bodyText">
+<p class="basketText">Basket</p>
 <%
     String errorMessage = request.getParameter("error");
     if (errorMessage != null && !errorMessage.isEmpty()) {
