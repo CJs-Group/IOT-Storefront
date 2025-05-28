@@ -8,6 +8,10 @@ import java.sql.SQLException;
 
 public class DBConnector extends DB implements AutoCloseable {
     public DBConnector() throws SQLException {
+        try {
+            Class.forName(driver);
+        }
+        catch (Exception e) {}
         conn = DriverManager.getConnection(URL + db, dbuser, dbpass);
     }
 
