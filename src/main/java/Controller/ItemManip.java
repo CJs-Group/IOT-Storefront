@@ -7,10 +7,6 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -51,11 +47,17 @@ public class ItemManip extends HttpServlet {
             String imageUrl = "";
             if (formAction.equals("addItem") || formAction.equals("editItem")) {
                 Part imagePart = request.getPart("image");
-                if (imagePart != null) {
-                    String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
+                if (imagePart != null && imagePart.getSize() > 0) {
                     String imageFileName = imagePart.getSubmittedFileName();
-                    imagePart.write(uploadPath + File.separator + imageFileName);
-                    imageUrl = "/images/" + imageFileName;
+                    if (imageFileName != null && !imageFileName.trim().isEmpty()) {
+                        String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
+                        File uploadDir = new File(uploadPath);
+                        if (!uploadDir.exists()) {
+                            uploadDir.mkdirs();
+                        }
+                        imagePart.write(uploadPath + File.separator + imageFileName);
+                        imageUrl = "images/" + imageFileName;
+                    }
                 }
             }
             switch (formAction) {
