@@ -117,7 +117,7 @@
     }
 %>
 Only registered users can save orders. <br>
-Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
+Click <a href="userHome.jsp">here </a>to proceed to the main page. <br/>
 Click <a href="basket.jsp">here </a>to proceed to the basket. <br/>
 </div>
 </html>

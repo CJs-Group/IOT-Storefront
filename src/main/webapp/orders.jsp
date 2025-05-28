@@ -48,9 +48,6 @@
                 <input type="text" id="filter" name="filter">
                 <input type="submit" value="Search">
             </form>
-<p>
-    Click <a href="../userHome.jsp">here</a> to return to your home page.<br/>
-</p>
 
 <%
     String noOrdersMessage = "You have no orders yet.";
@@ -167,9 +164,8 @@
 %>
 <br/>
 <p>
-    Click <a href="../userHome.jsp">here</a> to return to your home page.<br/>
+    Click <a href="userHome.jsp">here</a> to return to your home page.<br/>
 </p>
-
 </div>
 </body>
 </html>

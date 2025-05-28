@@ -68,7 +68,7 @@
             <th>Amount</th>
             <th>Payment Date</th>
             <th>Status</th>
-            <th>Card Details</th>
+            <th>Card Details (Number / Name)</th>
         </tr>
     </thead>
     <tbody>
@@ -146,7 +146,11 @@
 <br/>
 <p>
     <a href="updatePaymentMethod.jsp">Add New Payment Method</a><br/>
+<<<<<<< Updated upstream
     <a href="../userHome.jsp">Back to Home</a>
+=======
+    <a href="userHome.jsp">Back to Home</a>
+>>>>>>> Stashed changes
 </p>
 
 </body>
