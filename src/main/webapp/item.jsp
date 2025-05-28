@@ -10,6 +10,7 @@ DBConnector dbc = new DBConnector();
 DBManager dbm = new DBManager(dbc.openConnection());
 ItemType item = null;
 String itemIdParam = request.getParameter("id");
+int availableStock = 0;
 if (itemIdParam != null && !itemIdParam.isEmpty()) {
     try {
         item = dbm.getItemTypeById(Integer.parseInt(itemIdParam));
@@ -25,6 +26,9 @@ if (item == null) {
     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Item not found.");
     return;
 }
+else {
+    availableStock = dbm.getItemQuantity(item.getItemID());
+}
 %>
 
 <head>
@@ -34,7 +38,29 @@ if (item == null) {
 </head>
 
 <body>
-    <jsp:include page="includes/topbar.jsp" />
+    <div class="topBar"></div>
+    <img src="images/CJ_MAXX.png" class="logo">
+    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
+
+    <div class="buttonContainer">
+        <a href="login.jsp" class="registerContainer">
+            <img src="images/login.png" class="registerIcon">
+            <p class="registerText">Login</p>
+        </a>
+        
+        <a href="register.jsp" class="registerContainer">
+            <img src="images/user.png" class="registerIcon">
+            <p class="registerText">Register</p>
+        </a>
+
+        <a href="basket.jsp" class="cartContainer">
+            <img src="images/cart.png" class="cartIcon">
+            <p class="cartText">Cart</p>
+        </a>
+    </div>
+
+    <div class="leftBar"></div>
+    <div class="rightBar"></div>
 
     <div class="mainText">
         <div class="prodImageContainer">
@@ -52,13 +78,21 @@ if (item == null) {
             </div>
             <p>ID: <%= item.getItemID() %></p>
             <p><%= item.getDescription() %></p>
+            <% if (availableStock > 0) { %>
+                <p style="color: green; font-size: 16px;">In Stock: <%= availableStock %> available</p>
+            <% } else { %>
+                <p style="color: red; font-size: 24px; font-weight: bold;">OUT OF STOCK</p>
+                <p style="color: red; font-size: 14px;">Currently unavailable</p>
+            <% } %>
         </div>
 
         <div class="addCartContainer">
             <form action="${pageContext.request.contextPath}/updateBasket" method="post" style="display: inline;">
                 <input type="hidden" name="itemId" value="<%= item.getItemID() %>" />
                 <input type="hidden" name="action" value="+1" />
-                <button type="submit" class="addCartButton">Add to Cart</button>
+                <button type="submit" class="addCartButton" <%= availableStock <= 0 ? "disabled" : "" %>>
+                    <%= availableStock <= 0 ? "Out of Stock" : "Add to Cart" %>
+                </button>
             </form>
         </div>
     </div>
