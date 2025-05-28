@@ -21,7 +21,9 @@
     }
 %>
 <div class="topBar"></div>
-<img src="${pageContext.request.contextPath}/images/CJ_MAXX.png" class="logo">
+<a href="${pageContext.request.contextPath}/index.jsp" class="logoLink">
+    <img src="${pageContext.request.contextPath}/images/CJ_MAXX.png" class="logo">
+</a>
 <div class="searchBarPos">
     <form action="/index.jsp" method="get">
         <input type="text" name="q" placeholder="Search.." class="searchBar">

@@ -153,14 +153,24 @@ body {
     padding-left: 10%;
 }
 
-.logo {
+/* ...existing code... */
+
+.logoLink {
     height: 100px;
     top: 0;
     padding-top: 10px;
     position: fixed;
     padding-left: 7%;
-    z-index: 2;
+    z-index: 3;
+    display: block;
 }
+
+.logo {
+    height: 100px;
+    display: block;
+}
+
+/* ...existing code... */
 
 .botBar {
     bottom: 0;
