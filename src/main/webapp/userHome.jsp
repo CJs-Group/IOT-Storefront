@@ -13,11 +13,7 @@
     <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
 </head>
 
-<div class="topBar"></div>
-        <img src="images/CJ_MAXX.png" class="logo">
-
-    <div class="leftBar"></div>
-    <div class="rightBar"></div>
+<jsp:include page="includes/topbar.jsp" />
 
     <img src="images/CJ_MAXX.png" class="logoLarge">
 

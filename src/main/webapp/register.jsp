@@ -10,12 +10,7 @@
     </head>
 
     <body>
-        <div class="topBar"></div>
-            <img src="images/CJ_MAXX.png" class="logo">
-        </div>
-
-        <div class="leftBar"></div>
-        <div class="rightBar"></div>
+        <jsp:include page="includes/topbar.jsp" />
 
         <img src="images/CJ_MAXX.png" class="logoLarge">
 
