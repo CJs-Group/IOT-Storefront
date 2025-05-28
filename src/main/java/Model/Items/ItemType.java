@@ -50,9 +50,9 @@ public class ItemType {
         return ItemID;
     }
     
-    public int getQuantity() {
-        return quantity;
-    }
+    // public int getQuantity() {
+    //     return quantity;
+    // }
 
     // public List<Unit> getUnits() {
     //     return units;

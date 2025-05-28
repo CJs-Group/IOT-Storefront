@@ -92,14 +92,13 @@ public class ItemTypeDAO {
     }
 
     public void updateItemType(ItemType itemType) throws SQLException {
-        String sql = "UPDATE ItemTypes SET Name = ?, Description = ?, ImagePath = ?, Type = ?, Price = ?, Quantity = ? WHERE ItemTypeID = ?";
+        String sql = "UPDATE ItemTypes SET Name = ?, Description = ?, ImagePath = ?, Type = ?, Price = ?, WHERE ItemTypeID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, itemType.getName());
             ps.setString(2, itemType.getDescription());
             ps.setString(3, itemType.getImagePath());
             ps.setString(4, itemType.getType().name());
             ps.setInt(5, itemType.getPrice());
-            ps.setInt(6, itemType.getQuantity());
             ps.setInt(7, itemType.getItemID());
             ps.executeUpdate();
         }
