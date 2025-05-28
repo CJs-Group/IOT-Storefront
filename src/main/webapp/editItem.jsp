@@ -15,12 +15,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Add Item</title>
-        <%-- <link rel="stylesheet" type="text/css" href="css/userManagement.css"> --%>
+        <link rel="stylesheet" type="text/css" href="css/IoTBay.css">
+        <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
         <script>
         
         </script>
     </head>
-    <body>
+    <body class="mainText">
         <h1>
             Add Item
         </h1>
