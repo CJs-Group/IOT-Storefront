@@ -128,10 +128,10 @@ Click <a href="basket.jsp">here</a> to go to your basket.<br/>
 <%
     if (isLoggedIn) {
 %>
-Click <a href="/pdbSystem/paymentHistory.jsp">here</a> to go to your payment history.<br/>
+Click <a href="paymentHistory.jsp">here</a> to go to your payment history.<br/>
 <%
     }
 %>
-Click <a href="userHome.jsp">here</a> to return to your home page.<br/>
+Click <a href="index.jsp">here</a> to return to your home page.<br/>
 </body>
 </html>

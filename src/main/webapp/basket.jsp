@@ -168,7 +168,7 @@ else {
   }
 }
 %>
-Click <a href="../userHome.jsp">here </a>to proceed to the main page.<br/>
+Click <a href="index.jsp">here </a>to proceed to the main page.<br/>
 <%
   }
   catch (Exception e) {
