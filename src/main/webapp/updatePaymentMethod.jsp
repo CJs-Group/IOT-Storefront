@@ -122,15 +122,14 @@
     <input type="password" name="cvv" value=""><br><br>
     <input type="submit" value="Submit">
 </form>
-
-<br/>
-Click <a href="basket.jsp">here</a> to go to your basket.<br/>
+Click <a href="basket.jsp">here</a> to go to your basket.<br>
+</br>
 <%
     if (isLoggedIn) {
 %>
 <%
     }
 %>
-Click <a href="userHome.jsp">here</a> to return to your home page.<br/>
+Click <a href="userHome.jsp">here</a> to go to your home page.<br/>
 </body>
 </html>

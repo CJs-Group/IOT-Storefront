@@ -125,11 +125,11 @@
 <%
     }
 %>
-
-<br/>
 <p>
-    Click <a href="userHome.jsp">here</a> to return to the main page. <br/>
-    Click <a href="orders.jsp">here</a> to view all your orders. <br/>
+    Click <a href="userHome.jsp">here</a> to go to your home page.<br>
+    <br/>
+    Click <a href="orders.jsp">here</a> to view all your orders.<br>
+    <br/>
 </p>
 
 </div>

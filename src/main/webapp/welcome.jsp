@@ -64,7 +64,7 @@
                     <li>Welcome! This is your first login.</li>
                 <% } %>
             </ul>
-            
+
             <br><br><br>
         </div>
         <p class="returnText">Click <a href="userHome.jsp">here</a> to proceed to the main page.</p>

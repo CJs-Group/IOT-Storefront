@@ -49,7 +49,7 @@
     <div class="rightBar"></div>
 
     <div class="bodyText">
-    <p class="basketText">Basket</p>
+    <h1 class="basketText">Basket</h1>
 
     <%
         String errorMessage = request.getParameter("error");
@@ -160,7 +160,7 @@
       // Only show checkout link if user has payment details and stock is available
       if (paymentInfos.size() > 0 && allowedToCheckout) {
     %>
-      Click <a href="checkout.jsp">here </a>to proceed for checkout.<br>
+      Click <a href="checkout.jsp">here</a> to proceed for checkout.<br>
       <br/>
     <%
       } else if (paymentInfos.size() == 0) {

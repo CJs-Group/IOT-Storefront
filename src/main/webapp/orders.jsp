@@ -162,9 +162,9 @@
 <%
         }
 %>
-<br/>
 <p>
-    Click <a href="userHome.jsp">here</a> to return to your home page.<br/>
+    Click <a href="userHome.jsp">here</a> to return to your home page.<br>
+    <br/>
 </p>
 </div>
 </body>
