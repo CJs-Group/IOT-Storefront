@@ -199,4 +199,29 @@ public class UnitDAO {
             ps.executeUpdate();
         }
     }
+
+    public void addItemQuantity(ItemType itemType, int newQuantity) throws SQLException {
+        if (newQuantity > 0) {
+            for (int i = 0; i < newQuantity; i++) {
+                Unit newUnit = new Unit(0, itemType, new java.util.Date(), Status.In_Stock);
+                createUnit(newUnit, null);
+            }
+        }
+        else if (newQuantity < 0) {
+            List<Unit> inStockUnits = getUnitsByStatusAndItemID(Status.In_Stock, itemType.getItemID());
+            int unitsToRemove = Math.abs(newQuantity);
+            
+            if (inStockUnits.size() < unitsToRemove) {
+                throw new SQLException("Not enough units in stock. Available: " + inStockUnits.size() + ", Requested: " + unitsToRemove);
+            }
+            
+            for (int i = 0; i < unitsToRemove; i++) {
+                deleteUnit(inStockUnits.get(i).getUnitID());
+            }
+        }
+    }
+
+    public int getItemQuantity(int itemTypeId) throws SQLException { //Probably don't need this
+         return getUnitsByStatusAndItemID(Status.In_Stock, itemTypeId).size();
+    }
 }

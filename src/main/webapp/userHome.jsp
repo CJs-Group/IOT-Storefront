@@ -39,7 +39,7 @@
             <img src="images/storefront.png" class="storefrontImage">
             <a href="index.jsp">Storefront</a><br/>
                 <%
-                    if(user instanceof Customer) {
+                    if (user instanceof Customer) {
                 %>
                         <img src="images/cart.png" class="cartImage">
                         <a href="basket.jsp">View basket</a><br/>
@@ -49,6 +49,11 @@
                         
                         <img src="images/user.png" class="logoutImage">
                         <a href="paymentManagement">Payment management</a><br/>
+                <%
+                    } else {
+                %>
+                        <img src="images/list.png" class="cartImage">
+                        <a href="stock.jsp">View Stock</a><br/>
                 <%
                     }
                 %>

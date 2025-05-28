@@ -61,6 +61,7 @@
   DBManager dbm = null;
   Basket basket = null;
   boolean isLoggedIn = false;
+  boolean allowedToCheckout = true;
   try {
     DBConnector dbConnector = new DBConnector();
     conn = dbConnector.openConnection();
@@ -133,12 +134,17 @@ else {
     for (BasketItem basketItem : basket.getItems()) {
       ItemType itemType = basketItem.getItemType();
       int quantity = basketItem.getQuantity();
+      int availableStock = dbm.getItemQuantity(itemType.getItemID());
+      boolean canAddMore = availableStock > quantity;
+      if (availableStock < quantity) {
+        allowedToCheckout = false;
+      }
 %>
 <label>Item: <%= itemType.getName() %>, Quantity: <%= quantity %></label>
 <form method="post" action="../updateBasket">
   <input type="hidden" name="itemId" value="<%= itemType.getItemID() %>">
   <button type="submit" name="action" value="remove">Remove</button>
-  <button type="submit" name="action" value="+1">+1</button>
+  <button type="submit" name="action" value="+1" <%= !canAddMore ? "disabled" : "" %>>+1</button>
   <button type="submit" name="action" value="-1">-1</button>
 </form>
 
@@ -146,17 +152,21 @@ else {
     }
 %>
 <%
-  // Only show checkout link if user has payment details or is a guest
-  if (paymentInfos.size() > 0) {
+  // Only show checkout link if user has payment details and stock is available
+  if (paymentInfos.size() > 0 && allowedToCheckout) {
 %>
   Click <a href="checkout.jsp">here </a>to proceed for checkout.<br/>
 <%
-  } else {
+  } else if (paymentInfos.size() == 0) {
 %>
   <label>Please provide payment details before checkout.</label><br/>
 <%
-    }
+  } else if (!allowedToCheckout) {
+%>
+  <label>Some items in your basket are out of stock. Please adjust quantities before checkout.</label><br/>
+<%
   }
+}
 %>
 Click <a href="../userHome.jsp">here </a>to proceed to the main page.<br/>
 <%

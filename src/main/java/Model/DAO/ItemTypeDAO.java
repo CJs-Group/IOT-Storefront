@@ -2,6 +2,8 @@ package Model.DAO;
 
 import Model.Items.ItemType;
 import Model.Items.Types;
+import Model.Items.Unit;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import Model.Items.ItemType;
+import Model.Items.Types;
+import Model.Items.Unit;
+import Model.Items.Status;
 
 public class ItemTypeDAO {
     private Connection conn;
@@ -59,7 +65,7 @@ public class ItemTypeDAO {
         List<ItemType> itemTypes = new ArrayList<>();
         String sql = "SELECT * FROM ItemTypes";
         try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+            ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 itemTypes.add(resultToItemType(rs));
             }
@@ -85,14 +91,14 @@ public class ItemTypeDAO {
     }
 
     public void updateItemType(ItemType itemType) throws SQLException {
-        String sql = "UPDATE ItemTypes SET Name = ?, Description = ?, ImagePath = ?, Type = ?, Price = ? WHERE ItemTypeID = ?";
+        String sql = "UPDATE ItemTypes SET Name = ?, Description = ?, ImagePath = ?, Type = ?, Price = ?, WHERE ItemTypeID = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, itemType.getName());
             ps.setString(2, itemType.getDescription());
             ps.setString(3, itemType.getImagePath());
             ps.setString(4, itemType.getType().name());
             ps.setInt(5, itemType.getPrice());
-            ps.setInt(6, itemType.getItemID());
+            ps.setInt(7, itemType.getItemID());
             ps.executeUpdate();
         }
     }
