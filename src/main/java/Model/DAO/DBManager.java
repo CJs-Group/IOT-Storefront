@@ -56,11 +56,11 @@ public class DBManager {
         }
     }
 
-    public ItemType getItemById(int id) throws SQLException {
+    public ItemType getItemTypeById(int id) throws SQLException {
         return itemTypeDAO.getItemTypeById(id);
     }
 
-    public ItemType[] getItemsByQuery(String query) throws SQLException {
+    public List<ItemType> getItemTypesByQuery(String query) throws SQLException {
         return itemTypeDAO.getItemTypesByQuery(query);
     }
 

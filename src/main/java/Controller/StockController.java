@@ -25,7 +25,7 @@ public class StockController extends HttpServlet {
             if (itemIdStr != null && action != null) {
                 try {
                     int itemId = Integer.parseInt(itemIdStr);
-                    ItemType item = dbm.getItemById(itemId);
+                    ItemType item = dbm.getItemTypeById(itemId);
                     switch (action) {
                         case "remove":
                             dbm.deleteItemType(itemId);

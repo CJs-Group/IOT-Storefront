@@ -12,7 +12,7 @@ ItemType item = null;
 String itemIdParam = request.getParameter("id");
 if (itemIdParam != null && !itemIdParam.isEmpty()) {
     try {
-        item = dbm.getItemById(Integer.parseInt(itemIdParam));
+        item = dbm.getItemTypeById(Integer.parseInt(itemIdParam));
     } catch (NumberFormatException e) {
         // Handle invalid ID format, e.g., redirect or show error
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid item ID format.");

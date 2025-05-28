@@ -35,7 +35,7 @@ public class BasketController extends HttpServlet {
                         DBManager dbm = new DBManager(dbc.openConnection());
                         int userId = (int) userIdObj;
                         int basketID = dbm.getBasketByUserId(userId, false).getBasketID();
-                        ItemType item = dbm.getItemById(itemId);
+                        ItemType item = dbm.getItemTypeById(itemId);
                         switch (action) {
                             case "remove":
                                 dbm.removeItemTypeFromBasket(basketID, itemId);
@@ -55,7 +55,7 @@ public class BasketController extends HttpServlet {
                     // User is not logged in - use session basket
                     try (DBConnector dbc = new DBConnector()) {
                         DBManager dbm = new DBManager(dbc.openConnection());
-                        ItemType item = dbm.getItemById(itemId);
+                        ItemType item = dbm.getItemTypeById(itemId);
                         Basket sessionBasket = (Basket) session.getAttribute("sessionBasket");
                         if (sessionBasket == null) {
                             sessionBasket = new Basket(-1);
