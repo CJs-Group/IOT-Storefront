@@ -41,6 +41,11 @@
                         <img src="images/cart.png" class="cartImage">
                         <a href="pdbSystem/basket.jsp">View basket</a><br/>
                 <%
+                    } else {
+                %>
+                        <img src="images/list.png" class="cartImage">
+                        <a href="stock.jsp">View Stock</a><br/>
+                <%
                     }
                 %>
             <img src="images/user.png" class="logoutImage">

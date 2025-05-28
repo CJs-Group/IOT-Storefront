@@ -124,6 +124,10 @@ public class DBManager {
         itemTypeDAO.deleteItemType(itemTypeId);
     }
 
+    public void addItemQuantity(ItemType itemType, int newQuantity) throws SQLException {
+        itemTypeDAO.addItemQuantity(itemType, newQuantity);
+    }
+
         public void createUnit(Unit unit, Integer userID) throws SQLException {
         unitDAO.createUnit(unit, userID);
     }
