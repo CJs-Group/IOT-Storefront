@@ -1,4 +1,5 @@
 package Controller;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
@@ -26,8 +28,12 @@ import Model.Users.Staff;
 import Model.Users.User;
 
 @WebServlet("/itemManip")
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 1,
+    maxFileSize = 1024 * 1024 * 10,
+    maxRequestSize = 1024 * 1024 * 100
+)
 public class ItemManip extends HttpServlet {
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String successRedirectPage = "itemManagement.jsp";
         String formErrorRedirectPage = "itemManagement.jsp";
@@ -42,6 +48,16 @@ public class ItemManip extends HttpServlet {
             String description = request.getParameter("description");
             String price = request.getParameter("price");
             String type = request.getParameter("type");
+            String imageUrl = "";
+            if (formAction.equals("addItem") || formAction.equals("editItem")) {
+                Part imagePart = request.getPart("image");
+                if (imagePart != null) {
+                    String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
+                    String imageFileName = imagePart.getSubmittedFileName();
+                    imagePart.write(uploadPath + File.separator + imageFileName);
+                    imageUrl = "/images/" + imageFileName;
+                }
+            }
             switch (formAction) {
                 case "deleteItem":
                     formErrorRedirectPage = "itemManagement.jsp";
@@ -69,7 +85,7 @@ public class ItemManip extends HttpServlet {
                             name,
                             description,
                             Types.valueOf(type),
-                            ""
+                            imageUrl
                         );
                         dbm.createItemType(it);
                         
@@ -100,6 +116,9 @@ public class ItemManip extends HttpServlet {
                         }
                         if (type != null) {
                             it.setType(Types.valueOf(type));
+                        }
+                        if (imageUrl != null && imageUrl.length() != 0) {
+                            it.setImagePath(imageUrl);
                         }
                         dbm.updateItemType(it);
                         response.sendRedirect(successRedirectPage);

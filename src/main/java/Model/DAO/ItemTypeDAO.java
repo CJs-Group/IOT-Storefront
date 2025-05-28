@@ -2,8 +2,6 @@ package Model.DAO;
 
 import Model.Items.ItemType;
 import Model.Items.Types;
-import Model.Items.Unit;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import Model.Items.ItemType;
-import Model.Items.Types;
-import Model.Items.Unit;
-import Model.Items.Status;
 
 public class ItemTypeDAO {
     private Connection conn;
@@ -65,7 +59,7 @@ public class ItemTypeDAO {
         List<ItemType> itemTypes = new ArrayList<>();
         String sql = "SELECT * FROM ItemTypes";
         try (Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 itemTypes.add(resultToItemType(rs));
             }

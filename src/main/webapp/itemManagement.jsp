@@ -44,7 +44,7 @@
                         <td>$<%=i.getPrice()%></td>
                         <td><%=i.getType()%></td>
                         <td>
-                            <form action="/itemManip" method="POST">
+                            <form action="/itemManip" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="formAction" value="deleteItem" />
                                 <input type="hidden" name="selectedItemTypeID" value="<%=i.getItemID()%>" />
                                 <button type="submit">Delete</button>

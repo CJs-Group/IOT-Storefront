@@ -10,7 +10,6 @@ public class ItemType {
     String description;
     Enum<Types> type;
     String imagePath;
-    int quantity;
 
     public ItemType(int ItemID, int price, String name, String description, Enum<Types> type, String imagePath) {
         this.ItemID = ItemID;
@@ -23,7 +22,7 @@ public class ItemType {
 
     public ItemType(int ItemID, String name, String description, Enum<Types> type, String imagePath) {
         this.ItemID = ItemID;
-        this.price = 0;
+        price = 0;
         this.name = name;
         this.description = description;
         this.type = type;
@@ -49,10 +48,6 @@ public class ItemType {
     public int getItemID() {
         return ItemID;
     }
-    
-    // public int getQuantity() {
-    //     return quantity;
-    // }
 
     // public List<Unit> getUnits() {
     //     return units;
@@ -89,9 +84,4 @@ public class ItemType {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
-
-    // Do this with the dbm
-    // public void setQuantity(int quantity) {
-    //     this.quantity = quantity;
-    // }
 }

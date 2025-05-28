@@ -148,7 +148,7 @@
                                 <td style="text-align:right;">$<%= String.format("%.2f", priceAtPurchase) %></td>
                                 <td style="text-align:right;">$<%= String.format("%.2f", subtotal) %></td>
                                 <td style="text-align:center;">
-                                    <form method="post" action="../order" style="margin:0;">
+                                    <form method="post" action="order" style="margin:0;">
                                         <input type="hidden" name="action" value="removeItem" />
                                         <input type="hidden" name="orderId" value="<%= order.getOrderID() %>" />
                                         <input type="hidden" name="unitId" value="<%= item.getUnit().getUnitID() %>" />

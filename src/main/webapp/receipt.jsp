@@ -125,8 +125,6 @@
 <%
     }
 %>
-
-<br/>
 <p>
     Click <a href="index.jsp">here</a> to return to the main page. <br/>
     Click <a href="orders.jsp">here</a> to view all your orders. <br/>

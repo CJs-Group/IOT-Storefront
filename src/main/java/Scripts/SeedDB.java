@@ -67,6 +67,7 @@ public class SeedDB {
             for (int i = 0; i < items.length; i++) {
                 ItemType itemType = items[i];
                 db.createItemType(itemType);
+
                 for (int j = 0; j < 10; j++) {
                     Unit unit = new Unit(0, itemType, new java.util.Date(), Model.Items.Status.In_Stock); //UnitID auto generated
                     db.createUnit(unit, null);

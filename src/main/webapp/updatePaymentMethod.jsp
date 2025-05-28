@@ -107,12 +107,12 @@
 <%
     if (!isLoggedIn) {
 %>
-<p><em>Shopping as Guest - Payment information will be stored for this session only</em></p>
+<p><em>Shopping as Guest - Payment information will be stored for this session only.</em></p>
 <%
     }
 %>
-<form action="../updatePaymentMethod" method="post">
-    <label>Credit Card Number:</label><br>
+<form action="updatePaymentMethod" method="post">
+    <label>Credit Card Number (16 digits):</label><br>
     <input type="text" name="creditCardNumber" value="<%= paymentInfo.getCardNo() != null ? paymentInfo.getCardNo() : "" %>"><br>
     <label>Full Name:</label><br>
     <input type="text" name="fullName" value="<%= paymentInfo.getCardHolderName() != null ? paymentInfo.getCardHolderName() : "" %>"><br>
@@ -122,13 +122,11 @@
     <input type="password" name="cvv" value=""><br><br>
     <input type="submit" value="Submit">
 </form>
-
-<br/>
-Click <a href="basket.jsp">here</a> to go to your basket.<br/>
+Click <a href="basket.jsp">here</a> to go to your basket.<br>
+</br>
 <%
     if (isLoggedIn) {
 %>
-Click <a href="paymentHistory.jsp">here</a> to go to your payment history.<br/>
 <%
     }
 %>
