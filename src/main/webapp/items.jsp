@@ -2,6 +2,8 @@
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
 <%@page import="Model.Items.ItemType"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html>
 
@@ -9,7 +11,7 @@
     DBConnector dbc = new DBConnector();
     DBManager dbm = new DBManager(dbc.openConnection());
     String query = request.getParameter("q");
-    ItemType[] items = dbm.getItemTypesByQuery(query == null ? "" : query);
+    List<ItemType> items = dbm.getItemTypesByQuery(query == null ? "" : query);
 %>
 
 <body>

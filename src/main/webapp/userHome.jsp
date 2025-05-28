@@ -2,6 +2,7 @@
 <%@page import="Model.Users.Customer"%>
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
+<%@page import="Model.Users.Staff"%>
 
 <html>
 
@@ -51,9 +52,18 @@
                         <a href="paymentManagement">Payment management</a><br/>
                 <%
                     } else {
+                        Staff staff = (Staff) user;
                 %>
                         <img src="images/list.png" class="cartImage">
                         <a href="stock.jsp">View Stock</a><br/>
+                        
+                        <img src="images/list.png" class="cartImage">
+                        <a href="itemManagement.jsp">Item Management</a><br/>
+                        
+                        <% if (staff.isAdmin()) { %>
+                            <img src="images/user.png" class="logoutImage">
+                            <a href="userManagement.jsp">User Management</a><br/>
+                        <% } %>
                 <%
                     }
                 %>
