@@ -24,7 +24,7 @@
         <h1>
             Add Item
         </h1>
-        <form action="/itemManip" method="POST">
+        <form action="/itemManip" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="formAction" value="editItem" />
 
             <label for="selectedItemTypeID">Item Type ID: <%=selectedItemTypeID%></label>
@@ -51,6 +51,9 @@
             <label for="smarthome">Smart Home</label><br />
             <input type="radio" id="assistants" name="type" value="Assistants" <%=itemType.getType() == Types.Assistants ? "checked" : ""%>>
             <label for="assistants">Assistants</label><br />
+
+            <label>Image:</label><br />
+            <input id="image" name="image" type="file" accept="image/png, image/jpeg, image/webp, image/gif" /><br />
 
             <button type="submit">Edit Item</button>
         </form>
