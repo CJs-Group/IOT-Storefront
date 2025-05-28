@@ -324,6 +324,7 @@
                         <button class="deleteButton smallbutton" type="submit" form="selectForm" name="deleteUser" disabled>Delete</button>
                         <button class="activateButton smallbutton" type="submit" form="selectForm" name="activateUser" disabled>Activate</button>
                         <button class="deactivateButton smallbutton" type="submit" form="selectForm" name="deactivateUser" disabled>Deactivate</button>
+                        <button class="backButton smallbutton" type="button" onclick="location.href='index.jsp'">Back</button>
                     </div>
                 </div>
             </div>

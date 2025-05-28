@@ -2,33 +2,49 @@
 <%@page import="Model.DAO.DBConnector"%>
 <%@page import="Model.DAO.DBManager"%>
 <%@page import="Model.Items.ItemType"%>
+<%@page import="Model.Users.User"%>
+<%@page import="Model.Users.Customer"%>
+<%@page import="Model.Users.Staff"%>
 <!DOCTYPE html>
 <html>
 
 <%
 DBConnector dbc = new DBConnector();
 DBManager dbm = new DBManager(dbc.openConnection());
+Object userID = session.getAttribute("userId");
+boolean isLoggedIn = userID != null;
+boolean isCustomer = false;
+boolean isStaff = false;
+if (isLoggedIn) {
+    try {
+        User user = dbm.getUserById((Integer) userID);
+        isCustomer = user instanceof Customer;
+        isStaff = user instanceof Staff;
+    }
+    catch (Exception e) {
+    }
+}
 ItemType item = null;
 String itemIdParam = request.getParameter("id");
 int availableStock = 0;
 if (itemIdParam != null && !itemIdParam.isEmpty()) {
     try {
         item = dbm.getItemTypeById(Integer.parseInt(itemIdParam));
-    } catch (NumberFormatException e) {
-        // Handle invalid ID format, e.g., redirect or show error
+    }
+    catch (NumberFormatException e) {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid item ID format.");
         return;
     }
 }
 
 if (item == null) {
-    // Handle item not found, e.g., redirect or show error
     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Item not found.");
     return;
 }
 else {
     availableStock = dbm.getItemQuantity(item.getItemID());
 }
+boolean showAddToCart = !isStaff && (!isLoggedIn || isCustomer);
 %>
 
 <head>
@@ -38,29 +54,7 @@ else {
 </head>
 
 <body>
-    <div class="topBar"></div>
-    <img src="images/CJ_MAXX.png" class="logo">
-    <div class="searchBarPos"><input type="text" placeholder="Search.." class="searchBar"></div>
-
-    <div class="buttonContainer">
-        <a href="login.jsp" class="registerContainer">
-            <img src="images/login.png" class="registerIcon">
-            <p class="registerText">Login</p>
-        </a>
-        
-        <a href="register.jsp" class="registerContainer">
-            <img src="images/user.png" class="registerIcon">
-            <p class="registerText">Register</p>
-        </a>
-
-        <a href="basket.jsp" class="cartContainer">
-            <img src="images/cart.png" class="cartIcon">
-            <p class="cartText">Cart</p>
-        </a>
-    </div>
-
-    <div class="leftBar"></div>
-    <div class="rightBar"></div>
+    <jsp:include page="includes/topbar.jsp" />
 
     <div class="mainText">
         <div class="prodImageContainer">
@@ -86,15 +80,21 @@ else {
             <% } %>
         </div>
 
-        <div class="addCartContainer">
-            <form action="${pageContext.request.contextPath}/updateBasket" method="post" style="display: inline;">
-                <input type="hidden" name="itemId" value="<%= item.getItemID() %>" />
-                <input type="hidden" name="action" value="+1" />
-                <button type="submit" class="addCartButton" <%= availableStock <= 0 ? "disabled" : "" %>>
-                    <%= availableStock <= 0 ? "Out of Stock" : "Add to Cart" %>
-                </button>
-            </form>
-        </div>
+        <% if (showAddToCart) { %>
+            <div class="addCartContainer">
+                <form action="${pageContext.request.contextPath}/updateBasket" method="post" style="display: inline;">
+                    <input type="hidden" name="itemId" value="<%= item.getItemID() %>" />
+                    <input type="hidden" name="action" value="+1" />
+                    <button type="submit" class="addCartButton" <%= availableStock <= 0 ? "disabled" : "" %>>
+                        <%= availableStock <= 0 ? "Out of Stock" : "Add to Cart" %>
+                    </button>
+                </form>
+            </div>
+        <% } else if (isStaff) { %>
+            <div class="addCartContainer">
+                <p style="color: #FFF; font-size: 14px;;">Staff members cannot add items to cart</p>
+            </div>
+        <% } %>
     </div>
 
     <div class="botBar">

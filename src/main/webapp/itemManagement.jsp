@@ -11,6 +11,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/IoTBay.css">
+        <link rel="icon" type="image/png" href="images/CJ_MAXX.png">
         <title>Item Management</title>
         <%-- <link rel="stylesheet" type="text/css" href="css/userManagement.css"> --%>
         <script>
@@ -18,7 +20,14 @@
         </script>
     </head>
     <body>
-        <div>
+        <style>
+            body {
+                overflow: auto;
+            }
+        </style>
+    
+    <jsp:include page="includes/topbar.jsp" />
+        <div class="registerPageText">
             <h1>Item Management</h1>
             <div>
                 <table>
@@ -64,6 +73,8 @@
             <div>
                 <a href="/addItem.jsp">Add Item</a>
             </div>
+            <br/>
+            Click <a href="../userHome.jsp">here </a>to proceed to the main page. <br/>
         </div>
     </body>
 </html>
