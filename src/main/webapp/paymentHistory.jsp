@@ -148,7 +148,6 @@
             <td><%= paymentMethod.getCardHolderName() %></td>
             <td><%= paymentMethod.getExpiryDate() %></td>
             <td>
-                <a href="updatePaymentMethod.jsp">Edit</a> |
                 <a href="paymentManagement?action=delete&cardId=<%= paymentMethod.getPaymentId() %>" 
                    onclick="return confirm('Are you sure you want to delete this payment method?')">Delete</a>
             </td>
