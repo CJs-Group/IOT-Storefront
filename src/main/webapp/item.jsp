@@ -10,6 +10,7 @@ DBConnector dbc = new DBConnector();
 DBManager dbm = new DBManager(dbc.openConnection());
 ItemType item = null;
 String itemIdParam = request.getParameter("id");
+int availableStock = 0;
 if (itemIdParam != null && !itemIdParam.isEmpty()) {
     try {
         item = dbm.getItemById(Integer.parseInt(itemIdParam));
@@ -24,6 +25,9 @@ if (item == null) {
     // Handle item not found, e.g., redirect or show error
     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Item not found.");
     return;
+}
+else {
+    availableStock = dbm.getItemQuantity(item.getItemID());
 }
 %>
 
@@ -74,13 +78,21 @@ if (item == null) {
             </div>
             <p>ID: <%= item.getItemID() %></p>
             <p><%= item.getDescription() %></p>
+            <% if (availableStock > 0) { %>
+                <p style="color: green; font-size: 16px;">In Stock: <%= availableStock %> available</p>
+            <% } else { %>
+                <p style="color: red; font-size: 24px; font-weight: bold;">OUT OF STOCK</p>
+                <p style="color: red; font-size: 14px;">Currently unavailable</p>
+            <% } %>
         </div>
 
         <div class="addCartContainer">
             <form action="${pageContext.request.contextPath}/updateBasket" method="post" style="display: inline;">
                 <input type="hidden" name="itemId" value="<%= item.getItemID() %>" />
                 <input type="hidden" name="action" value="+1" />
-                <button type="submit" class="addCartButton">Add to Cart</button>
+                <button type="submit" class="addCartButton" <%= availableStock <= 0 ? "disabled" : "" %>>
+                    <%= availableStock <= 0 ? "Out of Stock" : "Add to Cart" %>
+                </button>
             </form>
         </div>
     </div>

@@ -79,14 +79,6 @@ public class OrderController extends HttpServlet {
                     return;
                 }
 
-            
-            for (BasketItem basketItem : basket.getItems()) {
-                for (int i = 0; i < basketItem.getQuantity(); i++) {
-                    Unit unit = new Unit(0, basketItem.getItemType(), new java.util.Date(), Model.Items.Status.In_Stock); //UnitID auto generated
-                    dbm.createUnit(unit, null);
-                }
-            }
-
             Map<ItemType, List<Unit>> unitsToReserveForOrder = new HashMap<>();
             for (BasketItem basketItem : basket.getItems()) {
                 ItemType itemType = basketItem.getItemType();
@@ -95,8 +87,8 @@ public class OrderController extends HttpServlet {
 
                 if (availableUnits.size() < requiredQuantity) {
                     String errorMessage = "Not enough stock for " + itemType.getName() +
-                                        ". Required: " + requiredQuantity +
-                                        ", Available: " + availableUnits.size() + ".";
+                                          ". Required: " + requiredQuantity +
+                                          ", Available: " + availableUnits.size() + ".";
                     String redirectUrl = isGuest ? "basket.jsp" : "checkout.jsp";
                     response.sendRedirect(request.getContextPath() + redirectUrl + "?error=" + URLEncoder.encode(errorMessage, "UTF-8"));
                     return;
@@ -122,8 +114,6 @@ public class OrderController extends HttpServlet {
                     else {
                         dbm.updateUnit(unitToReserve, -1);
                     }
-
-                    dbm.addItemQuantity(itemType, -1);
 
                     OrderItem orderItem = new OrderItem(0, unitToReserve, 1, itemType.getPrice());
                     orderItemsForNewOrder.add(orderItem);
@@ -212,8 +202,6 @@ public class OrderController extends HttpServlet {
                     unit.setStatus(Status.In_Stock);
                     unit.setDatePurchased(null); 
                     dbm.updateUnit(unit, null); 
-                    ItemType unitItem = unit.getItemType();
-                    dbm.addItemQuantity(unitItem, 1);
                 }
                 dbm.cancelOrder(orderId);
                 response.sendRedirect(request.getContextPath() + "orders.jsp?success=" + URLEncoder.encode("Order cancelled successfully!", "UTF-8"));
@@ -247,8 +235,6 @@ public class OrderController extends HttpServlet {
                 unit.setStatus(Status.In_Stock);
                 unit.setDatePurchased(null);
                 dbm.updateUnit(unit, null);
-                ItemType unitItem = unit.getItemType();
-                dbm.addItemQuantity(unitItem, 1);
                 response.sendRedirect(request.getContextPath() + "editOrder.jsp?orderId=" + orderId); 
             } else if (action.equals("Change Delivery Method")){
                 int orderId = Integer.parseInt(request.getParameter("orderId"));
