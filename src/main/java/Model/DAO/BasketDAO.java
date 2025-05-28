@@ -96,15 +96,15 @@ public class BasketDAO {
 
         if (existingItem != null) {
             int newQuantity = existingItem.getQuantity() + quantityToChange;
-            if (newQuantity > 0) {
+            if (newQuantity > 0 && newQuantity <= itemType.getQuantity()) {
                 existingItem.setQuantity(newQuantity);
                 basketItemDAO.updateBasketItem(existingItem);
-            } else {
+            } else if (newQuantity <= 0) {
                 basketItemDAO.deleteBasketItem(existingItem.getBasketItemID());
             }
         }
         else {
-            if (quantityToChange > 0) {
+            if (quantityToChange > 0 && quantityToChange <= itemType.getQuantity()) {
                 BasketItem newItem = new BasketItem(0, basketId, itemType, quantityToChange, itemType.getPrice());
                 basketItemDAO.createBasketItem(newItem);
             }
@@ -114,9 +114,10 @@ public class BasketDAO {
     public void updateBasketItemQuantity(int basketItemId, int newQuantity) throws SQLException {
         BasketItem item = basketItemDAO.getBasketItemById(basketItemId);
         if (item != null) {
+            ItemType itemType = item.getItemType();
             if (newQuantity <= 0) {
                 basketItemDAO.deleteBasketItem(basketItemId);
-            } else {
+            } else if (newQuantity <= itemType.getQuantity()) {
                 item.setQuantity(newQuantity);
                 basketItemDAO.updateBasketItem(item);
             }

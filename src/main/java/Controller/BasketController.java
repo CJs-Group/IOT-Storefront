@@ -69,9 +69,11 @@ public class BasketController extends HttpServlet {
                             case "+1":
                                 BasketItem existingItem = sessionBasket.getBasketItemByType(itemId);
                                 if (existingItem != null) {
-                                    existingItem.setQuantity(existingItem.getQuantity() + 1);
-                                }
-                                else {
+                                    int newQuantity = existingItem.getQuantity() + 1;
+                                    if (newQuantity <= item.getQuantity()) {
+                                        existingItem.setQuantity(newQuantity);
+                                    }
+                                } else if (item.getQuantity() != 0) {
                                     BasketItem newItem = new BasketItem(-1, item, 1, item.getPrice());
                                     sessionBasket.addBasketItem(newItem);
                                 }
