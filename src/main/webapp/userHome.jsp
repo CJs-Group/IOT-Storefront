@@ -50,6 +50,11 @@
                         <img src="images/user.png" class="logoutImage">
                         <a href="paymentManagement">Payment management</a><br/>
                 <%
+                    } else {
+                %>
+                        <img src="images/list.png" class="cartImage">
+                        <a href="stock.jsp">View Stock</a><br/>
+                <%
                     }
                 %>
             <img src="images/user.png" class="logoutImage">
