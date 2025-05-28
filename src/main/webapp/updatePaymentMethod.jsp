@@ -128,7 +128,6 @@ Click <a href="basket.jsp">here</a> to go to your basket.<br/>
 <%
     if (isLoggedIn) {
 %>
-Click <a href="paymentHistory.jsp">here</a> to go to your payment history.<br/>
 <%
     }
 %>
