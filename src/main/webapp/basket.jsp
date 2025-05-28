@@ -176,8 +176,6 @@
     }
     %>
     <a>Click <a href="index.jsp">here</a> to go to the storefront.</a><br>
-    <br/>
-    Click <a href="userHome.jsp">here</a> to go to your home page.<br>
     <%
       }
       catch (Exception e) {
